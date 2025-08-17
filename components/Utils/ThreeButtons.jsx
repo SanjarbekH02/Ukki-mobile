@@ -45,8 +45,10 @@ function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/m
             );
             sound.setOnPlaybackStatusUpdate((status) => {
                 if (status.didJustFinish) {
+                    if(setShowPointer !== undefined){
+                        setShowPointer(true);
+                    }
                     setIsButton(true);
-                    setShowPointer(true)
                     sound.unloadAsync();
                 }
             });

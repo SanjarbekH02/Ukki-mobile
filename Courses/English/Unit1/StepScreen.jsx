@@ -5,6 +5,9 @@ import Styles from "../../../Styles/Styles";
 import Step1 from "./Step1";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
+import Step4 from "./Step4";
+import Step5 from "./Step5";
+import Step6 from "./Step6";
 
 export default function StepScreen({ route, navigation }) {
     const { unitId, step, unitSteps, progress, setProgress } = route.params;
@@ -62,6 +65,22 @@ export default function StepScreen({ route, navigation }) {
             )}
             {step.order === 3 && (
                 <Step3 next={goToNextStep} />
+                // <FlashCards
+                //     data={[
+                //         { word: "Hello", translation: "Salom", audioUrl: "https://ukkibackend.soof.uz/media/audio/CD1-03-1.mp3" },
+                //         { word: "Bye", translation: "Hayr", audioUrl: "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3" },
+                //     ]}
+                // />
+            )}
+
+            {step.order === 4 && (
+                <Step4 next={goToNextStep} />
+            )}
+            {step.order === 5 && (
+                <Step5 next={goToNextStep} />
+            )}
+             {step.order === 6 && (
+                <Step6 next={goToNextStep} />
             )}
 
 

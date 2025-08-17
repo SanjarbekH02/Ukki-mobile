@@ -6,7 +6,7 @@ import NameGame from '../../../components/IsmTop';
 import ThreeButtons from '../../../components/Utils/ThreeButtons';
 import Styles from '../../../Styles/Styles';
 
-export default function Step3() {
+export default function Step3({next}) {
     const [showPointer, setShowPointer] = useState(false);
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const [buttonIndex, setButtonIndex] = useState(null);
@@ -174,9 +174,9 @@ export default function Step3() {
                 )}
 
                 {onAllCorrect && (
-                    <TouchableOpacity style={[Styles.listenBtn3]}>
-                        <Text style={Styles.listenNumber}>3</Text>
-                        <Text style={Styles.listenText}>Listen and find.</Text>
+                    <TouchableOpacity onPress={next} style={[Styles.NextButton]}>
+                        
+                        <Text style={Styles.listenText}>NEXT</Text>
                     </TouchableOpacity>
                 )}
 

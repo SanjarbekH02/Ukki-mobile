@@ -47,6 +47,9 @@ export default StyleSheet.create({
         shadowOffset: { width: 0, height: 3 },
         elevation: 4,
         alignItems: "center",
+        position: "absolute",
+        bottom: 20,
+        right: 20
     },
     buttonText: {
         fontSize: 18,
