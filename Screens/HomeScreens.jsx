@@ -1,3 +1,4 @@
+import { useNavigation } from 'expo-router';
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -15,8 +16,9 @@ const courses = [
 ];
 
 export default function HomeScreen() {
+    const navigation = useNavigation()
     const renderCourse = ({ item }) => (
-        <TouchableOpacity style={styles.courseItem}>
+        <TouchableOpacity onPress={() => navigation.navigate('CourseDetail')} style={styles.courseItem}>
             <Text style={styles.courseTitle}>{item.title}</Text>
             <Text style={styles.courseSubtitle}>{item.lessons}ta dars</Text>
             <Image source={item.image} style={styles.courseImage} resizeMode="contain" />

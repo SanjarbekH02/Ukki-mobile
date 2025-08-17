@@ -1,7 +1,9 @@
+import { useNavigation } from 'expo-router';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const ProfileScreen = () => {
+    const navigation = useNavigation()
     return (
         <View style={styles.container}>
             <View style={styles.profileContainer}>
@@ -17,7 +19,7 @@ const ProfileScreen = () => {
                 <MenuItem icon="person-outline" label="Profil ma'lumotlari" />
                 <MenuItem icon="heart-outline" label="Saqlangan kurslar" />
                 <MenuItem icon="star-outline" label="Ilovamizni baholang" />
-                <MenuItem icon="chatbubble-ellipses-outline" label="Savol yoki takliflar uchun" />
+                <MenuItem onPress={() => navigation.navigate('Feedback')} icon="chatbubble-ellipses-outline" label="Savol yoki takliflar uchun" />
                 <MenuItem icon="globe-outline" label="Til" rightText="O'zbekcha" />
                 <MenuItem icon="log-out-outline" label="Tizimdan chiqish" />
             </View>
@@ -25,8 +27,8 @@ const ProfileScreen = () => {
     );
 };
 
-const MenuItem = ({ icon, label, rightText }) => (
-    <TouchableOpacity style={styles.menuItem}>
+const MenuItem = ({ icon, label, rightText, onPress }) => (
+    <TouchableOpacity onPress={onPress} style={styles.menuItem}>
         <View style={styles.menuLeft}>
             <Icon name={icon} size={24}  color="#595E62" style={styles.menuIcon} />
             <Text style={styles.menuText}>{label}</Text>

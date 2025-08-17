@@ -41,7 +41,7 @@ const MyCoursesScreen = () => {
                                     <View>
                                         <Text style={styles.title}>{course.title}</Text>
                                         <Text style={styles.subTitle}>Yakunlangan darslar: {course.completed}/{course.total}</Text>
-                                    </View>
+                                    </View>     
                                     <Image source={course.image} style={styles.courseImage} />
                                 </View>
 

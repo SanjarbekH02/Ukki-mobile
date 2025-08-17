@@ -91,12 +91,12 @@ const styles = StyleSheet.create({
     // paddingTop: 60,
     backgroundColor: '#e6f2ff',
   },
-  top: {
-    // flex: 1,
-    position: "relative",
-    paddingTop: 20,
-    paddingBottom: 30,
-  },
+    top: {
+      // flex: 1,
+      position: "relative",
+      paddingTop: 20,
+      paddingBottom: 30,
+    },
   toBack: {
 
     padding: 8,
