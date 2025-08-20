@@ -1,14 +1,18 @@
 import { useNavigation } from 'expo-router'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-export default function ({ text = "", transparent}) {
+export default function ({ text = "", transparent }) {
     const navigation = useNavigation()
     return (
         < View style={[styles.top, transparent ? styles.transparent : '']}>
             <TouchableOpacity onPress={() => navigation.goBack()} style={styles.toBack} >
                 <Image source={require('../../assets/images/left.png')} />
             </TouchableOpacity>
-            <Text style={styles.title}>{text}</Text>
+            <Text style={styles.title}>
+                {text.split(" ").length > 3
+                    ? text.split(" ").slice(0, 3).join(" ") + "..."
+                    : text}
+            </Text>
         </View>
     )
 }

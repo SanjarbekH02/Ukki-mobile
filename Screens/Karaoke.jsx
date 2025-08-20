@@ -177,15 +177,15 @@ import ComponentTop from '../components/Utils/ComponentTop';
 const { width } = Dimensions.get('window');
 
 export default function KaraokePlayer({
-    audioUri = "https://ukkibackend.soof.uz/media/audio/632fc43a-d639-4c78-bf70-980be1cc6f15.mp3",
+    audioUri = "https://ukkibackend.soof.uz/media/audio/fdcecb34-7e46-41fb-b70d-0e2a981222b9.mp3",
     lrcText = `
-[00:10.03]Guess [00:10.45]what! [00:12.12]Come  [00:12.59]and [00:12.71]see. | Top-chi qani, kel, Ko'r!
-[00:14.21]Guess [00:14.70]what! [00:16.36]Come [00:16.60]and [00:16.83]play. | Top-chi qani, kel, o'yna.
-[00:18.55]Guess [00:19.03]what! [00:20.73]What [00:21.73]can [00:22.06]we [00:22.31]learn [00:22.76]today? | Top-chi qani, bugun nimalarni bilamiz?
-[00:31.49]Guess [00:31.89]what! [00:33.55]Come [00:33.79]and [00:34.03]see. | Top-chi qani, kel, Ko'r!
-[00:35.64]Guess [00:36.08]what! [00:37.79]Come [00:38.07]and [00:38.30]play. | Top-chi qani, kel, o'yna.
-[00:39.97]Guess [00:40.42]what! [00:42.17]it's [00:42.44]time [00:43.41]to [00:43.68]learn [00:44.16]today! | Top-chi qani, bugun o'rganish vaqti keldimi!
-[00:46.51]Guess [00:46.87]what! | Topgin-chi
+[00:02.07]Guess [00:02.33]what! [00:04.21]Come  [00:04.47]and [00:04.74]see. | Top-chi qani, kel, Ko'r!
+[00:06.33]Guess [00:06.87]what! [00:08.46]Come [00:08.72]and [00:08.99]play. | Top-chi qani, kel, o'yna.
+[00:10.58]Guess [00:10.86]what! [00:12.71]What [00:13.77]can [00:14.04]we [00:14.56]learn [00:14.83]today? | Top-chi qani, bugun nimalarni bilamiz?
+[00:23.56]Guess [00:23.81]what! [00:25.68]Come [00:25.94]and [00:26.20]see. | Top-chi qani, kel, Ko'r!
+[00:27.80]Guess [00:28.34]what! [00:29.94]Come [00:30.20]and [00:30.46]play. | Top-chi qani, kel, o'yna.
+[00:32.05]Guess [00:32.58]what! [00:34.44]it's [00:34.71]time [00:35.24]to [00:35.78]learn [00:36.30]today! | Top-chi qani, bugun o'rganish vaqti keldimi!
+[00:38.43]Guess [00:38.97]what! | Topgin-chi
 `,
     autoPlay = true,
     next

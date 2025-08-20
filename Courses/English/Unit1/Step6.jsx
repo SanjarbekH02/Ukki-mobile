@@ -23,6 +23,7 @@ export default function Step6({ next }) {
 
     const correctOrder = ["olivia", "tina", "david"];
 
+
     const playAudio = async (index) => {
         try {
             if (soundRef.current) {
@@ -159,7 +160,7 @@ const styles = StyleSheet.create({
         left: 0,
         width: "100%",
         height: "100%",
-        resizeMode: "stretch",
+        resizeMode: "cover",
     },
     olivia: {
         width: 80,

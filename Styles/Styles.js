@@ -114,8 +114,8 @@ export default StyleSheet.create({
         elevation: 5,
     },
     userNumber: {
-        width:40,
-        height:40,
+        width: 40,
+        height: 40,
         borderRadius: 50,
         backgroundColor: '#7272728e',
         justifyContent: 'center',
@@ -144,9 +144,15 @@ export default StyleSheet.create({
         color: '#fff',
         fontWeight: 'bold',
     },
-    userNumberImage:{
+    userNumberImage: {
         width: 90,
         height: 90,
     },
+    stepContainer: {
+        width: "100%",
+        height: "90%",
+        justifyContent: "center",
+        alignItems: "center",
+    }
 
 })

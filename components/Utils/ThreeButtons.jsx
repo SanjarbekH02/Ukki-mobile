@@ -3,15 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Styles from "../../Styles/Styles";
 
-function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/media/audio/CD1-03-1.mp3", setIsPlaying, playBtn }) {
-    const [clicked, setClicked] = useState(false);
+function ThreeButtons({ setShowPointer, audioUrl = "https://ukkibackend.soof.uz/media/audio/CD1-03-1.mp3", setIsPlaying, playBtn,
+    clicked = false,
+    infoClick = false,
+    setClicked,
+    setInfoClick,
+    setDictionary
+}) {
+
     const [isButton, setIsButton] = useState(false);
 
     const pointerScale = useRef(new Animated.Value(1)).current;
     const pointerOpacity = useRef(new Animated.Value(1)).current;
 
     useEffect(() => {
-        if (!clicked) {
+        if (!clicked || infoClick) {
             Animated.loop(
                 Animated.sequence([
                     Animated.timing(pointerScale, {
@@ -29,7 +35,7 @@ function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/m
                 ])
             ).start();
         }
-    }, [clicked]);
+    }, [clicked, infoClick ]);
 
     const handlePress = async () => {
         setClicked(true);
@@ -45,7 +51,7 @@ function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/m
             );
             sound.setOnPlaybackStatusUpdate((status) => {
                 if (status.didJustFinish) {
-                    if(setShowPointer !== undefined){
+                    if (setShowPointer !== undefined) {
                         setShowPointer(true);
                     }
                     setIsButton(true);
@@ -57,6 +63,12 @@ function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/m
         }
     };
 
+    const handleInfoClick = () => {
+        setClicked(false)
+        setInfoClick(false)
+        setDictionary(true)
+    }
+
     return (
         <View style={styles.buttonsBLock}>
             {isButton && playBtn && (
@@ -64,14 +76,23 @@ function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/m
                     <Text style={Styles.buttonText}>Play</Text>
                 </TouchableOpacity>
             )}
-            <TouchableOpacity style={styles.button} onPress={handlePress}>
-                {/* Soroq belgisi */}
-                <Image
-                    style={styles.buttonImage}
-                    source={require("../../assets/images/soroq.png")}
-                />
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity style={styles.button} onPress={handleInfoClick}>
+                    <Image
+                        style={styles.buttonImage}
+                        source={require("../../assets/images/undov.png")}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handlePress}>
+                    {/* Soroq belgisi */}
+                    <Image
+                        style={styles.buttonImage}
+                        source={require("../../assets/images/soroq.png")}
+                    />
 
-                {/* Qo'l rasmi */}
+                    {/* Qo'l rasmi */}
+
+                </TouchableOpacity>
                 {!clicked && (
                     <Animated.Image
                         style={[
@@ -81,7 +102,18 @@ function ThreeButtons({setShowPointer, audioUrl = "https://ukkibackend.soof.uz/m
                         source={require("../../assets/images/hand2.png")}
                     />
                 )}
-            </TouchableOpacity>
+
+                {infoClick && (
+                    <Animated.Image
+                        style={[
+                            styles.handImage2,
+                            { transform: [{ scale: pointerScale }], opacity: pointerOpacity },
+                        ]}
+                        source={require("../../assets/images/hand2.png")}
+                    />
+                )}
+
+            </View>
         </View>
     );
 }
@@ -95,7 +127,7 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 10,
         right: 0,
-        zIndex:100
+        zIndex: 100
     },
     playBtn: {
         backgroundColor: '#FFD93D',
@@ -113,6 +145,7 @@ const styles = StyleSheet.create({
         marginLeft: 100,
         // position: "fixed",
     },
+    buttonsContainer: { backgroundColor: 'white', borderTopLeftRadius: 8, borderBottomLeftRadius: 8, },
     button: {
         padding: 8,
         backgroundColor: "#fff",
@@ -130,7 +163,15 @@ const styles = StyleSheet.create({
         height: 70,
         position: "absolute",
         right: -15,
-        top: 30,
+        bottom: -50,
+        zIndex: 2,
+    },
+    handImage2: {
+        width: 50,
+        height: 70,
+        position: "absolute",
+        bottom: 13,
+        right: -10,
         zIndex: 2,
     },
 });

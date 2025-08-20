@@ -1,4 +1,5 @@
 // import { Audio } from "expo-av";
+import { Audio } from "expo-av";
 import { useEffect, useRef, useState } from "react";
 import {
     Animated,
@@ -12,24 +13,19 @@ import {
     Vibration,
     View,
 } from "react-native";
-import ErrorOverlay from "../components/OnError";
-import Success from '../components/Success';
+import ErrorOverlay from "./OnError";
+import Success from './Success';
 
-/**
- * WordGameAssist
- * - words: array of words
- * - requires optional assets in ./assets:
- *    - sounds: click.mp3, success.mp3, error.mp3 (optional)
- *    - hand.png (pointer image)
- *
- * Behavior:
- * - normal play: pick letters to fill boxes
- * - after 3 wrong attempts on the same word => assistMode true
- * - assist mode: pointer shows which pool letter to press (in order).
- *   Only that letter press is accepted; each correct press moves pointer to next letter.
- */
-
-export default function WordGameAssist({ words = ["hello", "bye", "green", "yellow"] }) {
+export default function WordGameAssist({
+    next,
+    words = ["hello", "bye", "green", "yellow"],
+    audios = [
+        "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
+    ]
+}) {
     const [index, setIndex] = useState(0);
     const [target, setTarget] = useState(words[0].toLowerCase());
     const [boxes, setBoxes] = useState([]);
@@ -37,6 +33,7 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
     const [message, setMessage] = useState("");
     const [disablePool, setDisablePool] = useState(false);
     const pointerScale = useRef(new Animated.Value(1)).current;
+    const wordSound = useRef(null);
 
 
     useEffect(() => {
@@ -55,6 +52,38 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
             ])
         ).start();
     }, []);
+
+    useEffect(() => {
+        initForWord(words[index]);
+        setAttempts(0);
+        playWordAudio(audios[index]);   // ✅ yangi qo‘shildi
+
+        return () => {
+            unloadWordAudio();
+        };
+    }, [index]);
+
+
+    async function playWordAudio(url) {
+        try {
+            await unloadWordAudio();
+            const { sound } = await Audio.Sound.createAsync({ uri: url });
+            wordSound.current = sound;
+            await sound.playAsync();
+        } catch (e) {
+            console.log("Audio error:", e);
+        }
+    }
+
+    async function unloadWordAudio() {
+        try {
+            if (wordSound.current) {
+                await wordSound.current.stopAsync();
+                await wordSound.current.unloadAsync();
+                wordSound.current = null;
+            }
+        } catch (e) { }
+    }
 
     // attempts counter for current word
     const [attempts, setAttempts] = useState(0);
@@ -239,10 +268,11 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
             setAttempts(0);
             setAssistMode(false);
             setAssistIndex(0);
-            setTimeout(() => {
-                const next = (index + 1) % words.length;
-                setIndex(next);
-            }, 900);
+            if (index < words.length - 1) {
+                setTimeout(() => {
+                    setIndex(index + 1);
+                }, 900);
+            }
         } else {
             playError();
             Vibration.vibrate(300);
@@ -341,7 +371,7 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
     useEffect(() => {
         if (!assistMode) return;
         if (assistIndex >= target.length) {
-           
+
             Animated.timing(pointerOpacity, { toValue: 0, duration: 200, useNativeDriver: true }).start();
             return;
         }
@@ -383,8 +413,18 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
 
             {/* message */}
             {message === "Tog'ri!" ? (
-                <Success />
-            ): message === "Noto'g'ri — qaytadan yozing" ? (
+                <>
+                    <Success />
+                    {index === words.length - 1 && (
+                        <TouchableOpacity
+                            style={[styles.controlBtn, { marginTop: 20 }]}
+                            onPress={next}
+                        >
+                            <Text style={styles.controlText}>🎉 Tugatish</Text>
+                        </TouchableOpacity>
+                    )}
+                </>
+            ) : message === "Noto'g'ri — qaytadan yozing" ? (
                 <ErrorOverlay />
             ) : null}
 
@@ -416,34 +456,7 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
                 })}
             </View>
 
-            {/* Controls */}
-            <View style={styles.controls}>
-                <TouchableOpacity
-                    style={styles.controlBtn}
-                    onPress={() => {
-                        setPool((prev) => prev.map((p) => ({ ...p, used: false })));
-                        setBoxes(Array.from({ length: target.length }).map(() => null));
-                        setMessage("");
-                        setDisablePool(false);
-                        setAttempts(0);
-                        setAssistMode(false);
-                        setAssistIndex(0);
-                        Animated.timing(pointerOpacity, { toValue: 0, duration: 100, useNativeDriver: true }).start();
-                    }}
-                >
-                    <Text style={styles.controlText}>🔄 Qayta boshlash</Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                    style={styles.controlBtn}
-                    onPress={() => {
-                        const next = (index + 1) % words.length;
-                        setIndex(next);
-                    }}
-                >
-                    <Text style={styles.controlText}>➡️ Keyingi</Text>
-                </TouchableOpacity>
-            </View>
+           
 
             {/* Pointer (absolute) */}
             <Animated.View
@@ -461,7 +474,7 @@ export default function WordGameAssist({ words = ["hello", "bye", "green", "yell
                 ]}
             >
                 <Image
-                    source={require("../assets/images/hand.png")}
+                    source={require("../../assets/images/hand.png")}
                     style={{ width: 40, height: 40, resizeMode: "contain" }}
                 />
             </Animated.View>
@@ -554,15 +567,19 @@ const styles = StyleSheet.create({
         marginTop: 18,
     },
     controlBtn: {
-        paddingHorizontal: 14,
-        paddingVertical: 10,
-        borderRadius: 12,
-        borderWidth: 2,
-        borderColor: "#ff6f91",
-        marginHorizontal: 8,
-        backgroundColor: "#ffcccb",
+        backgroundColor: "#FFD93D",
+        paddingVertical: 15,
+        paddingHorizontal: 30,
+        borderRadius: 30,
+        marginVertical: 10,
+        shadowColor: "#000",
+        shadowOpacity: 0.2,
+        shadowRadius: 6,
+        shadowOffset: { width: 0, height: 3 },
+        elevation: 4,
+        alignItems: "center",
     },
-    controlText: { fontWeight: "800", color: "#b71c1c", fontSize: 15 },
+    controlText: { fontWeight: "800", color: "#000", fontSize: 15 },
 
     pointer: {
         position: "absolute",

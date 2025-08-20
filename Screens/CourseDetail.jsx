@@ -169,10 +169,10 @@ export default function CourseDetailScreen() {
                                                     key={step.order}
                                                     style={styles.stepButton}
                                                     onPress={() => {
-                                                        if (!isCompleted && !isNextAfterCompleted && !isFirstStep) {
-                                                            Alert.alert("Diqqat", "Oldingi qadam tugallanmagan!");
-                                                            return;
-                                                        }
+                                                        // if (!isCompleted && !isNextAfterCompleted && !isFirstStep) {
+                                                        //     Alert.alert("Diqqat", "Oldingi qadam tugallanmagan!");
+                                                        //     return;
+                                                        // }
                                                         navigation.navigate("StepScreen", {
                                                             unitId: unit.id,
                                                             step,
@@ -182,7 +182,7 @@ export default function CourseDetailScreen() {
                                                         });
                                                     }}
                                                 >
-                                                    <Text style={styles.stepText}>{step.title}</Text>
+                                                    <Text style={styles.stepText}>{step.order}.  {step.title}</Text>
 
                                                     {isCompleted ? (
                                                         <Text>✅</Text>
@@ -254,7 +254,7 @@ const styles = StyleSheet.create({
     unitTitle: { fontSize: 18, color: "black", fontWeight: "600", marginRight: "auto", marginLeft: 10 },
     stepsContainer: { backgroundColor: "#e9f3ff", paddingLeft: 20 },
     stepButton: { paddingVertical: 10, borderBottomWidth: 1, borderBottomColor: "#ddd", flexDirection: "row", alignItems: "center", justifyContent: "space-between", padding: 10 },
-    stepText: { fontSize: 15 },
+    stepText: { fontSize: 15, width: "90%" },
     button: {
         backgroundColor: '#007AFF', paddingVertical: 20,
         alignItems: 'center', borderRadius: 50,

@@ -6,14 +6,17 @@ import NameGame from '../../../components/IsmTop';
 import ThreeButtons from '../../../components/Utils/ThreeButtons';
 import Styles from '../../../Styles/Styles';
 
-export default function Step3({next}) {
+export default function Step3({ next }) {
     const [showPointer, setShowPointer] = useState(false);
     const scaleAnim = useRef(new Animated.Value(1)).current;
     const [buttonIndex, setButtonIndex] = useState(null);
     const soundRef = useRef(null);
     const [onAllCorrect, setOnAllCorrect] = useState(false);
     const [selectName, setSelectName] = useState(null);
-    const [hiddenButtons, setHiddenButtons] = useState([]); // ❌ yashiriladigan tugmalar
+    const [hiddenButtons, setHiddenButtons] = useState([]);
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [dictionary, setDictionary] = useState(false)
 
     const buttonAudios = {
         1: "https://ukkibackend.soof.uz/media/audio/cd659513-0efb-45ac-bc55-207460a2805d.mp3",
@@ -75,8 +78,10 @@ export default function Step3({next}) {
         <View style={{ height: "100%", justifyContent: "center" }}>
             <View style={styles.container}>
                 <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
                     setShowPointer={setShowPointer}
-                    audioUrl="https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3"
+                    audioUrl="https://ukkibackend.soof.uz/media/audio/ddf40a8d-9519-42a3-8d00-4e3722302aa7.mp3"
                 />
 
                 <TouchableOpacity style={Styles.listenBtn}>
@@ -175,7 +180,7 @@ export default function Step3({next}) {
 
                 {onAllCorrect && (
                     <TouchableOpacity onPress={next} style={[Styles.NextButton]}>
-                        
+
                         <Text style={Styles.listenText}>NEXT</Text>
                     </TouchableOpacity>
                 )}

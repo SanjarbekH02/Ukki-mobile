@@ -3,15 +3,26 @@ import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ComponentTop from "../../../components/Utils/ComponentTop";
 import Styles from "../../../Styles/Styles";
 import Step1 from "./Step1";
+import Step10 from "./Step10";
+import Step11 from "./Step11";
+import Step12 from "./Step12";
+import Step13 from "./Step13";
+import Step14 from "./Step14";
+import QABox from "./Step15";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
 import Step5 from "./Step5";
 import Step6 from "./Step6";
+import Step7 from "./Step7";
+import Step8 from "./Step8";
+import Step9 from "./Step9";
 
 export default function StepScreen({ route, navigation }) {
     const { unitId, step, unitSteps, progress, setProgress } = route.params;
     const [isPlaying, setIsPlaying] = useState(false);
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(true)
 
 
     const currentStepIndex = unitSteps.findIndex(s => s.order === step.order);
@@ -44,7 +55,7 @@ export default function StepScreen({ route, navigation }) {
     };
     return (
         <View style={styles.container}>
-            {!isPlaying && (
+            {!isPlaying && step.order !== 14 && (
                 <View style={Styles.ComponentTop}>
                     <ComponentTop text={step.title} />
                 </View>
@@ -79,10 +90,36 @@ export default function StepScreen({ route, navigation }) {
             {step.order === 5 && (
                 <Step5 next={goToNextStep} />
             )}
-             {step.order === 6 && (
+            {step.order === 6 && (
                 <Step6 next={goToNextStep} />
             )}
-
+            {step.order === 7 && (
+                <Step7 next={goToNextStep} />
+            )}
+            {step.order === 8 && (
+                <Step8 next={goToNextStep} />
+            )}
+            {step.order === 9 && (
+                <Step9 next={goToNextStep} />
+            )}
+            {step.order === 10 && (
+                <Step10 next={goToNextStep} />
+            )}
+            {step.order === 11 && (
+                <Step11 next={goToNextStep} />
+            )}
+            {step.order === 12 && (
+                <Step12 next={goToNextStep} />
+            )}
+            {step.order === 13 && (
+                <Step13 next={goToNextStep} />
+            )}
+            {step.order === 14 && (
+                <Step14 next={goToNextStep} />
+            )}
+            {step.order === 15 && (
+                <QABox next={goToNextStep} />
+            )}
 
         </View>
     );

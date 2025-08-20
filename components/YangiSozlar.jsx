@@ -4,7 +4,7 @@ import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "
 
 const { width } = Dimensions.get("window");
 
-const FlashCards = ({ data, onFinish }) => {
+const FlashCards = ({ data, onFinish, setDictionary }) => {
     const [index, setIndex] = useState(0);
     const [finished, setFinished] = useState(false);
     const translateX = useRef(new Animated.Value(width)).current;
@@ -100,7 +100,7 @@ const FlashCards = ({ data, onFinish }) => {
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.button, { backgroundColor: "#f44336" }]}
-                        onPress={onFinish}
+                        onPress={() => setDictionary(false)}
                     >
                         <Text style={styles.buttonText}>Tugatish</Text>
                     </TouchableOpacity>

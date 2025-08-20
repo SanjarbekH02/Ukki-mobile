@@ -12,6 +12,9 @@ const Step2 = ({ next }) => {
   const [showPointer, setShowPointer] = useState(false);
   const [showPointer2, setShowPointer2] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
+  const [infoClick, setInfoClick] = useState(true);
+  const [clicked, setClicked] = useState(true)
+  const [dictionary, setDictionary] = useState(false)
 
   const audioList = [
     "https://ukkibackend.soof.uz/media/audio/CD1-03-1.mp3",
@@ -133,7 +136,10 @@ const Step2 = ({ next }) => {
 
       <View style={{ height: "100%", justifyContent: "center" }}>
         <View style={styles.container}>
-          <ThreeButtons setShowPointer={setShowPointer} audioUrl="https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3" />
+          <ThreeButtons
+            setDictionary={setDictionary}
+            infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
+            setShowPointer={setShowPointer} audioUrl="https://ukkibackend.soof.uz/media/audio/e4949dfd-4e72-449a-bba1-70de09457bed.mp3" />
           <TouchableOpacity
             style={Styles.listenBtn}
             onPress={() => playAudio(0)}
@@ -142,7 +148,7 @@ const Step2 = ({ next }) => {
             <Text style={Styles.listenText}>Listen. Who's speaking?</Text>
             {showPointer && (
               <Animated.Image
-                source={require("../../../assets/images/hand2.png")} 
+                source={require("../../../assets/images/hand2.png")}
                 style={[
                   styles.pointer,
                   { transform: [{ scale: scaleAnim }] }
@@ -152,9 +158,9 @@ const Step2 = ({ next }) => {
 
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={() => { next(); hidePointer(); }} style={[Styles.listenBtn, Styles.listenBtn2]} 
+          <TouchableOpacity onPress={() => { next(); hidePointer(); }} style={[Styles.listenBtn, Styles.listenBtn2]}
           //  disabled={!showPointer2}
-           >
+          >
             <Text style={Styles.listenNumber}>2</Text>
             <Text style={Styles.listenText}>Listen. point, and say.</Text>
             {showPointer2 && (
