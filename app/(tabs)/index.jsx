@@ -1,12 +1,12 @@
 // index.jsx yoki App.jsx faylda
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
+import * as NavigationBar from "expo-navigation-bar";
+import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import BottomTabNavigator from '../../components/BottomTabNavigator';
+import StepScreen from '../../Courses/English/Unit1/StepScreen';
 import CourseDetailScreen from '../../Screens/CourseDetail';
 import FeedbackForm from '../../Screens/FeedbackForm';
-import StepScreen from '../../Courses/English/Unit1/StepScreen';
-
 // import KaraokePlayer from "../../Screens/Karaoke";
 
 
@@ -14,6 +14,13 @@ import StepScreen from '../../Courses/English/Unit1/StepScreen';
 
 const Stack = createNativeStackNavigator();
 export default function App() {
+  useEffect(() => {
+    // Navigation bar’ni yashirish
+    NavigationBar.setVisibilityAsync("hidden");
+
+    // Qorong‘i fon qilish (ixtiyoriy)
+    NavigationBar.setBackgroundColorAsync("black");
+  }, []);
   return (
     <SafeAreaView
       style={{
@@ -21,7 +28,7 @@ export default function App() {
         backgroundColor: '#fff',
       }}
     >
-      <StatusBar backgroundColor="transparent" translucent barStyle="dark-content" />
+      {/* <StatusBar backgroundColor="transparent" translucent barStyle="dark-content" /> */}
       <Stack.Navigator>
         <Stack.Screen name="Main" component={BottomTabNavigator} options={{ headerShown: false }} />
         <Stack.Screen

@@ -5,7 +5,7 @@ import FlashCards from '../../../components/YangiSozlar';
 import KaraokePlayer from '../../../Screens/Karaoke';
 import Styles from '../../../Styles/Styles';
 
-export default function Step1({ setIsPlaying, isPlaying, next }) {
+export default function     Step1({ setIsPlaying, isPlaying, next }) {
     const [infoClick, setInfoClick] = useState(true);
     const [clicked, setClicked] = useState(true)
     const [dictionary, setDictionary] = useState(false)
@@ -31,7 +31,7 @@ export default function Step1({ setIsPlaying, isPlaying, next }) {
                     <View style={Styles.container}>
                         <Text style={Styles.title}>1.Hello</Text>
                         <Image style={Styles.ImgFull} source={require('../../../assets/images/1-sahifa.png')} />
-                        <Image style={Styles.ImgFull} source={require('../../../assets/images/image.png')} />
+                        {/* <Image style={Styles.ImgFull} source={require('../../../assets/images/image.png')} /> */}
                         <ThreeButtons setDictionary={setDictionary} infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} audioUrl='https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3' setIsPlaying={setIsPlaying} playBtn={true} />
                     </View>
                 )

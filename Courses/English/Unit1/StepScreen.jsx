@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Alert, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Alert, StyleSheet, View } from "react-native";
 import ComponentTop from "../../../components/Utils/ComponentTop";
 import Styles from "../../../Styles/Styles";
 import Step1 from "./Step1";
@@ -9,6 +9,10 @@ import Step12 from "./Step12";
 import Step13 from "./Step13";
 import Step14 from "./Step14";
 import QABox from "./Step15";
+import Step16 from "./Step16";
+import Step17 from "./Step17";
+import Step18 from './Step18';
+import Step19 from "./Step19";
 import Step2 from "./Step2";
 import Step3 from "./Step3";
 import Step4 from "./Step4";
@@ -63,11 +67,11 @@ export default function StepScreen({ route, navigation }) {
             {step.order === 1 && (
                 <>
                     <Step1 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
-                    <TouchableOpacity style={styles.NextButton} onPress={goToNextStep}>
+                    {/* <TouchableOpacity style={styles.NextButton} onPress={goToNextStep}>
                         <Text style={styles.buttonText}>
                             {isLastStep ? "✅ Unit tugadi" : "➡ Keyingi step"}
                         </Text>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </>
             )}
 
@@ -119,6 +123,18 @@ export default function StepScreen({ route, navigation }) {
             )}
             {step.order === 15 && (
                 <QABox next={goToNextStep} />
+            )}
+            {step.order === 16 && (
+                <Step16 next={goToNextStep}/>
+            )}
+            {step.order === 17 && (
+                <Step17 next={goToNextStep} />
+            )}
+            {step.order === 18 && (
+                <Step18 next={goToNextStep} />
+            )}
+            {step.order === 19 && (
+                <Step19 next={goToNextStep} />
             )}
 
         </View>

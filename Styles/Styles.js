@@ -25,8 +25,9 @@ export default StyleSheet.create({
 
     ImgFull: {
         width: "100%",
+        height: "100%",
         resizeMode: "contain",
-        resizeMode: "cover"
+        resizeMode: "stretch"
     },
     step2Img: {
         width: "100%",
