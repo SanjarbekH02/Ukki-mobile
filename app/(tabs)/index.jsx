@@ -4,7 +4,7 @@ import * as NavigationBar from "expo-navigation-bar";
 import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import BottomTabNavigator from '../../components/BottomTabNavigator';
-import StepScreen from '../../Courses/English/Unit1/StepScreen';
+import StepScreen from '../../Courses/English/StepScreen';
 import CourseDetailScreen from '../../Screens/CourseDetail';
 import FeedbackForm from '../../Screens/FeedbackForm';
 // import KaraokePlayer from "../../Screens/Karaoke";

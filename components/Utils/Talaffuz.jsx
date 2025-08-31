@@ -2,15 +2,17 @@
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import ComponentTop from "./ComponentTop";
 import ErrorOverlay from "./OnError";
 import ConfettiEffect from "./Success";
+import ThreeButtons from "./ThreeButtons";
 
   export default function WordPractice({
     words = [
       { text: "hello", audioUrl: "https://ukkibackend.soof.uz/media/audio/4cf823e3-4e9c-4182-91dd-4027395781d8.mp3" },
       { text: "how", audioUrl: "https://ukkibackend.soof.uz/media/audio/4cf823e3-4e9c-4182-91dd-4027395781d8.mp3" },
     ],
+    setDictionary,
+    setWordgame,
     onFinish
   }) {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -137,7 +139,7 @@ import ConfettiEffect from "./Success";
         const userSaid = (sttData.transcript || "").toLowerCase().trim();
         const correctWord = words[currentIndex].text.split("-")[0].toLowerCase().trim();
 
-        if (userSaid === correctWord) {
+        if (userSaid.includes(correctWord)) {
           setSuccess(true);
           setTimeout(() => setSuccess(false), 3000);
           setRetryCount(0);
@@ -188,9 +190,10 @@ import ConfettiEffect from "./Success";
         colors={['#f2f2fe', '#f9eaef', '#fef3ee']}
         style={{ flex: 1 }}
       >
+      
         {success && <ConfettiEffect />}
         {error && <ErrorOverlay />}
-        <ComponentTop class="transparent" text="Eshit va takrorla" />
+        {/* <ComponentTop class="transparent" text="Eshit va takrorla" /> */}
 
         <View style={styles.container}>
           {!isCompleted ? (
@@ -208,11 +211,9 @@ import ConfettiEffect from "./Success";
                   </View>
                 </Animated.View>
               </TouchableOpacity>
-
-
             </>
           ) : (
-            <TouchableOpacity style={styles.doneText}>
+            <TouchableOpacity onPress={() => {setDictionary(false); setWordgame(true); setTalaffuz(false)}} style={styles.doneText}>
               <Text style={{ color: "white", fontSize: 20, textAlign: "center" }}>Next</Text>
             </TouchableOpacity>
           )}

@@ -66,21 +66,21 @@ export default function CourseDetailScreen() {
     // Unitni ochish
     const toggleUnit = (unitId) => {
         // Oldingi unit tugaganmi tekshirish
-        const unitIndex = courseData.findIndex(u => u.id === unitId);
-        if (unitIndex > 0) {
-            const prevUnit = courseData[unitIndex - 1];
-            const lastStepOrder = prevUnit.steps[prevUnit.steps.length - 1].order;
+        // const unitIndex = courseData.findIndex(u => u.id === unitId);
+        // if (unitIndex > 0) {
+        //     const prevUnit = courseData[unitIndex - 1];
+        //     const lastStepOrder = prevUnit.steps[prevUnit.steps.length - 1].order;
 
-            const isPrevUnitCompleted =
-                progress?.unitId > prevUnit.id ||
-                (progress?.unitId === prevUnit.id &&
-                    progress?.lastCompletedStep >= lastStepOrder);
+        //     const isPrevUnitCompleted =
+        //         progress?.unitId > prevUnit.id ||
+        //         (progress?.unitId === prevUnit.id &&
+        //             progress?.lastCompletedStep >= lastStepOrder);
 
-            if (!isPrevUnitCompleted) {
-                Alert.alert("Diqqat", "Oldingi bo'lim tugallanmagan!");
-                return;
-            }
-        }
+        //     if (!isPrevUnitCompleted) {
+        //         Alert.alert("Diqqat", "Oldingi bo'lim tugallanmagan!");
+        //         return;
+        //     }
+        // }
 
         setOpenUnit(openUnit === unitId ? null : unitId);
     };

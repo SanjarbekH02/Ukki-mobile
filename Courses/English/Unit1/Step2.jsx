@@ -2,7 +2,10 @@ import { Audio } from 'expo-av';
 import LottieView from 'lottie-react-native';
 import { useEffect, useRef, useState } from 'react';
 import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import WordPractice from '../../../components/Utils/Talaffuz';
 import ThreeButtons from '../../../components/Utils/ThreeButtons';
+import WordGameAssist from '../../../components/Utils/WordGame';
+import FlashCards from '../../../components/YangiSozlar';
 import Styles from '../../../Styles/Styles';
 
 const Step2 = ({ next }) => {
@@ -15,6 +18,8 @@ const Step2 = ({ next }) => {
   const [infoClick, setInfoClick] = useState(true);
   const [clicked, setClicked] = useState(true)
   const [dictionary, setDictionary] = useState(false)
+  const [wordgame, setWordgame] = useState(true)
+  const [talaffuz, setTalaffuz] = useState(false)
 
   const audioList = [
     "https://ukkibackend.soof.uz/media/audio/CD1-03-1.mp3",
@@ -57,7 +62,6 @@ const Step2 = ({ next }) => {
     }
   }, [showPointer, showPointer2]);
 
-  // audio player
   const playAudio = async (index) => {
     setShowPointer(false)
     if (index >= audioList.length) {
@@ -134,113 +138,161 @@ const Step2 = ({ next }) => {
   return (
     <>
 
-      <View style={{ height: "100%", justifyContent: "center" }}>
-        <View style={styles.container}>
-          <ThreeButtons
-            setDictionary={setDictionary}
-            infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
-            setShowPointer={setShowPointer} audioUrl="https://ukkibackend.soof.uz/media/audio/e4949dfd-4e72-449a-bba1-70de09457bed.mp3" />
-          <TouchableOpacity
-            style={Styles.listenBtn}
-            onPress={() => playAudio(0)}
-          >
-            <Text style={Styles.listenNumber}>1</Text>
-            <Text style={Styles.listenText}>Listen. Who's speaking?</Text>
-            {showPointer && (
-              <Animated.Image
-                source={require("../../../assets/images/hand2.png")}
-                style={[
-                  styles.pointer,
-                  { transform: [{ scale: scaleAnim }] }
-                ]}
-              />
-            )}
+      {dictionary ? (
+        <>
 
-          </TouchableOpacity>
+          {wordgame ? (
+            <FlashCards
+              setDictionary={setWordgame}
+              data={[
+                { word: "Listen", translation: "Tinglamoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/tinglamoq.mp3" },
+                { word: "Point ", translation: "ko’rsatmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/ko'rsatmoq.mp3" },
+                { word: "Say", translation: "Aytmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/aytmoq.mp3" },
+                { word: "Who ", translation: "Kim", audioUrl: "https://ukkibackend.soof.uz/media/audio/kim.mp3" },
+                { word: "Speak", translation: "Gapirmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/gapirmoq.mp3" },
+                { word: "Find", translation: "Topmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/topmoq.mp3" },
+                { word: "What is your name?", translation: " Sening isming nima?", audioUrl: "https://ukkibackend.soof.uz/media/audio/sening isming nima.mp3" },
+              ]}
+            />
 
-          <TouchableOpacity onPress={() => { next(); hidePointer(); }} style={[Styles.listenBtn, Styles.listenBtn2]}
-          //  disabled={!showPointer2}
-          >
-            <Text style={Styles.listenNumber}>2</Text>
-            <Text style={Styles.listenText}>Listen. point, and say.</Text>
-            {showPointer2 && (
-              <Animated.Image
-                source={require("../../../assets/images/hand2.png")} // qo‘lcha rasmi
-                style={[
-                  styles.pointer,
-                  { transform: [{ scale: scaleAnim }] }
-                ]}
-              />
-            )}
-          </TouchableOpacity>
+          ) : talaffuz ? (
+            <WordPractice
+              setWordgame={setWordgame}
+              setDictionary={setDictionary}
+              setTalaffuz={setTalaffuz}
+              words={[
+                { text: "listen", audioUrl: "https://ukkibackend.soof.uz/media/audio/tinglamoq.mp3" },
+                { text: "point", audioUrl: "https://ukkibackend.soof.uz/media/audio/ko'rsatmoq.mp3" },
+                { text: "say", audioUrl: "https://ukkibackend.soof.uz/media/audio/aytmoq.mp3" },
+                { text: "who", audioUrl: "https://ukkibackend.soof.uz/media/audio/kim.mp3" },
+                { text: "speak", audioUrl: "https://ukkibackend.soof.uz/media/audio/gapirmoq.mp3" },
+                { text: "find", audioUrl: "https://ukkibackend.soof.uz/media/audio/topmoq.mp3" },
+              ]}
+            />
 
-          <Image
-            source={require('../../../assets/images/step2.jpg')}
-            style={styles.step2Img}
-          />
+          ) : (
+            <WordGameAssist
+              setDictionary={setTalaffuz}
+              words={["listen", "point", "say", "who", "speak", "find",]}
+              audios={
+                [
+                  "https://ukkibackend.soof.uz/media/audio/tinglamoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/ko'rsatmoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/aytmoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/kim.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/gapirmoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/topmoq.mp3",
 
-          {/* Button 1 */}
-          <TouchableOpacity style={[Styles.userNumber, Styles.userNumber1, mapping[currentIndex] === 1 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
-            {mapping[currentIndex] === 1 ? (
-              <LottieView
-                source={require('../../../assets/images/vois.json')}
-                autoPlay
-                loop
-                style={Styles.userNumberImage}
-              />
-            ) : (
-              <Text style={Styles.userNumberText}>1</Text>
-            )}
-          </TouchableOpacity>
+                ]
+              }
+            />
+          )}
+        </>
+      ) : (
+        <View style={{ height: "100%", justifyContent: "center" }}>
+          <View style={styles.container}>
+            <ThreeButtons
+              setDictionary={setDictionary}
+              infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
+              setShowPointer={setShowPointer} audioUrl="https://ukkibackend.soof.uz/media/audio/e4949dfd-4e72-449a-bba1-70de09457bed.mp3" />
+            <TouchableOpacity
+              style={Styles.listenBtn}
+              onPress={() => playAudio(0)}
+            >
+              <Text style={Styles.listenNumber}>1</Text>
+              <Text style={Styles.listenText}>Listen. Who's speaking?</Text>
+              {showPointer && (
+                <Animated.Image
+                  source={require("../../../assets/images/hand2.png")}
+                  style={[
+                    styles.pointer,
+                    { transform: [{ scale: scaleAnim }] }
+                  ]}
+                />
+              )}
 
-          {/* Button 2 */}
-          <TouchableOpacity style={[Styles.userNumber, Styles.userNumber2, mapping[currentIndex] === 2 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
-            {mapping[currentIndex] === 2 ? (
-              <LottieView
-                source={require('../../../assets/images/vois.json')}
-                autoPlay
-                loop
-                style={Styles.userNumberImage}
-              />
-            ) : (
-              <Text style={Styles.userNumberText}>2</Text>
-            )}
-          </TouchableOpacity>
+            </TouchableOpacity>
 
-          {/* Button 3 */}
-          <TouchableOpacity style={[Styles.userNumber, Styles.userNumber3, mapping[currentIndex] === 3 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
-            {mapping[currentIndex] === 3 ? (
-              <LottieView
-                source={require('../../../assets/images/vois.json')}
-                autoPlay
-                loop
-                style={Styles.userNumberImage}
-              />
-            ) : (
-              <Text style={Styles.userNumberText}>3</Text>
-            )}
-          </TouchableOpacity>
+            <TouchableOpacity onPress={() => { next(); hidePointer(); }} style={[Styles.listenBtn, Styles.listenBtn2]}
+            //  disabled={!showPointer2}
+            >
+              <Text style={Styles.listenNumber}>2</Text>
+              <Text style={Styles.listenText}>Listen. point, and say.</Text>
+              {showPointer2 && (
+                <Animated.Image
+                  source={require("../../../assets/images/hand2.png")} // qo‘lcha rasmi
+                  style={[
+                    styles.pointer,
+                    { transform: [{ scale: scaleAnim }] }
+                  ]}
+                />
+              )}
+            </TouchableOpacity>
 
-          {/* Button 4 */}
-          <TouchableOpacity style={[Styles.userNumber, Styles.userNumber4, mapping[currentIndex] === 4 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
-            {mapping[currentIndex] === 4 ? (
-              <LottieView
-                source={require('../../../assets/images/vois.json')}
-                autoPlay
-                loop
-                style={Styles.userNumberImage}
-              />
-            ) : (
-              <Text style={Styles.userNumberText}>4</Text>
-            )}
-          </TouchableOpacity>
+            <Image
+              source={require('../../../assets/images/step2.jpg')}
+              style={styles.step2Img}
+            />
 
-          <TouchableOpacity style={[Styles.listenBtn3]}>
-            <Text style={Styles.listenNumber}>3</Text>
-            <Text style={Styles.listenText}>Listen and find.</Text>
-          </TouchableOpacity>
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber1, mapping[currentIndex] === 1 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 1 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>1</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber2, mapping[currentIndex] === 2 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 2 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>2</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber3, mapping[currentIndex] === 3 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 3 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>3</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber4, mapping[currentIndex] === 4 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 4 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>4</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.listenBtn3]}>
+              <Text style={Styles.listenNumber}>3</Text>
+              <Text style={Styles.listenText}>Listen and find.</Text>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      )}
 
     </>
   );
@@ -266,8 +318,8 @@ const styles = StyleSheet.create({
     position: "absolute",
     left: 70,
     top: "50%",
-    width: 40,
-    height: 40,
+    width: 50,
+    height: 50,
     resizeMode: "contain",
     zIndex: 10,
   },

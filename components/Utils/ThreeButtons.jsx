@@ -8,7 +8,8 @@ function ThreeButtons({ setShowPointer, audioUrl = "https://ukkibackend.soof.uz/
     infoClick = false,
     setClicked,
     setInfoClick,
-    setDictionary
+    setDictionary,
+    setPointer
 }) {
 
     const [isButton, setIsButton] = useState(false);
@@ -35,7 +36,7 @@ function ThreeButtons({ setShowPointer, audioUrl = "https://ukkibackend.soof.uz/
                 ])
             ).start();
         }
-    }, [clicked, infoClick ]);
+    }, [clicked, infoClick]);
 
     const handlePress = async () => {
         setClicked(true);
@@ -53,6 +54,9 @@ function ThreeButtons({ setShowPointer, audioUrl = "https://ukkibackend.soof.uz/
                 if (status.didJustFinish) {
                     if (setShowPointer !== undefined) {
                         setShowPointer(true);
+                    }
+                    if (setPointer !== undefined) {
+                        setPointer(true)
                     }
                     setIsButton(true);
                     sound.unloadAsync();

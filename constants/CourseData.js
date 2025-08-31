@@ -2,7 +2,7 @@
 export const courseData = [
     {
         id: 1,
-        name: "Unit 1",
+        name: "Starter unit",
         steps: [
             { id: 1, title: "Hello", order: 1 },
             { id: 2, title: "Get to know", order: 2 },
@@ -23,16 +23,25 @@ export const courseData = [
             { id: 17, title: "Listen", order: 17 },
             { id: 18, title: "Workbook. Look then draw and say", order: 18 },
             { id: 19, title: "Listen and act", order: 19 },
+            { id: 20, title: "What's missing? Look and Drow. Then stick", order: 20 },
+            { id: 21, title: "Listen and say", order: 21 },
+            { id: 22, title: "Trace the latters", order: 22 },
+            { id: 23, title: "Listen and say", order: 23 },
+            { id: 24, title: "Watch the video.", order: 24 },
+            { id: 25, title: "Say the color.", order: 25 },
         ]
     },
     {
         id: 2,
-        name: "Unit 2",
+        name: "Unit 1",
         steps: [
-            { id: 1, title: "Nazariya", order: 1 },
-            { id: 2, title: "Misollar", order: 2 },
-            { id: 3, title: "Mashqlar", order: 3 },
-            { id: 4, title: "Test", order: 4 }
+            { id: 1, title: "Who's speaking?", order: 1 },
+            { id: 2, title: "Listen. Point and say", order: 2 },
+            { id: 3, title: "Listen     and find", order: 3 },
+            { id: 4, title: "Say the chant", order: 4 },
+            { id: 5, title: "Look and find five differences", order: 5 },
+            { id: 6, title: "Listen and check.", order: 6 },
+            { id:7, title: "Look and match.", order: 7 },
         ]
     }
 ];

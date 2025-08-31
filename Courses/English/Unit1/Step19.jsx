@@ -1,13 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Styles from "../../../Styles/Styles";
+import ThreeButtons from "../../../components/Utils/ThreeButtons";
 
 export default function Step19({ next }) {
   const [count, setCount] = useState(5);
   const [showName, setShowName] = useState(false);
 
-  const scaleAnim = useRef(new Animated.Value(0)).current; // sanoq uchun
-  const nameAnim = useRef(new Animated.Value(0)).current;  // ism uchun
+  const scaleAnim = useRef(new Animated.Value(0)).current;
+  const nameAnim = useRef(new Animated.Value(0)).current;
 
   const colors = ["#EF4444", "#F59E0B", "#10B981", "#3B82F6", "#8B5CF6"];
 
@@ -15,7 +16,6 @@ export default function Step19({ next }) {
     if (count === 0) {
       setShowName(true);
 
-      // ism chiqishi uchun animatsiya
       nameAnim.setValue(0);
       Animated.spring(nameAnim, {
         toValue: 1,
@@ -26,7 +26,6 @@ export default function Step19({ next }) {
       return;
     }
 
-    // sanoq animatsiyasi
     scaleAnim.setValue(0);
     Animated.sequence([
       Animated.timing(scaleAnim, {
@@ -44,7 +43,7 @@ export default function Step19({ next }) {
 
   return (
     <View style={Styles.stepContainer}>
-      {/* Tepada savol yoki ism */}
+      <ThreeButtons />  
       {!showName ? (
         <Text style={styles.title}>Bu jonzotning ismi nima?</Text>
       ) : (
@@ -55,13 +54,11 @@ export default function Step19({ next }) {
         </Animated.Text>
       )}
 
-      {/* Rasm */}
       <Image
         style={styles.image}
         source={require("../../../assets/images/listen13.png")}
       />
 
-      {/* Teskari sanoq */}
       {count > 0 && (
         <Animated.Text
           style={[
@@ -73,7 +70,6 @@ export default function Step19({ next }) {
         </Animated.Text>
       )}
 
-      {/* Next button faqat ism chiqqanda */}
       {showName && (
         <TouchableOpacity style={Styles.NextButton} onPress={next}>
           <Text style={styles.buttonText}>Next ➡️</Text>

@@ -17,7 +17,7 @@ const shuffleArray = (array) => {
     return [...array].sort(() => Math.random() - 0.5);
 };
 
-export default function QABox({ }) {
+export default function QABox({next}) {
     const [shuffledAnswers] = useState(shuffleArray(data.map((d) => d.answer)));
     const [selectedQ, setSelectedQ] = useState(null);
     const [selectedA, setSelectedA] = useState(null);
@@ -35,7 +35,6 @@ export default function QABox({ }) {
         setSelectedA(null);
         setResult(null);
     };
-
     const handleSelectA = (a) => {
         if (!selectedQ) return;
         if (disabledAnswers.includes(a)) return;
@@ -117,7 +116,7 @@ export default function QABox({ }) {
 
                 {/* Hamma to‘g‘ri topilganda Next tugmasi */}
                 {allCorrect && (
-                    <TouchableOpacity style={Styles.NextButton} onPress={() => alert("Next step! 🚀")}>
+                    <TouchableOpacity style={Styles.NextButton} onPress={next}>
                         <Text style={styles.nextText}>Next</Text>
                     </TouchableOpacity>
                 )}

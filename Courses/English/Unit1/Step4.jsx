@@ -21,7 +21,7 @@ const targets = [
 
 export default function App({ next }) {
     const [positions, setPositions] = useState({});
-    const [matched, setMatched] = useState({}); // to‘g‘ri joylashganlar
+    const [matched, setMatched] = useState({});
     const dropZones = useRef({});
     const [isError, setIsError] = useState(false);
 

@@ -14,38 +14,41 @@ import {
     View,
 } from "react-native";
 import ErrorOverlay from "./OnError";
-import Success from './Success';
+import Success from "./Success";
+import ThreeButtons from "./ThreeButtons";
 
 export default function WordGameAssist({
-    next,
+    setDictionary,
     words = ["hello", "bye", "green", "yellow"],
     audios = [
         "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
         "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
         "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
         "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
-    ]
+    ],
 }) {
     const [index, setIndex] = useState(0);
     const [target, setTarget] = useState(words[0].toLowerCase());
     const [boxes, setBoxes] = useState([]);
-    const [pool, setPool] = useState([]); // {id, letter, used}
+    const [pool, setPool] = useState([]);
     const [message, setMessage] = useState("");
     const [disablePool, setDisablePool] = useState(false);
+
+    const [isStarted, setIsStarted] = useState(false); // 🔥 yangi state
+
     const pointerScale = useRef(new Animated.Value(1)).current;
     const wordSound = useRef(null);
-
 
     useEffect(() => {
         Animated.loop(
             Animated.sequence([
                 Animated.timing(pointerScale, {
-                    toValue: 1.2, // kattalashish
+                    toValue: 1.2,
                     duration: 500,
                     useNativeDriver: true,
                 }),
                 Animated.timing(pointerScale, {
-                    toValue: 1, // qayta kichrayish
+                    toValue: 1,
                     duration: 500,
                     useNativeDriver: true,
                 }),
@@ -54,15 +57,14 @@ export default function WordGameAssist({
     }, []);
 
     useEffect(() => {
+        if (!isStarted) return; // 🔥 faqat Play bosilganda ishlaydi
         initForWord(words[index]);
         setAttempts(0);
-        playWordAudio(audios[index]);   // ✅ yangi qo‘shildi
-
+        playWordAudio(audios[index]);
         return () => {
             unloadWordAudio();
         };
-    }, [index]);
-
+    }, [index, isStarted]);
 
     async function playWordAudio(url) {
         try {
@@ -85,89 +87,23 @@ export default function WordGameAssist({
         } catch (e) { }
     }
 
-    // attempts counter for current word
+    // attempts counter
     const [attempts, setAttempts] = useState(0);
 
     // assist mode state
     const [assistMode, setAssistMode] = useState(false);
-    const [assistIndex, setAssistIndex] = useState(0); // which letter of target we are guiding to
+    const [assistIndex, setAssistIndex] = useState(0);
 
-    // pointer animation & layout refs
+    // pointer animation
     const pointerAnim = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
     const pointerOpacity = useRef(new Animated.Value(0)).current;
     const poolContainerLayout = useRef({ x: 0, y: 0 });
-    const poolItemLayouts = useRef({}); // { [id]: { x, y, width, height } }
+    const poolItemLayouts = useRef({});
 
     // sounds
     const clickSound = useRef(null);
     const successSound = useRef(null);
     const errorSound = useRef(null);
-
-    useEffect(() => {
-        initForWord(words[index]);
-        setAttempts(0);
-        // cleanup sounds on unmount
-        return () => {
-            //   unloadSounds();
-        };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [index]);
-
-    //   useEffect(() => {
-    //     // preload sounds once
-    //     loadSounds();
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    //   }, []);
-
-    //   async function loadSounds() {
-    //     try {
-    //       clickSound.current = await Audio.Sound.createAsync(require("./assets/sounds/click.mp3"));
-    //     } catch (e) {
-    //       clickSound.current = null;
-    //     }
-    //     try {
-    //       successSound.current = await Audio.Sound.createAsync(require("./assets/sounds/success.mp3"));
-    //     } catch (e) {
-    //       successSound.current = null;
-    //     }
-    //     try {
-    //       errorSound.current = await Audio.Sound.createAsync(require("./assets/sounds/error.mp3"));
-    //     } catch (e) {
-    //       errorSound.current = null;
-    //     }
-    //   }
-
-    async function unloadSounds() {
-        try {
-            if (clickSound.current && clickSound.current.sound) await clickSound.current.sound.unloadAsync();
-            if (successSound.current && successSound.current.sound) await successSound.current.sound.unloadAsync();
-            if (errorSound.current && errorSound.current.sound) await errorSound.current.sound.unloadAsync();
-        } catch (e) {
-            // ignore
-        }
-    }
-
-    async function playClick() {
-        try {
-            if (clickSound.current && clickSound.current.sound) {
-                await clickSound.current.sound.replayAsync();
-            }
-        } catch (e) { }
-    }
-    async function playSuccess() {
-        try {
-            if (successSound.current && successSound.current.sound) {
-                await successSound.current.sound.replayAsync();
-            }
-        } catch (e) { }
-    }
-    async function playError() {
-        try {
-            if (errorSound.current && errorSound.current.sound) {
-                await errorSound.current.sound.replayAsync();
-            }
-        } catch (e) { }
-    }
 
     function initForWord(word) {
         const w = String(word).toLowerCase();
@@ -186,9 +122,7 @@ export default function WordGameAssist({
         setAssistIndex(0);
         poolItemLayouts.current = {};
         pointerOpacity.setValue(0);
-        // Android layout animation enable
         if (Platform.OS === "android" && LayoutAnimation && LayoutAnimation.configureNext) {
-            // no-op but ensures LayoutAnimation works on Android in dev
         }
     }
 
@@ -201,20 +135,13 @@ export default function WordGameAssist({
         return a;
     }
 
-    // when a pool letter is pressed
     async function onPick(poolId) {
-        // If in assistMode: only allow pressing the suggested pool item (the one pointer is on)
         if (assistMode) {
             const suggested = getSuggestedPoolItemForAssist(assistIndex);
             if (!suggested || suggested.id !== poolId) {
-                // ignore other presses while assisting
                 return;
             }
-            // allow pressing the suggested one — proceed
         }
-
-        // normal flow: play click sound
-        await playClick();
 
         const poolIdx = pool.findIndex((p) => p.id === poolId);
         if (poolIdx === -1) return;
@@ -223,7 +150,6 @@ export default function WordGameAssist({
         const emptyBoxIdx = boxes.findIndex((b) => b === null);
         if (emptyBoxIdx === -1) return;
 
-        // place letter
         const newBoxes = boxes.slice();
         newBoxes[emptyBoxIdx] = { ...pool[poolIdx] };
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -233,10 +159,8 @@ export default function WordGameAssist({
         newPool[poolIdx] = { ...newPool[poolIdx], used: true };
         setPool(newPool);
 
-        // If we were in assist mode, advance assistIndex to next letter
         if (assistMode) {
             setAssistIndex((prev) => prev + 1);
-            // If assistIndex reaches target length, we've completed the word — handle completion below
         }
 
         if (newBoxes.every((b) => b !== null)) {
@@ -245,9 +169,8 @@ export default function WordGameAssist({
         }
     }
 
-    // undo from boxes
     function onRemoveFromBox(boxIdx) {
-        if (assistMode) return; // don't allow removing while assisting (optional)
+        if (assistMode) return;
         if (boxes[boxIdx] === null) return;
         const item = boxes[boxIdx];
         const newBoxes = boxes.slice();
@@ -263,7 +186,6 @@ export default function WordGameAssist({
     function checkAnswer(filledBoxes) {
         const assembled = filledBoxes.map((b) => b.letter).join("");
         if (assembled === target) {
-            playSuccess();
             setMessage("Tog'ri!");
             setAttempts(0);
             setAssistMode(false);
@@ -274,21 +196,16 @@ export default function WordGameAssist({
                 }, 900);
             }
         } else {
-            playError();
             Vibration.vibrate(300);
             setMessage("Noto'g'ri — qaytadan yozing");
-            // increase attempts
             setAttempts((prev) => {
                 const nextAttempt = prev + 1;
-                // if attempts reach 3 => enable assistMode
                 if (nextAttempt >= 3) {
-                    // start assist mode after small delay so user sees message
                     setTimeout(() => startAssist(), 600);
                 }
                 return nextAttempt;
             });
 
-            // reset boxes and pool usage
             setTimeout(() => {
                 setPool((prev) => prev.map((p) => ({ ...p, used: false })));
                 setBoxes(Array.from({ length: target.length }).map(() => null));
@@ -298,33 +215,23 @@ export default function WordGameAssist({
         }
     }
 
-    /* ========== ASSIST MODE LOGIC ========== */
-
-    // start assist: show pointer at first target letter's matching pool item
     function startAssist() {
         setAssistMode(true);
         setAssistIndex(0);
-        // show pointer and move to first suggested item (if measurable)
         setTimeout(() => {
             movePointerToSuggested(0);
-        }, 120); // small delay
+        }, 120);
     }
 
-    // returns pool item (object) that corresponds to target letter at position idx
     function getSuggestedPoolItemForAssist(idx) {
-        // we need the pool item that matches target[idx] and is currently not used in boxes
         const ch = target[idx];
-        // find the first pool item with that letter and not used AND not already used by previous suggestions in mapping
-        // But since we always advance assistIndex only when user presses suggested, we can simply find first unused with that letter
         const poolItem = pool.find((p) => p.letter === ch && !p.used);
         return poolItem || null;
     }
 
-    // animate pointer to the suggested pool item's layout (if measured)
     function movePointerToSuggested(idx) {
         const poolItem = getSuggestedPoolItemForAssist(idx);
         if (!poolItem) {
-            // nothing to point to (maybe items not measured yet) -> try to fallback: flash the letters
             flashSuggestedLettersFallback(idx);
             return;
         }
@@ -335,11 +242,9 @@ export default function WordGameAssist({
             return;
         }
 
-        // compute absolute-ish coordinates within SafeAreaView:
-        const targetX = container.x + layout.x + layout.width / 2 - 20; // adjust pointer half width
-        const targetY = container.y + layout.y + 50; // above the letter
+        const targetX = container.x + layout.x + layout.width / 2 - 20;
+        const targetY = container.y + layout.y + 50;
 
-        // show pointer if hidden
         Animated.timing(pointerOpacity, { toValue: 1, duration: 200, useNativeDriver: true }).start();
 
         Animated.spring(pointerAnim, {
@@ -350,16 +255,13 @@ export default function WordGameAssist({
         }).start();
     }
 
-    // fallback: briefly flash suggested letter if layout not ready
     function flashSuggestedLettersFallback(idx) {
         const poolItem = getSuggestedPoolItemForAssist(idx);
         if (!poolItem) return;
-        // briefly toggle used style to draw attention
         setPool((prev) => prev.map((p) => (p.id === poolItem.id ? { ...p, used: true } : p)));
         setTimeout(() => {
             setPool((prev) => prev.map((p) => (p.id === poolItem.id ? { ...p, used: false } : p)));
         }, 700);
-        // ensure pointerOpacity visible a bit
         Animated.timing(pointerOpacity, { toValue: 1, duration: 150, useNativeDriver: true }).start(() => {
             setTimeout(() => {
                 Animated.timing(pointerOpacity, { toValue: 0, duration: 150, useNativeDriver: true }).start();
@@ -367,128 +269,155 @@ export default function WordGameAssist({
         });
     }
 
-    // watch assistIndex changes to move pointer to next letter
     useEffect(() => {
         if (!assistMode) return;
         if (assistIndex >= target.length) {
-
             Animated.timing(pointerOpacity, { toValue: 0, duration: 200, useNativeDriver: true }).start();
             return;
         }
-        // move pointer to next suggested pool item
         movePointerToSuggested(assistIndex);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [assistIndex, assistMode]);
 
-    /* ========== LAYOUT HANDLERS ========== */
     function onPoolContainerLayout(e) {
-        // store container layout relative to parent
         poolContainerLayout.current = e.nativeEvent.layout;
     }
     function onPoolItemLayout(id, e) {
         poolItemLayouts.current[id] = e.nativeEvent.layout;
     }
 
-    /* ========== RENDER ========== */
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false);
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>🌈 So'z o'yini (Assist)</Text>
-            <Text style={styles.hint}>So'zni tuzing ({target.length} harf)</Text>
-
-            {/* Boxes */}
-            <View style={styles.boxRow}>
-                {boxes.map((b, i) => (
-                    <TouchableOpacity
-                        key={i}
-                        style={[styles.box, b ? styles.boxFilled : null]}
-                        onPress={() => onRemoveFromBox(i)}
-                        activeOpacity={0.8}
-                        disabled={assistMode} // disable removing while assisting
-                    >
-                        <Text style={styles.boxText}>{b ? b.letter.toUpperCase() : ""}</Text>
-                    </TouchableOpacity>
-                ))}
-            </View>
-
-            {/* message */}
-            {message === "Tog'ri!" ? (
+            {!isStarted ? (
                 <>
-                    <Success />
-                    {index === words.length - 1 && (
-                        <TouchableOpacity
-                            style={[styles.controlBtn, { marginTop: 20 }]}
-                            onPress={next}
-                        >
-                            <Text style={styles.controlText}>🎉 Tugatish</Text>
-                        </TouchableOpacity>
-                    )}
+                    <ThreeButtons
+                        setDictionary={setDictionary}
+                        infoClick={infoClick}
+                        clicked={clicked}
+                        setClicked={setClicked}
+                        setInfoClick={setInfoClick}
+                        audioUrl="https://ukkibackend.soof.uz/media/audio/f7546256-eda1-4406-91fd-864fda928a2c.mp3"
+                    />
+                    <TouchableOpacity style={styles.playBtn} onPress={() => setIsStarted(true)}>
+                        <Text style={styles.playBtnText}>▶️ Play</Text>
+                    </TouchableOpacity>
                 </>
-            ) : message === "Noto'g'ri — qaytadan yozing" ? (
-                <ErrorOverlay />
-            ) : null}
+            ) : (
+                <>
+                    <ThreeButtons
+                        setDictionary={setDictionary}
+                        infoClick={infoClick}
+                        clicked={clicked}
+                        setClicked={setClicked}
+                        setInfoClick={setInfoClick}
+                        audioUrl="https://ukkibackend.soof.uz/media/audio/f7546256-eda1-4406-91fd-864fda928a2c.mp3"
+                    />
+                    <Text style={styles.title}>🌈 So'z o'yini</Text>
+                    <Text style={styles.hint}>So'zni tuzing ({target.length} harf)</Text>
 
-            {/* Pool */}
-            <View style={styles.poolRow} onLayout={onPoolContainerLayout}>
-                {pool.map((p) => {
-                    // If assistMode, highlight only suggested pool item
-                    let extraStyle = {};
-                    if (assistMode) {
-                        const suggested = getSuggestedPoolItemForAssist(assistIndex);
-                        if (suggested && suggested.id === p.id) {
-                            extraStyle = styles.suggestedLetter;
-                        } else {
-                            extraStyle = styles.dimmedLetter;
-                        }
-                    }
-                    return (
-                        <TouchableOpacity
-                            key={p.id}
-                            style={[styles.letter, p.used ? styles.letterUsed : null, extraStyle]}
-                            onLayout={(e) => onPoolItemLayout(p.id, e)}
-                            onPress={() => onPick(p.id)}
-                            disabled={p.used || disablePool}
-                            activeOpacity={0.8}
-                        >
-                            <Text style={styles.letterText}>{p.letter.toUpperCase()}</Text>
-                        </TouchableOpacity>
-                    );
-                })}
-            </View>
+                    {/* Boxes */}
+                    <View style={styles.boxRow}>
+                        {boxes.map((b, i) => (
+                            <TouchableOpacity
+                                key={i}
+                                style={[styles.box, b ? styles.boxFilled : null]}
+                                onPress={() => onRemoveFromBox(i)}
+                                activeOpacity={0.8}
+                                disabled={assistMode}
+                            >
+                                <Text style={styles.boxText}>{b ? b.letter.toUpperCase() : ""}</Text>
+                            </TouchableOpacity>
+                        ))}
+                    </View>
 
-           
+                    {message === "Tog'ri!" ? (
+                        <>
+                            <Success />
+                            {index === words.length - 1 && (
+                                <TouchableOpacity
+                                    style={[styles.controlBtn, { marginTop: 20 }]}
+                                    onPress={() => {
+                                        setDictionary(true);
+                                        setIsStarted(false); // 🔥 oxirida qayta Play tugmasi chiqishi uchun
+                                    }}
+                                >
+                                    <Text style={styles.controlText}>🎉 Tugatish</Text>
+                                </TouchableOpacity>
+                            )}
+                        </>
+                    ) : message === "Noto'g'ri — qaytadan yozing" ? (
+                        <ErrorOverlay />
+                    ) : null}
 
-            {/* Pointer (absolute) */}
-            <Animated.View
-                pointerEvents="none"
-                style={[
-                    styles.pointer,
-                    {
-                        opacity: pointerOpacity,
-                        transform: [
-                            { translateX: pointerAnim.x },
-                            { translateY: pointerAnim.y },
-                            { scale: pointerScale } // endi pulsatsiya shu yerda
-                        ],
-                    },
-                ]}
-            >
-                <Image
-                    source={require("../../assets/images/hand.png")}
-                    style={{ width: 40, height: 40, resizeMode: "contain" }}
-                />
-            </Animated.View>
+                    <View style={styles.poolRow} onLayout={onPoolContainerLayout}>
+                        {pool.map((p) => {
+                            let extraStyle = {};
+                            if (assistMode) {
+                                const suggested = getSuggestedPoolItemForAssist(assistIndex);
+                                if (suggested && suggested.id === p.id) {
+                                    extraStyle = styles.suggestedLetter;
+                                } else {
+                                    extraStyle = styles.dimmedLetter;
+                                }
+                            }
+                            return (
+                                <TouchableOpacity
+                                    key={p.id}
+                                    style={[styles.letter, p.used ? styles.letterUsed : null, extraStyle]}
+                                    onLayout={(e) => onPoolItemLayout(p.id, e)}
+                                    onPress={() => onPick(p.id)}
+                                    disabled={p.used || disablePool}
+                                    activeOpacity={0.8}
+                                >
+                                    <Text style={styles.letterText}>{p.letter.toUpperCase()}</Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                    </View>
 
+                    <Animated.View
+                        pointerEvents="none"
+                        style={[
+                            styles.pointer,
+                            {
+                                opacity: pointerOpacity,
+                                transform: [
+                                    { translateX: pointerAnim.x },
+                                    { translateY: pointerAnim.y },
+                                    { scale: pointerScale },
+                                ],
+                            },
+                        ]}
+                    >
+                        <Image
+                            source={require("../../assets/images/hand.png")}
+                            style={{ width: 40, height: 40, resizeMode: "contain" }}
+                        />
+                    </Animated.View>
+                </>
+            )}
         </SafeAreaView>
     );
 }
 
-/* ========== STYLES ========== */
 const styles = StyleSheet.create({
-    container: { flex: 1, padding: 16, alignItems: "center", justifyContent: 'center', backgroundColor: "#fdf6ff" },
+    container: { flex: 1, padding: 16, alignItems: "center", justifyContent: "center", backgroundColor: "#fdf6ff" },
     title: { fontSize: 26, fontWeight: "800", marginBottom: 6, color: "#ff6f91" },
     hint: { fontSize: 15, marginBottom: 12, color: "#444" },
-
+    playBtn: {
+        backgroundColor: "#4caf50",
+        paddingVertical: 18,
+        paddingHorizontal: 40,
+        borderRadius: 30,
+        elevation: 4,
+    },
+    playBtnText: {
+        fontSize: 22,
+        fontWeight: "bold",
+        color: "#fff",
+    },
     boxRow: {
         flexDirection: "row",
         justifyContent: "center",
@@ -514,7 +443,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#d4f8d4",
     },
     boxText: { fontSize: 24, fontWeight: "900", color: "#333" },
-
     poolRow: {
         flexDirection: "row",
         flexWrap: "wrap",
@@ -539,8 +467,6 @@ const styles = StyleSheet.create({
         opacity: 0.28,
     },
     letterText: { fontSize: 20, fontWeight: "900", color: "#ff7043" },
-
-    // assist styles
     suggestedLetter: {
         borderColor: "#3b82f6",
         backgroundColor: "#dbeafe",
@@ -548,23 +474,6 @@ const styles = StyleSheet.create({
     },
     dimmedLetter: {
         opacity: 0.45,
-    },
-
-    messageWrap: {
-        marginTop: 8,
-        marginBottom: 8,
-        paddingHorizontal: 14,
-        paddingVertical: 8,
-        borderRadius: 12,
-        backgroundColor: "#fff3cd",
-        borderWidth: 1,
-        borderColor: "#ffeeba",
-    },
-    messageText: { fontSize: 18, fontWeight: "800", color: "#856404" },
-
-    controls: {
-        flexDirection: "row",
-        marginTop: 18,
     },
     controlBtn: {
         backgroundColor: "#FFD93D",
@@ -580,7 +489,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
     },
     controlText: { fontWeight: "800", color: "#000", fontSize: 15 },
-
     pointer: {
         position: "absolute",
         left: 0,

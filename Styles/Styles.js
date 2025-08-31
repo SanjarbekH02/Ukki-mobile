@@ -22,7 +22,7 @@ export default StyleSheet.create({
         borderBottomLeftRadius: 12,
         borderBottomRightRadius: 12,
     },
-
+    
     ImgFull: {
         width: "100%",
         height: "100%",
@@ -76,7 +76,7 @@ export default StyleSheet.create({
         position: 'absolute',
         top: 10,
         left: 10,
-        backgroundColor: '#fff',
+        backgroundColor: '#ffffffff',
         borderRadius: 20,
         paddingRight: 10,
     },

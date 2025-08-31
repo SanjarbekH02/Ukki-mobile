@@ -179,13 +179,13 @@ const { width } = Dimensions.get('window');
 export default function KaraokePlayer({
     audioUri = "https://ukkibackend.soof.uz/media/audio/fdcecb34-7e46-41fb-b70d-0e2a981222b9.mp3",
     lrcText = `
-[00:02.07]Guess [00:02.33]what! [00:04.21]Come  [00:04.47]and [00:04.74]see. | Top-chi qani, kel, Ko'r!
-[00:06.33]Guess [00:06.87]what! [00:08.46]Come [00:08.72]and [00:08.99]play. | Top-chi qani, kel, o'yna.
-[00:10.58]Guess [00:10.86]what! [00:12.71]What [00:13.77]can [00:14.04]we [00:14.56]learn [00:14.83]today? | Top-chi qani, bugun nimalarni bilamiz?
-[00:23.56]Guess [00:23.81]what! [00:25.68]Come [00:25.94]and [00:26.20]see. | Top-chi qani, kel, Ko'r!
-[00:27.80]Guess [00:28.34]what! [00:29.94]Come [00:30.20]and [00:30.46]play. | Top-chi qani, kel, o'yna.
-[00:32.05]Guess [00:32.58]what! [00:34.44]it's [00:34.71]time [00:35.24]to [00:35.78]learn [00:36.30]today! | Top-chi qani, bugun o'rganish vaqti keldimi!
-[00:38.43]Guess [00:38.97]what! | Topgin-chi
+[00:02.05]Guess [00:02.31]what! [00:04.17]Come  [00:04.44]and [00:04.70]see. | Top-chi qani, kel, Ko'r!
+[00:06.03]Guess [00:06.57]what! [00:08.43]Come [00:08.69]and [00:08.96]play. | Top-chi qani, kel, o'yna.
+[00:10.51]Guess [00:11.02]what! [00:12.89]What [00:13.69]can [00:13.96]we [00:14.22]learn [00:14.76]today? | Top-chi qani, bugun nimalarni bilamiz?
+[00:23.48]Guess [00:23.74]what! [00:25.56]Come [00:25.82]and [00:26.09]see. | Top-chi qani, kel, Ko'r!
+[00:27.67]Guess [00:28.21]what! [00:29.80]Come [00:30.07]and [00:30.33]play. | Top-chi qani, kel, o'yna.
+[00:31.93]Guess [00:32.46]what! [00:34.05]it's [00:34.59]time [00:35.39]to [00:35.65]learn [00:36.18]today! | Top-chi qani, bugun o'rganish vaqti keldimi!
+[00:38.31]Guess [00:38.84]what! | Topgin-chi
 `,
     autoPlay = true,
     next

@@ -1,6 +1,7 @@
 import { Audio } from "expo-av";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Dimensions, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Animated, Dimensions, Easing, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ThreeButtons from "./Utils/ThreeButtons";
 
 const { width } = Dimensions.get("window");
 
@@ -10,6 +11,12 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
     const translateX = useRef(new Animated.Value(width)).current;
     const rotateY = useRef(new Animated.Value(0)).current;
     const soundRef = useRef(null);
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [pointer, setPointer] = useState(false);
+    // const [dictionary, setDictionary] = useState(false)
+     const pointerScale = useRef(new Animated.Value(1)).current;
+     const pointerOpacity = useRef(new Animated.Value(1)).current;
 
     const currentItem = data[index];
 
@@ -22,6 +29,26 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
             }).start();
         }
     }, [index, finished]);
+    useEffect(() => {
+        if (pointer) {
+            Animated.loop(
+                Animated.sequence([
+                    Animated.timing(pointerScale, {
+                        toValue: 1.2,
+                        duration: 400,
+                        easing: Easing.ease,
+                        useNativeDriver: true,
+                    }),
+                    Animated.timing(pointerScale, {
+                        toValue: 1,
+                        duration: 400,
+                        easing: Easing.ease,
+                        useNativeDriver: true,
+                    }),
+                ])
+            ).start();
+        }
+    }, [pointer]);
 
     // Audio o‘ynash
     const playAudio = async (url) => {
@@ -44,8 +71,8 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
         }
     };
 
-    // Flip + audio
     const flipCard = () => {
+        setPointer(false)
         Animated.timing(rotateY, {
             toValue: 180,
             duration: 500,
@@ -54,7 +81,6 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
         playAudio(currentItem.audioUrl);
     };
 
-    // Keyingi kartaga o'tish
     const nextCard = () => {
         Animated.timing(translateX, {
             toValue: -width,
@@ -111,6 +137,10 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
 
     return (
         <View style={styles.container}>
+            <ThreeButtons setDictionary={setDictionary} setPointer={setPointer}
+                audioUrl="https://ukkibackend.soof.uz/media/audio/e4ee6793-0df5-4696-91d7-670b825d3c17.mp3"
+                infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} />
+
             {/* FRONT SIDE */}
             <Animated.View
                 style={[
@@ -143,11 +173,20 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
                     </Text>
                 </TouchableOpacity>
             </Animated.View>
+            {pointer && (
+                <Animated.Image
+                    style={[
+                        styles.handImage,
+                        { transform: [{ scale: pointerScale }], opacity: pointerOpacity },
+                    ]}
+                    source={require("../assets/images/hand2.png")}
+                />
+            )}
         </View>
     );
 };
 
-const colors = ["#FFB6C1", "#87CEFA", "#90EE90", "#FFD700", "#FFA07A"];
+const colors = ["#ff687eff", "#27abfdff", "#50ff50ff", "#ffd900ff", "#ff5f20ff"];
 
 const styles = StyleSheet.create({
     container: {
@@ -199,6 +238,14 @@ const styles = StyleSheet.create({
         color: "#fff",
         fontSize: 16,
         fontWeight: "bold",
+    },
+    handImage: {
+        width: 50,
+        height: 70,
+        position: "absolute",
+        right: '40%',
+        bottom: '40%',
+        zIndex: 2,
     },
 });
 
