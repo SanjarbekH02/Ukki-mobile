@@ -340,7 +340,7 @@ export default function WordGameAssist({
                                     style={[styles.controlBtn, { marginTop: 20 }]}
                                     onPress={() => {
                                         setDictionary(true);
-                                        setIsStarted(false); // 🔥 oxirida qayta Play tugmasi chiqishi uchun
+                                        setIsStarted(false);
                                     }}
                                 >
                                     <Text style={styles.controlText}>🎉 Tugatish</Text>
@@ -421,6 +421,7 @@ const styles = StyleSheet.create({
     boxRow: {
         flexDirection: "row",
         justifyContent: "center",
+        flexWrap: 'wrap',
         marginBottom: 18,
     },
     box: {
@@ -437,6 +438,7 @@ const styles = StyleSheet.create({
         shadowColor: "#000",
         shadowOpacity: 0.08,
         shadowRadius: 4,
+        marginBottom: 3,
     },
     boxFilled: {
         borderColor: "#4caf50",

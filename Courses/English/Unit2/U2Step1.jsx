@@ -179,7 +179,7 @@ const U2Step1 = ({ next }) => {
                         <Text style={Styles.listenText}>Listen. point, and say.</Text>
                         {showPointer2 && (
                             <Animated.Image
-                                source={require("../../../assets/images/hand2.png")} // qo‘lcha rasmi
+                                source={require("../../../assets/images/hand2.png")}
                                 style={[
                                     styles.pointer,
                                     { transform: [{ scale: scaleAnim }] }
@@ -193,7 +193,6 @@ const U2Step1 = ({ next }) => {
                         style={styles.step2Img}
                     />
 
-                    {/* Button 1 */}
                     <TouchableOpacity style={[styles.userNumber, styles.userNumber1, mapping[currentIndex] === 1 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
                         {mapping[currentIndex] === 1 ? (
                             <LottieView

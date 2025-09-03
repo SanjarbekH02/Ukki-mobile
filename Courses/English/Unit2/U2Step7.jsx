@@ -17,7 +17,7 @@ const bottomImages = [
   { id: "d", src: require("../../../assets/images/qizilstol.jpg") },
 ];
 
-export default function MatchGame() {
+export default function MatchGame({next}) {
   const [selectedTop, setSelectedTop] = useState(null);
   const [matches, setMatches] = useState({});
   const [results, setResults] = useState({});
@@ -96,7 +96,7 @@ export default function MatchGame() {
       </TouchableOpacity>
 
       {allCorrect && (
-        <TouchableOpacity style={Styles.NextButton} onPress={() => alert("Next bosildi!")}>
+        <TouchableOpacity style={Styles.NextButton} onPress={next}>
           <Text style={{ color: "white", fontSize: 18 }}>➡️ Next</Text>
         </TouchableOpacity>
       )}

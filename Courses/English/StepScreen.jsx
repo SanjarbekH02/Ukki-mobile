@@ -28,12 +28,18 @@ import Step7 from "./Unit1/Step7";
 import Step8 from "./Unit1/Step8";
 import Step9 from "./Unit1/Step9";
 import U2Step1 from "./Unit2/U2Step1";
+import U2Step10 from "./Unit2/U2Step10";
+import ClassroomCountGame from "./Unit2/U2Step11";
+import U2Step12 from "./Unit2/U2Step12";
+import U2Step13 from "./Unit2/U2Step13";
 import U2Step2 from "./Unit2/U2Step2";
 import U2Step3 from "./Unit2/U2Step3";
 import U2Step4 from "./Unit2/U2Step4";
 import U2Step5 from "./Unit2/U2Step5";
 import ListenAndChooseGrid from "./Unit2/U2Step6";
 import MatchPairsGame from "./Unit2/U2Step7";
+import U2Step8 from "./Unit2/U2Step8";
+import U2Step9 from "./Unit2/U2Step9";
 
 export default function StepScreen({ route, navigation }) {
     const { unitId, step, unitSteps, progress, setProgress } = route.params;
@@ -186,6 +192,24 @@ export default function StepScreen({ route, navigation }) {
             )}
             {unitId === 2 && step.order === 7 && (
                 <MatchPairsGame next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 8 && (
+                <U2Step8 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 9 && (
+                <U2Step9 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 10 && (
+                <U2Step10 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 11 && (
+                <ClassroomCountGame next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 12 && (
+                <U2Step12 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 13 && (
+                <U2Step13 next={goToNextStep} />
             )}
 
         </View>
