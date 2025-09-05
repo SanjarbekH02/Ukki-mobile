@@ -169,7 +169,6 @@ const Step2 = ({ next }) => {
                 { text: "find", audioUrl: "https://ukkibackend.soof.uz/media/audio/topmoq.mp3" },
               ]}
             />
-
           ) : (
             <WordGameAssist
               setDictionary={setTalaffuz}
@@ -220,7 +219,7 @@ const Step2 = ({ next }) => {
               <Text style={Styles.listenText}>Listen. point, and say.</Text>
               {showPointer2 && (
                 <Animated.Image
-                  source={require("../../../assets/images/hand2.png")} // qo‘lcha rasmi
+                  source={require("../../../assets/images/hand2.png")} 
                   style={[
                     styles.pointer,
                     { transform: [{ scale: scaleAnim }] }

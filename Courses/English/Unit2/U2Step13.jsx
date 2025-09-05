@@ -1,14 +1,18 @@
 import { Audio } from "expo-av";
 import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ErrorOverlay from "../../../components/Utils/OnError";
+import ConfettiEffect from "../../../components/Utils/Success";
+import ThreeButtons from "../../../components/Utils/ThreeButtons";
 
-export default function U2Step13() {
+export default function U2Step13({ next }) {
     const [sound, setSound] = useState(null);
     const [currentQ, setCurrentQ] = useState(0);
     const [result, setResult] = useState(null);
     const [gameFinished, setGameFinished] = useState(false);
+    const [isSuccess, setIsSucces] = useState(false);
+    const [isError, setIsError] = useState(false);
 
-    // Savollar ro‘yxati
     const questions = [
         {
             audio: "https://ukkibackend.soof.uz/media/audio/CD1-30-1.mp3",
@@ -100,6 +104,10 @@ export default function U2Step13() {
     const handleAnswer = (index) => {
         if (index === questions[currentQ].correct) {
             setResult("✅ To‘g‘ri!");
+            setIsSucces(true)
+            setTimeout(() => {
+                setIsSucces(false)
+            }, 2000)
             if (currentQ < questions.length - 1) {
                 setTimeout(() => {
                     setResult(null);
@@ -114,60 +122,77 @@ export default function U2Step13() {
             }
         } else {
             setResult("❌ Noto‘g‘ri!");
+            setIsError(true);
+            setTimeout(() => {
+                setIsError(false)
+            }, 1000)
             setTimeout(() => {
                 playAudio(questions[currentQ].audio);
                 setResult(null);
             }, 1000);
         }
     };
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false);
+    const [dictionary, setDictionary] = useState(false);
 
     return (
-        <View style={styles.container}>
-            {!gameFinished && (
-                <>
-                    <TouchableOpacity
-                        style={styles.playBtn}
-                        onPress={() => playAudio(questions[currentQ].audio)}
-                    >
-                        <Text style={styles.playText}>▶ Audio</Text>
-                    </TouchableOpacity>
+        <>
+            <View style={styles.container}>
+                <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick}
+                    clicked={clicked}
+                    setClicked={setClicked}
+                    setInfoClick={setInfoClick}  audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, audioni tingla va rasmlar ketma-ketligini belgila..mp3" />
+                {!gameFinished && (
+                    <>
+                        <TouchableOpacity
+                            style={styles.playBtn}
+                            onPress={() => playAudio(questions[currentQ].audio)}
+                        >
+                            <Text style={styles.playText}>▶ Audio</Text>
+                        </TouchableOpacity>
 
-                    <View style={styles.imgGrid}>
-                        {questions[currentQ].options.map((img, i) => (
-                            <TouchableOpacity
-                                key={i}
-                                style={styles.imgBox}
-                                onPress={() => handleAnswer(i)}
-                            >
-                                <Image source={img} style={styles.image} />
-                            </TouchableOpacity>
-                        ))}
-                    </View>
-
-                    {result && (
-                        <View style={{ alignItems: "center", marginTop: 20 }}>
-                            <Text style={{ fontSize: 22, fontWeight: "bold", color: "white" }}>
-                                {result}
-                            </Text>
+                        <View style={styles.imgGrid}>
+                            {questions[currentQ].options.map((img, i) => (
+                                <TouchableOpacity
+                                    key={i}
+                                    style={styles.imgBox}
+                                    onPress={() => handleAnswer(i)}
+                                >
+                                    <Image source={img} style={styles.image} />
+                                </TouchableOpacity>
+                            ))}
                         </View>
-                    )}
-                </>
-            )}
 
-            {gameFinished && (
-                <View style={{ alignItems: "center", marginTop: 30 }}>
-                    <Text style={{ fontSize: 22, fontWeight: "bold", color: "white" }}>
-                        🎉 Barcha savollar tugadi!
-                    </Text>
-                    <TouchableOpacity
-                        style={styles.nextBtn}
-                        onPress={() => alert("Keyingi Step!")}
-                    >
-                        <Text style={styles.nextText}>Next ➜</Text>
-                    </TouchableOpacity>
-                </View>
-            )}
-        </View>
+                        {result && (
+                            <View style={{ alignItems: "center", marginTop: 20 }}>
+                                <Text style={{ fontSize: 22, fontWeight: "bold", color: "white" }}>
+                                    {result}
+                                </Text>
+                            </View>
+                        )}
+                    </>
+                )}
+
+                {gameFinished && (
+                    <View style={{ alignItems: "center", marginTop: 30 }}>
+                        <Text style={{ fontSize: 22, fontWeight: "bold", color: "white" }}>
+                            🎉 Barcha savollar tugadi!
+                        </Text>
+                        <TouchableOpacity
+                            style={styles.nextBtn}
+                            onPress={next}
+                        >
+                            <Text style={styles.nextText}>Next ➜</Text>
+                        </TouchableOpacity>
+                    </View>
+                )}
+            </View>
+            {isSuccess && <ConfettiEffect />}
+            {isError && <ErrorOverlay />}
+        </>
     );
 }
 

@@ -1,4 +1,3 @@
-// data.js
 export const courseData = [
     {
         id: 1,
@@ -48,6 +47,16 @@ export const courseData = [
             { id:11, title: "Look and count, write the number.", order: 11 },
             { id:12, title: "Listen, Point and say", order: 12 },
             { id:13, title: "Chose the right action.", order: 13 },
+            { id:14, title: "Listen and check.", order: 14 },
+        ]
+    },
+    {
+        id: 3,
+        name: "Unit 2",
+        steps: [
+            {
+                id: 1,title: "hello ", order: 1
+            }
         ]
     }
 ];
