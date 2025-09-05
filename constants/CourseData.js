@@ -48,6 +48,8 @@ export const courseData = [
             { id:12, title: "Listen, Point and say", order: 12 },
             { id:13, title: "Chose the right action.", order: 13 },
             { id:14, title: "Listen and check.", order: 14 },
+            { id:15, title: "Talking pictures.", order: 15 },
+            { id:16, title: "Listen look and match.", order: 16 },
         ]
     },
     {

@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ErrorOverlay from "./OnError";
 import ConfettiEffect from "./Success";
-import ThreeButtons from "./ThreeButtons";
 
   export default function WordPractice({
     words = [
@@ -13,7 +12,8 @@ import ThreeButtons from "./ThreeButtons";
     ],
     setDictionary,
     setWordgame,
-    onFinish
+    onFinish,
+    setTalaffuz
   }) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(true);
