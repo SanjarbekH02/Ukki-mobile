@@ -33,6 +33,8 @@ import ClassroomCountGame from "./Unit2/U2Step11";
 import U2Step12 from "./Unit2/U2Step12";
 import U2Step13 from "./Unit2/U2Step13";
 import AudioQuiz from "./Unit2/U2Step14";
+import U2Step15 from "./Unit2/U2Step15";
+import MatchGame from "./Unit2/U2Step16";
 import U2Step2 from "./Unit2/U2Step2";
 import U2Step3 from "./Unit2/U2Step3";
 import U2Step4 from "./Unit2/U2Step4";
@@ -79,7 +81,7 @@ export default function StepScreen({ route, navigation }) {
     };
     return (
         <View style={styles.container}>
-            {!isPlaying && step.order !== 14 && unitId !== 1 &&(
+            {!isPlaying && step.order !== 14 && (
                 <View style={Styles.ComponentTop}>
                     <ComponentTop text={step.title} />
                 </View>
@@ -215,7 +217,12 @@ export default function StepScreen({ route, navigation }) {
             {unitId === 2 && step.order === 14 && (
                 <AudioQuiz next={goToNextStep} />
             )}
-            
+            {unitId === 2 && step.order === 15 && (
+                <U2Step15 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 16 && (
+                <MatchGame next={goToNextStep} />
+            )}
 
         </View>
     );

@@ -1,7 +1,10 @@
 import { Audio } from "expo-av";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import WordPractice from "../../../components/Utils/Talaffuz";
 import ThreeButtons from "../../../components/Utils/ThreeButtons";
+import WordGameAssist from "../../../components/Utils/WordGame";
+import FlashCards from "../../../components/YangiSozlar";
 
 const questions = [
     {
@@ -31,22 +34,23 @@ export default function AudioQuiz({ next }) {
     const [current, setCurrent] = useState(0);
     const [selected, setSelected] = useState({});
     const [checked, setChecked] = useState(false);
-    const [selectedBtns, setSelectedBtns] = useState([])
-
-    useEffect(() => {
-        playAudio(current);
-        return () => {
-            if (sound) sound.unloadAsync();
-        };
-    }, [current]);
+    const [selectedBtns, setSelectedBtns] = useState([]);
+    const [started, setStarted] = useState(false); // yangi state
 
     const playAudio = async (index) => {
-        if (sound) await sound.unloadAsync();
+        if (sound) {
+            await sound.unloadAsync();
+        }
         const { sound: newSound } = await Audio.Sound.createAsync({
             uri: questions[index].audio,
         });
         setSound(newSound);
         await newSound.playAsync();
+    };
+
+    const handleStart = () => {
+        setStarted(true);
+        playAudio(current);
     };
 
     const handleSelect = (imgId) => {
@@ -56,71 +60,149 @@ export default function AudioQuiz({ next }) {
         }
         if (current < questions.length - 1) {
             setCurrent(current + 1);
+            playAudio(current + 1);
         }
     };
 
-    const handleCheck = () => {
-        setChecked(true);
-    };
+    const handleCheck = () => setChecked(true);
 
     const handleTryAgain = () => {
-        setSelectedBtns([])
+        setSelectedBtns([]);
         setSelected({});
         setChecked(false);
         setCurrent(0);
-        playAudio(0);
+        setStarted(false);
+        if (sound) sound.unloadAsync();
     };
 
     const isAllCorrect = () =>
         questions.every((q, i) => selected[i] === q.id);
 
-    const [infoClick, setInfoClick] = useState(false);
-    const [clicked, setClicked] = useState(false);
+    const [infoClick, setInfoClick] = useState(true);
+    const [clicked, setClicked] = useState(true);
     const [dictionary, setDictionary] = useState(false);
-    return (
-        <View style={styles.container}>
-            <ThreeButtons
-                setDictionary={setDictionary}
-                infoClick={infoClick}
-                clicked={clicked}
-                setClicked={setClicked}
-                setInfoClick={setInfoClick} audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3" />
-            <View style={styles.imagesRow}>
-                {questions.map((q, index) => (
-                    <View key={q.id} style={styles.card}>
-                        <Image source={q.image} style={styles.img} />
-                        <TouchableOpacity
-                            style={[
-                                styles.box,
-                                selectedBtns.includes(q.id) && styles.selectedBox,
-                            ]}
-                            onPress={() => handleSelect(q.id)}
-                            disabled={checked}
-                        >
-                            {checked && selected[index] === q.id ? (
-                                <Text style={styles.correct}>✔</Text>
-                            ) : checked && selected[index] && selected[index] !== q.id ? (
-                                <Text style={styles.incorrect}>✘</Text>
-                            ) : null}
-                        </TouchableOpacity>
-                    </View>
-                ))}
-            </View>
+    const [wordgame, setWordgame] = useState(true)
+    const [talaffuz, setTalaffuz] = useState(false)
 
-            {!checked ? (
-                <TouchableOpacity style={styles.checkBtn} onPress={handleCheck}>
-                    <Text style={styles.btnText}>Check</Text>
-                </TouchableOpacity>
-            ) : isAllCorrect() ? (
-                <TouchableOpacity style={styles.nextBtn}>
-                    <Text style={styles.btnText}>Next</Text>
-                </TouchableOpacity>
+    return (
+        <>
+            {dictionary ? (
+                <>
+
+                    {wordgame ? (
+                        <FlashCards
+                            setDictionary={setWordgame}
+                            data={[
+                                { word: "Different ", translation: "Boshqacha", audioUrl: "https://ukkibackend.soof.uz/media/audio/boshqacha.mp3" },
+                                { word: "The same", translation: "Bir xil", audioUrl: "https://ukkibackend.soof.uz/media/audio/bir xil.mp3" },
+                                { word: "Circle", translation: "Aylana", audioUrl: "https://ukkibackend.soof.uz/media/audio/aylana.mp3" },
+                                { word: "Stand", translation: "Tik turmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/tik turmoq.mp3" },
+                                { word: "Sit", translation: "O‘tirmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'tirmoq.mp3" },
+                                { word: "Read", translation: "O‘qimoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'qimoq.mp3" },
+                                { word: "Bend down", translation: "Egilmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/egilmoq.mp3" },
+                                { word: "Boy", translation: "O‘g‘il bola", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'g'il bola.mp3" },
+                                { word: "Girl", translation: "Qiz bola", audioUrl: "https://ukkibackend.soof.uz/media/audio/qizbola.mp3" },
+                                { word: "Look", translation: "Qaramoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/qaramoq.mp3" },
+                            ]}
+                        />
+
+                    ) : talaffuz ? (
+                        <WordPractice
+                            setWordgame={setWordgame}
+                            setDictionary={setDictionary}
+                            setTalaffuz={setTalaffuz}
+                            words={[
+                                { text: "Different", audioUrl: "https://ukkibackend.soof.uz/media/audio/boshqacha.mp3" },
+                                { text: "The same", audioUrl: "https://ukkibackend.soof.uz/media/audio/bir xil.mp3" },
+                                { text: "Circle", audioUrl: "https://ukkibackend.soof.uz/media/audio/aylana.mp3" },
+                                { text: "Stand", audioUrl: "https://ukkibackend.soof.uz/media/audio/tik turmoq.mp3" },
+                                { text: "Sit", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'tirmoq.mp3" },
+                                { text: "Read", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'qimoq.mp3" },
+                                { text: "Bend down", audioUrl: "https://ukkibackend.soof.uz/media/audio/egilmoq.mp3" },
+                                { text: "Boy", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'g'il bola.mp3" },
+                                { text: "Girl", audioUrl: "https://ukkibackend.soof.uz/media/audio/qizbola.mp3" },
+                                { text: "Look", audioUrl: "https://ukkibackend.soof.uz/media/audio/qaramoq.mp3" },
+                            ]}
+                        />
+                    ) : (
+                        <WordGameAssist
+                            setDictionary={setTalaffuz}
+                            words={["Different", "The same", "Circle", "Stand", "Sit", "Read", "Bend down", "Boy", "Girl", "Look"]}
+                            audios={
+                                [
+                                    "https://ukkibackend.soof.uz/media/audio/boshqacha.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/bir xil.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/aylana.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/tik turmoq.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/o'tirmoq.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/o'qimoq.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/egilmoq.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/o'g'il bola.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/qizbola.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/qaramoq.mp3",
+
+                                ]
+                            }
+                        />
+                    )}
+                </>
             ) : (
-                <TouchableOpacity style={styles.tryBtn} onPress={handleTryAgain}>
-                    <Text style={styles.btnText}>Try Again</Text>
-                </TouchableOpacity>
+                <View style={styles.container}>
+                    <ThreeButtons
+                        setDictionary={setDictionary}
+                        infoClick={infoClick}
+                        clicked={clicked}
+                        setClicked={setClicked}
+                        setInfoClick={setInfoClick}
+                        audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3"
+                    />
+
+                    {!started ? (
+                        <TouchableOpacity style={styles.playBtn} onPress={handleStart}>
+                            <Text style={styles.playText}>▶ Play</Text>
+                        </TouchableOpacity>
+                    ) : (
+                        <>
+                            <View style={styles.imagesRow}>
+                                {questions.map((q, index) => (
+                                    <View key={q.id} style={styles.card}>
+                                        <Image source={q.image} style={styles.img} />
+                                        <TouchableOpacity
+                                            style={[
+                                                styles.box,
+                                                selectedBtns.includes(q.id) && styles.selectedBox,
+                                            ]}
+                                            onPress={() => handleSelect(q.id)}
+                                            disabled={checked}
+                                        >
+                                            {checked && selected[index] === q.id ? (
+                                                <Text style={styles.correct}>✔</Text>
+                                            ) : checked && selected[index] && selected[index] !== q.id ? (
+                                                <Text style={styles.incorrect}>✘</Text>
+                                            ) : null}
+                                        </TouchableOpacity>
+                                    </View>
+                                ))}
+                            </View>
+
+                            {!checked ? (
+                                <TouchableOpacity style={styles.checkBtn} onPress={handleCheck}>
+                                    <Text style={styles.btnText}>Check</Text>
+                                </TouchableOpacity>
+                            ) : isAllCorrect() ? (
+                                <TouchableOpacity style={styles.nextBtn}>
+                                    <Text style={styles.btnText}>Next</Text>
+                                </TouchableOpacity>
+                            ) : (
+                                <TouchableOpacity style={styles.tryBtn} onPress={handleTryAgain}>
+                                    <Text style={styles.btnText}>Try Again</Text>
+                                </TouchableOpacity>
+                            )}
+                        </>
+                    )}
+                </View>
             )}
-        </View>
+        </>
     );
 }
 
@@ -164,4 +246,15 @@ const styles = StyleSheet.create({
         borderRadius: 8,
     },
     btnText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+
+    // yangi play tugmasi
+    playBtn: {
+        backgroundColor: "#4CAF50",
+        paddingVertical: 20,
+        paddingHorizontal: 50,
+        borderRadius: 100,
+        justifyContent: "center",
+        alignItems: "center",
+    },
+    playText: { fontSize: 28, color: "#fff", fontWeight: "bold" },
 });
