@@ -1,0 +1,62 @@
+export const courseData = [
+    {
+        id: 1,
+        name: "Starter unit",
+        steps: [
+            { id: 1, title: "Hello", order: 1 },
+            { id: 2, title: "Get to know", order: 2 },
+            { id: 3, title: "Find the name", order: 3 },
+            { id: 4, title: "Workbook drag", order: 4 },
+            { id: 5, title: "Text Dialog", order: 5 },
+            { id: 6, title: "Listen and stick", order: 6 },
+            { id: 7, title: "listen. Look and say", order: 7 },
+            { id: 8, title: "Word building game", order: 8 },
+            { id: 9, title: "pronunciation of numbers", order: 9 },
+            { id: 10, title: "WorkBook. What’s next? Draw a line", order: 10 },
+            { id: 11, title: "Listen and write the numbers in the pictures.", order: 11 },
+            { id: 12, title: "Listen. Poind and say", order: 12 },
+            { id: 13, title: "Sing the song", order: 13 },
+            { id: 14, title: "Sing the song. Karaoke", order: 14 },
+            { id: 15, title: "Ask and answer.", order: 15 },
+            { id: 16, title: "Listen and color.", order: 16 },
+            { id: 17, title: "Listen", order: 17 },
+            { id: 18, title: "Workbook. Look then draw and say", order: 18 },
+            { id: 19, title: "Listen and act", order: 19 },
+            { id: 20, title: "What's missing? Look and Drow. Then stick", order: 20 },
+            { id: 21, title: "Listen and say", order: 21 },
+            { id: 22, title: "Trace the latters", order: 22 },
+            { id: 23, title: "Listen and say", order: 23 },
+            { id: 24, title: "Watch the video.", order: 24 },
+            { id: 25, title: "Say the color.", order: 25 },
+        ]
+    },
+    {
+        id: 2,
+        name: "Unit 1",
+        steps: [
+            { id: 1, title: "Who's speaking?", order: 1 },
+            { id: 2, title: "Listen. Point and say", order: 2 },
+            { id: 3, title: "Listen and find", order: 3 },
+            { id: 4, title: "Say the chant", order: 4 },
+            { id: 5, title: "Look and find five differences", order: 5 },
+            { id: 6, title: "Listen and check.", order: 6 },
+            { id:7, title: "Look and match.", order: 7 },
+            { id:8, title: "Listen and stick.", order: 8 },
+            { id:9, title: "What's next? select a line.", order: 9 },
+            { id:10, title: "Karaoke, Sing the song.", order: 10 },
+            { id:11, title: "Look and count, write the number.", order: 11 },
+            { id:12, title: "Listen, Point and say", order: 12 },
+            { id:13, title: "Chose the right action.", order: 13 },
+            { id:14, title: "Listen and check.", order: 14 },
+        ]
+    },
+    {
+        id: 3,
+        name: "Unit 2",
+        steps: [
+            {
+                id: 1,title: "hello ", order: 1
+            }
+        ]
+    }
+];

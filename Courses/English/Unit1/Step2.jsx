@@ -1,0 +1,327 @@
+import { Audio } from 'expo-av';
+import LottieView from 'lottie-react-native';
+import { useEffect, useRef, useState } from 'react';
+import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import WordPractice from '../../../components/Utils/Talaffuz';
+import ThreeButtons from '../../../components/Utils/ThreeButtons';
+import WordGameAssist from '../../../components/Utils/WordGame';
+import FlashCards from '../../../components/YangiSozlar';
+import Styles from '../../../Styles/Styles';
+
+const Step2 = ({ next }) => {
+  const [currentIndex, setCurrentIndex] = useState(null);
+  const soundRef = useRef(null);
+  const [listen2, setListen2] = useState(false);
+  const [showPointer, setShowPointer] = useState(false);
+  const [showPointer2, setShowPointer2] = useState(false);
+  const scaleAnim = useRef(new Animated.Value(1)).current;
+  const [infoClick, setInfoClick] = useState(true);
+  const [clicked, setClicked] = useState(true)
+  const [dictionary, setDictionary] = useState(false)
+  const [wordgame, setWordgame] = useState(true)
+  const [talaffuz, setTalaffuz] = useState(false)
+
+  const audioList = [
+    "https://ukkibackend.soof.uz/media/audio/CD1-03-1.mp3",
+    "https://ukkibackend.soof.uz/media/audio/CD1-03-2.mp3",
+    "https://ukkibackend.soof.uz/media/audio/CD1-03-3.mp3",
+    "https://ukkibackend.soof.uz/media/audio/CD1-03-4.mp3",
+    "https://ukkibackend.soof.uz/media/audio/CD1-03-5.mp3",
+    "https://ukkibackend.soof.uz/media/audio/CD1-03-6.mp3",
+  ];
+
+  const mapping = {
+    0: 1,
+    1: 3,
+    2: 2,
+    3: 2,
+    4: 4,
+    5: 3,
+  };
+
+  useEffect(() => {
+    if (showPointer || showPointer2) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(scaleAnim, {
+            toValue: 1.2,
+            duration: 600,
+            useNativeDriver: true,
+            easing: Easing.linear,
+          }),
+          Animated.timing(scaleAnim, {
+            toValue: 1,
+            duration: 600,
+            useNativeDriver: true,
+            easing: Easing.linear,
+          }),
+        ])
+      ).start();
+    } else {
+      scaleAnim.setValue(1);
+    }
+  }, [showPointer, showPointer2]);
+
+  const playAudio = async (index) => {
+    setShowPointer(false)
+    if (index >= audioList.length) {
+      setCurrentIndex(null);
+      setShowPointer2(true);
+      return;
+    }
+
+    try {
+      if (soundRef.current) {
+        await soundRef.current.unloadAsync();
+      }
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: audioList[index] },
+        { shouldPlay: true }
+      );
+      soundRef.current = sound;
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          playAudio(index + 1);
+        }
+      });
+      setCurrentIndex(index);
+    } catch (error) {
+      console.log("Audio error:", error);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      if (soundRef.current) {
+        soundRef.current.unloadAsync();
+      }
+    };
+  }, []);
+
+
+  const [buttonIndex, setButtonIndex] = useState(null);
+  const buttonAudios = {
+    1: "https://ukkibackend.soof.uz/media/audio/cd659513-0efb-45ac-bc55-207460a2805d.mp3",
+    2: "https://ukkibackend.soof.uz/media/audio/cd659513-0efb-45ac-bc55-207460a2805d.mp3",
+    3: "https://ukkibackend.soof.uz/media/audio/cd659513-0efb-45ac-bc55-207460a2805d.mp3",
+    4: "https://ukkibackend.soof.uz/media/audio/CD1-03-5.mp3",
+  };
+
+  const handlePlay = async (btnIndex) => {
+    try {
+      if (soundRef.current) {
+        await soundRef.current.unloadAsync();
+      }
+      const { sound } = await Audio.Sound.createAsync(
+        { uri: buttonAudios[btnIndex] },
+        { shouldPlay: true }
+      );
+      soundRef.current = sound;
+
+      sound.setOnPlaybackStatusUpdate((status) => {
+        if (status.didJustFinish) {
+          setButtonIndex(null);
+        }
+      });
+
+      setButtonIndex(btnIndex);
+    } catch (error) {
+      console.log("Audio play error:", error);
+    }
+  };
+
+  const hidePointer = () => {
+    setShowPointer(false);
+    setShowPointer2(false);
+  };
+
+  return (
+    <>
+
+      {dictionary ? (
+        <>
+
+          {wordgame ? (
+            <FlashCards
+              setDictionary={setWordgame}
+              data={[
+                { word: "Listen", translation: "Tinglamoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/tinglamoq.mp3" },
+                { word: "Point ", translation: "ko’rsatmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/ko'rsatmoq.mp3" },
+                { word: "Say", translation: "Aytmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/aytmoq.mp3" },
+                { word: "Who ", translation: "Kim", audioUrl: "https://ukkibackend.soof.uz/media/audio/kim.mp3" },
+                { word: "Speak", translation: "Gapirmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/gapirmoq.mp3" },
+                { word: "Find", translation: "Topmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/topmoq.mp3" },
+                { word: "What is your name?", translation: " Sening isming nima?", audioUrl: "https://ukkibackend.soof.uz/media/audio/sening isming nima.mp3" },
+              ]}
+            />
+
+          ) : talaffuz ? (
+            <WordPractice
+              setWordgame={setWordgame}
+              setDictionary={setDictionary}
+              setTalaffuz={setTalaffuz}
+              words={[
+                { text: "listen", audioUrl: "https://ukkibackend.soof.uz/media/audio/tinglamoq.mp3" },
+                { text: "point", audioUrl: "https://ukkibackend.soof.uz/media/audio/ko'rsatmoq.mp3" },
+                { text: "say", audioUrl: "https://ukkibackend.soof.uz/media/audio/aytmoq.mp3" },
+                { text: "who", audioUrl: "https://ukkibackend.soof.uz/media/audio/kim.mp3" },
+                { text: "speak", audioUrl: "https://ukkibackend.soof.uz/media/audio/gapirmoq.mp3" },
+                { text: "find", audioUrl: "https://ukkibackend.soof.uz/media/audio/topmoq.mp3" },
+              ]}
+            />
+          ) : (
+            <WordGameAssist
+              setDictionary={setTalaffuz}
+              words={["listen", "point", "say", "who", "speak", "find",]}
+              audios={
+                [
+                  "https://ukkibackend.soof.uz/media/audio/tinglamoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/ko'rsatmoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/aytmoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/kim.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/gapirmoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/topmoq.mp3",
+
+                ]
+              }
+            />
+          )}
+        </>
+      ) : (
+        <View style={{ height: "100%", justifyContent: "center" }}>
+          <View style={styles.container}>
+            <ThreeButtons
+              setDictionary={setDictionary}
+              infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
+              setShowPointer={setShowPointer} audioUrl="https://ukkibackend.soof.uz/media/audio/e4949dfd-4e72-449a-bba1-70de09457bed.mp3" />
+            <TouchableOpacity
+              style={Styles.listenBtn}
+              onPress={() => playAudio(0)}
+            >
+              <Text style={Styles.listenNumber}>1</Text>
+              <Text style={Styles.listenText}>Listen. Who's speaking?</Text>
+              {showPointer && (
+                <Animated.Image
+                  source={require("../../../assets/images/hand2.png")}
+                  style={[
+                    styles.pointer,
+                    { transform: [{ scale: scaleAnim }] }
+                  ]}
+                />
+              )}
+
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={() => { next(); hidePointer(); }} style={[Styles.listenBtn, Styles.listenBtn2]}
+            //  disabled={!showPointer2}
+            >
+              <Text style={Styles.listenNumber}>2</Text>
+              <Text style={Styles.listenText}>Listen. point, and say.</Text>
+              {showPointer2 && (
+                <Animated.Image
+                  source={require("../../../assets/images/hand2.png")} 
+                  style={[
+                    styles.pointer,
+                    { transform: [{ scale: scaleAnim }] }
+                  ]}
+                />
+              )}
+            </TouchableOpacity>
+
+            <Image
+              source={require('../../../assets/images/step2.jpg')}
+              style={styles.step2Img}
+            />
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber1, mapping[currentIndex] === 1 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 1 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>1</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber2, mapping[currentIndex] === 2 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 2 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>2</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber3, mapping[currentIndex] === 3 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 3 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>3</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.userNumber, Styles.userNumber4, mapping[currentIndex] === 4 && { borderWidth: 0, backgroundColor: 'inherit' }]}>
+              {mapping[currentIndex] === 4 ? (
+                <LottieView
+                  source={require('../../../assets/images/vois.json')}
+                  autoPlay
+                  loop
+                  style={Styles.userNumberImage}
+                />
+              ) : (
+                <Text style={Styles.userNumberText}>4</Text>
+              )}
+            </TouchableOpacity>
+
+            <TouchableOpacity style={[Styles.listenBtn3]}>
+              <Text style={Styles.listenNumber}>3</Text>
+              <Text style={Styles.listenText}>Listen and find.</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      )}
+
+    </>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+    position: 'relative',
+    height: "90%",
+    backgroundColor: '#eee',
+    marginBottom: 95
+  },
+  step2Img: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    height: '100%',
+    resizeMode: 'stretch',
+  },
+  pointer: {
+    position: "absolute",
+    left: 70,
+    top: "50%",
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+    zIndex: 10,
+  },
+});
+
+export default Step2;
