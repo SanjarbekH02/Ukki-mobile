@@ -35,6 +35,9 @@ import U2Step13 from "./Unit2/U2Step13";
 import AudioQuiz from "./Unit2/U2Step14";
 import U2Step15 from "./Unit2/U2Step15";
 import MatchGame from "./Unit2/U2Step16";
+import U2Step17 from "./Unit2/U2Step17";
+import U2Step18 from "./Unit2/U2Step18";
+import U2Step19 from "./Unit2/U2Step19";
 import U2Step2 from "./Unit2/U2Step2";
 import U2Step3 from "./Unit2/U2Step3";
 import U2Step4 from "./Unit2/U2Step4";
@@ -44,6 +47,9 @@ import MatchPairsGame from "./Unit2/U2Step7";
 import U2Step8 from "./Unit2/U2Step8";
 import U2Step9 from "./Unit2/U2Step9";
 import U3Step1 from "./Unit3/U3Step1";
+import U3Step10 from "./Unit3/U3Step10";
+import U3Step11 from "./Unit3/U3Step11";
+import U3Step12 from "./Unit3/U3Step12";
 import U3Step2 from "./Unit3/U3Step2";
 import U3Step3 from "./Unit3/U3Step3";
 import U3Step4 from "./Unit3/U3Step4";
@@ -52,9 +58,7 @@ import U3Step6 from "./Unit3/U3Step6";
 import U3Step7 from "./Unit3/U3Step7";
 import U3Step8 from "./Unit3/U3Step8";
 import U3Step9 from "./Unit3/U3Step9";
-import U3Step10 from "./Unit3/U3Step10";
-import U3Step11 from "./Unit3/U3Step11";
-import U3Step12 from "./Unit3/U3Step12";
+
 
 export default function StepScreen({ route, navigation }) {
     const { unitId, step, unitSteps, progress, setProgress } = route.params;
@@ -271,6 +275,15 @@ export default function StepScreen({ route, navigation }) {
             )}
             {unitId === 2 && step.order === 16 && (
                 <MatchGame next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 17 && (
+                <U2Step17 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 18 && (
+                <U2Step18 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 19 && (
+                <U2Step19 next={goToNextStep} />
             )}
 
         </View>
