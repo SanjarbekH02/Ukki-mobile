@@ -50,6 +50,7 @@ export const courseData = [
             { id:14, title: "Listen and check.", order: 14 },
             { id:15, title: "Talking pictures.", order: 15 },
             { id:16, title: "Listen look and match.", order: 16 },
+            { id:17, title: "What's missing? Look and draw.", order: 17 },
         ]
     },
     {

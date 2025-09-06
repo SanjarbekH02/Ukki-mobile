@@ -43,6 +43,7 @@ import ListenAndChooseGrid from "./Unit2/U2Step6";
 import MatchPairsGame from "./Unit2/U2Step7";
 import U2Step8 from "./Unit2/U2Step8";
 import U2Step9 from "./Unit2/U2Step9";
+import U2Step17 from "./Unit2/U2Step17";
 
 export default function StepScreen({ route, navigation }) {
     const { unitId, step, unitSteps, progress, setProgress } = route.params;
@@ -222,6 +223,9 @@ export default function StepScreen({ route, navigation }) {
             )}
             {unitId === 2 && step.order === 16 && (
                 <MatchGame next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 17 && (
+                <U2Step17 next={goToNextStep} />
             )}
 
         </View>
