@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
+    ActivityIndicator,
     Alert,
     FlatList,
     Image,
@@ -86,7 +87,11 @@ export default function CourseDetailScreen() {
     };
 
     if (!progress) {
-        return <Text>Yuklanmoqda...</Text>;
+        return (
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size="large" color="#007AFF" />
+            </View>
+        );
     }
 
     return (
@@ -260,5 +265,11 @@ const styles = StyleSheet.create({
         alignItems: 'center', borderRadius: 50,
         marginTop: 10, marginHorizontal: 10,
     },
-    buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 }
+    buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
+    loadingContainer: { 
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center',
+        backgroundColor: '#EFF4F8'
+    }
 });

@@ -54,9 +54,18 @@ export const courseData = [
         id: 3,
         name: "Unit 2",
         steps: [
-            {
-                id: 1,title: "hello ", order: 1
-            }
+            { id: 1, title: "Who's speaking?", order: 1 },
+            { id: 2, title: "Listen. Point and say", order: 2 },
+            { id: 3, title: "Listen and find", order: 3 },
+            { id: 4, title: "Say the chant", order: 4 },
+            { id: 5, title: "Look and find five differences", order: 5 },
+            { id: 6, title: "Listen and check", order: 6 },
+            { id: 7, title: "Look and match", order: 7 },
+            { id: 8, title: "Listen and stick", order: 8 },
+            { id: 9, title: "What's next? select a line", order: 9 },
+            { id: 10, title: "Karaoke, Sing the song", order: 10 },
+            { id: 11, title: "Look and count, write the number", order: 11 },
+            { id: 12, title: "Listen, Point and say", order: 12 }
         ]
     }
 ];
