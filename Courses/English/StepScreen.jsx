@@ -35,6 +35,9 @@ import U2Step13 from "./Unit2/U2Step13";
 import AudioQuiz from "./Unit2/U2Step14";
 import U2Step15 from "./Unit2/U2Step15";
 import MatchGame from "./Unit2/U2Step16";
+import U2Step17 from "./Unit2/U2Step17";
+import U2Step18 from "./Unit2/U2Step18";
+import U2Step19 from "./Unit2/U2Step19";
 import U2Step2 from "./Unit2/U2Step2";
 import U2Step3 from "./Unit2/U2Step3";
 import U2Step4 from "./Unit2/U2Step4";
@@ -43,7 +46,19 @@ import ListenAndChooseGrid from "./Unit2/U2Step6";
 import MatchPairsGame from "./Unit2/U2Step7";
 import U2Step8 from "./Unit2/U2Step8";
 import U2Step9 from "./Unit2/U2Step9";
-import U2Step17 from "./Unit2/U2Step17";
+import U3Step1 from "./Unit3/U3Step1";
+import U3Step10 from "./Unit3/U3Step10";
+import U3Step11 from "./Unit3/U3Step11";
+import U3Step12 from "./Unit3/U3Step12";
+import U3Step2 from "./Unit3/U3Step2";
+import U3Step3 from "./Unit3/U3Step3";
+import U3Step4 from "./Unit3/U3Step4";
+import U3Step5 from "./Unit3/U3Step5";
+import U3Step6 from "./Unit3/U3Step6";
+import U3Step7 from "./Unit3/U3Step7";
+import U3Step8 from "./Unit3/U3Step8";
+import U3Step9 from "./Unit3/U3Step9";
+
 
 export default function StepScreen({ route, navigation }) {
     const { unitId, step, unitSteps, progress, setProgress } = route.params;
@@ -218,6 +233,43 @@ export default function StepScreen({ route, navigation }) {
             {unitId === 2 && step.order === 14 && (
                 <AudioQuiz next={goToNextStep} />
             )}
+
+            
+            {unitId === 3 && step.order === 1 && (
+                <U3Step1 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 2 && (
+                <U3Step2 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 3 && (
+                <U3Step3 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 4 && (
+                <U3Step4 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 5 && (
+                <U3Step5 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 6 && (
+                <U3Step6 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 7 && (
+                <U3Step7 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 8 && (
+                <U3Step8 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 9 && (
+                <U3Step9 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 10 && (
+                <U3Step10 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 11 && (
+                <U3Step11 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 12 && (
+                <U3Step12 next={goToNextStep} />)}
             {unitId === 2 && step.order === 15 && (
                 <U2Step15 next={goToNextStep} />
             )}
@@ -226,6 +278,12 @@ export default function StepScreen({ route, navigation }) {
             )}
             {unitId === 2 && step.order === 17 && (
                 <U2Step17 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 18 && (
+                <U2Step18 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 19 && (
+                <U2Step19 next={goToNextStep} />
             )}
 
         </View>

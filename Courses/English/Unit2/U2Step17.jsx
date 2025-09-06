@@ -5,7 +5,7 @@ import ErrorOverlay from '../../../components/Utils/OnError';
 import ConfettiEffect from '../../../components/Utils/Success';
 import ThreeButtons from '../../../components/Utils/ThreeButtons';
 
-export default function U2Step17({next}) {
+export default function U2Step17({ next }) {
     const [selected, setSelected] = useState(null);
     const [result, setResult] = useState("");
     const [isSuccess, setIsSuccess] = useState(false);
@@ -33,10 +33,20 @@ export default function U2Step17({next}) {
         }
     }
 
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false);
+    const [dictionary, setDictionary] = useState(false);
+
     return (
         <>
             <View style={Styles.stepContainer}>
-                <ThreeButtons />
+                <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick}
+                    clicked={clicked}
+                    setClicked={setClicked}
+                    setInfoClick={setInfoClick} 
+                    audioUrl='https://ukkibackend.soof.uz/media/audio/Bilag’on bolajon, kerakli rasmni tanla. .mp3'/>
 
                 <View style={styles.imageBlock}>
                     <Image style={styles.Image} source={require('../../../assets/images/drag.jpg')} />
