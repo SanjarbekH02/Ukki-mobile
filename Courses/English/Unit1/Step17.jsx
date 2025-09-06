@@ -57,7 +57,6 @@ export default function Step17() {
 
     async function playAudio(audioUrl, img) {
         try {
-            // eski audio bo‘lsa stop qilamiz
             if (sound) {
                 await sound.stopAsync()
                 await sound.unloadAsync()
@@ -146,7 +145,6 @@ export default function Step17() {
                 </TouchableOpacity>
             </View>
 
-            {/* kattalashtirilgan rasm */}
             <Modal visible={visible} transparent animationType="fade">
                 <View style={styles.modalContainer}>
                     {activeImg && (
