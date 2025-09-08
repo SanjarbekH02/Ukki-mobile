@@ -280,7 +280,7 @@ export default function ListenAndChooseGrid() {
                 <View style={styles.overlay}>
                     <TouchableOpacity
                         style={styles.nextBtn}
-                        onPress={() => navigation.navigate("NextScreen")}
+                        onPress={next}
                     >
                         <Text style={styles.nextText}>➡ Next</Text>
                     </TouchableOpacity>

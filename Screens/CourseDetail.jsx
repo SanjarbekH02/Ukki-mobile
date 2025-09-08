@@ -22,7 +22,6 @@ export default function CourseDetailScreen() {
     const [progress, setProgress] = useState(null);
     const navigation = useNavigation();
 
-    // Progress yuklash
     useEffect(() => {
         const loadProgress = async () => {
             try {
@@ -97,7 +96,6 @@ export default function CourseDetailScreen() {
     return (
         <View style={styles.container}>
             <ScrollView showsVerticalScrollIndicator={false}>
-                {/* Header */}
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Ionicons name="chevron-back" size={24} color="black" />
@@ -108,14 +106,12 @@ export default function CourseDetailScreen() {
                     </TouchableOpacity>
                 </View>
 
-                {/* Image */}
                 <Image
                     source={require('../assets/images/english.png')}
                     style={styles.image}
                     resizeMode="contain"
                 />
 
-                {/* Info */}
                 <View style={styles.infoBottom}>
                     <View style={styles.infoRow}>
                         <Text style={styles.date}>26.06.2025, 15:50</Text>
@@ -142,7 +138,6 @@ export default function CourseDetailScreen() {
                         keyExtractor={(unit) => unit.id.toString()}
                         renderItem={({ item: unit }) => (
                             <View style={styles.unitContainer}>
-                                {/* Unit Header */}
                                 <TouchableOpacity style={styles.unitHeader} onPress={() => toggleUnit(unit.id)}>
                                     <Ionicons name="book" size={24} color="#0059FF" />
                                     <Text style={styles.unitTitle}>{unit.name}</Text>

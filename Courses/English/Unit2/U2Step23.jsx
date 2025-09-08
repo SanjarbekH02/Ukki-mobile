@@ -7,12 +7,12 @@ import ErrorOverlay from "../../../components/Utils/OnError";
 import ConfettiEffect from "../../../components/Utils/Success";
 import ThreeButtons from "../../../components/Utils/ThreeButtons";
 
-export default function Step22({ next }) {
+export default function U2Step23({ next }) {
     const audios = [
-        "https://ukkibackend.soof.uz/media/audio/Work_book_CD1_19_1.mp3",
-        "https://ukkibackend.soof.uz/media/audio/Work_book_CD1_19_2.mp3",
-        "https://ukkibackend.soof.uz/media/audio/Work_book_CD1_19_3.mp3",
-        "https://ukkibackend.soof.uz/media/audio/Work_book_CD1_19_4.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-37-1.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-37-2.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-37-3.mp3",
+        "https://ukkibackend.soof.uz/media/audio/CD1-37-4.mp3",
     ];
 
     const [playingIndex, setPlayingIndex] = useState(null);
@@ -24,10 +24,10 @@ export default function Step22({ next }) {
     const [isError, setIsError] = useState(false);
 
     const images = [
-        { id: 0, src: require("../../../assets/images/ruchka.jpg"), name: "ruchka" },
-        { id: 1, src: require("../../../assets/images/ayiq.jpg"), name: "panda" },
-        { id: 2, src: require("../../../assets/images/toshbaqa.jpg"), name: "toshbaqa" },
-        { id: 3, src: require("../../../assets/images/kitob.jpg"), name: "kitob" },
+        { id: 0, src: require("../../../assets/images/cd371.jpg"), name: "ruchka" },
+        { id: 1, src: require("../../../assets/images/cd372.jpg"), name: "panda" },
+        { id: 2, src: require("../../../assets/images/cd373.jpg"), name: "toshbaqa" },
+        { id: 3, src: require("../../../assets/images/cd374.jpg"), name: "kitob" },
     ];
 
     const playSequential = async (index = 0) => {
@@ -55,7 +55,7 @@ export default function Step22({ next }) {
     const handleSelect = (item) => {
         if (!allPlayed) return;
 
-        if (["panda", "ruchka"].includes(item.name)) {
+        if (["ruchka", "kitob"].includes(item.name)) {
             if (!correctAnswers.includes(item.name)) {
                 setCorrectAnswers([...correctAnswers, item.name]);
             }
@@ -90,7 +90,7 @@ export default function Step22({ next }) {
 
                 {allPlayed && (
                     <Text style={styles.question}>
-                        "P" harfi bilan boshlangan rasmni toping.
+                        "B" harfi bilan boshlangan rasmni toping.
                     </Text>
                 )}
 
