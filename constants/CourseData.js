@@ -54,6 +54,9 @@ export const courseData = [
             { id:18, title: "Listen and act.", order: 18 },
             { id:19, title: "Listen and say.", order: 19 },
             { id:20, title: "What material is it?", order: 20 },
+            { id:21, title: "Listen and say.", order: 21 },
+            { id:22, title: "Watch the video.", order: 22 },
+            { id:23, title: "Track the latters.", order: 23 },
         ]
     },
     {

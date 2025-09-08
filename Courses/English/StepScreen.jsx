@@ -39,6 +39,10 @@ import U2Step17 from "./Unit2/U2Step17";
 import U2Step18 from "./Unit2/U2Step18";
 import U2Step19 from "./Unit2/U2Step19";
 import U2Step2 from "./Unit2/U2Step2";
+import U2Step20 from "./Unit2/U2Step20";
+import U2Step21 from "./Unit2/U2Step21";
+import U2Step22 from "./Unit2/U2Step22";
+import U2Step23 from "./Unit2/U2Step23";
 import U2Step3 from "./Unit2/U2Step3";
 import U2Step4 from "./Unit2/U2Step4";
 import U2Step5 from "./Unit2/U2Step5";
@@ -284,6 +288,18 @@ export default function StepScreen({ route, navigation }) {
             )}
             {unitId === 2 && step.order === 19 && (
                 <U2Step19 next={goToNextStep} />
+            )}
+             {unitId === 2 && step.order === 20 && (
+                <U2Step20 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 21 && (
+                <U2Step21 next={goToNextStep} />
+            )}
+            {unitId === 2 && step.order === 22 && (
+                <U2Step22 next={goToNextStep} />
+            )}
+             {unitId === 2 && step.order === 23 && (
+                <U2Step23 next={goToNextStep} />
             )}
 
         </View>
