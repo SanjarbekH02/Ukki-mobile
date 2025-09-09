@@ -24,43 +24,52 @@ export default function CourseDetailScreen() {
 
     // Progress yuklash
     useEffect(() => {
-        const loadProgress = async () => {
-            try {
-                const res = await axios.get(
-                    `https://your-api.com/api/course-progress/${userId}/${courseId}`
-                );
-                if (res.data) {
-                    setProgress(res.data);
-                    setOpenUnit(res.data.unitId);
-                } else {
-                    setProgress({
-                        unitId: 1,
-                        lastCompletedStep: 0
-                    });
-                }
-            } catch (err) {
-                console.error("Progress yuklashda xatolik:", err);
-                setProgress({
-                    unitId: 1,
-                    lastCompletedStep: 0
-                });
-            }
-        };
-        loadProgress();
+        // const loadProgress = async () => {
+        //     try {
+        //         const res = await axios.get(
+        //             `https://your-api.com/api/course-progress/${userId}/${courseId}`
+        //         );
+        //         if (res.data) {
+        //             setProgress(res.data);
+        //             setOpenUnit(res.data.unitId);
+        //         } else {
+        //             setProgress({
+        //                 unitId: 1,
+        //                 lastCompletedStep: 0
+        //             });
+        //         }
+        //     } catch (err) {
+        //         console.error("Progress yuklashda xatolik:", err);
+        //         setProgress({
+        //             unitId: 1,
+        //             lastCompletedStep: 0
+        //         });
+        //     }
+        // };
+        // loadProgress();
+        
+        // For now, set default progress instead of making API call
+        setProgress({
+            unitId: 1,
+            lastCompletedStep: 0
+        });
+        setOpenUnit(1);
     }, [courseId, userId]);
 
     // Progress saqlash
     const saveProgress = async (unitId, stepOrder) => {
-        try {
-            await axios.post(`https://your-api.com/api/course-progress`, {
-                userId,
-                courseId,
-                unitId,
-                lastCompletedStep: stepOrder
-            });
-        } catch (err) {
-            console.error("Progress saqlashda xatolik:", err);
-        }
+        // try {
+        //     await axios.post(`https://your-api.com/api/course-progress`, {
+        //         userId,
+        //         courseId,
+        //         unitId,
+        //         lastCompletedStep: stepOrder
+        //     });
+        // } catch (err) {
+        //     console.error("Progress saqlashda xatolik:", err);
+        // }
+        
+        // For now, just update local state instead of making API call
         setProgress({ unitId, lastCompletedStep: stepOrder });
     };
 

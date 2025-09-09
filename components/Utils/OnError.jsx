@@ -82,7 +82,9 @@ export default function ErrorOverlay({
 
       {/* Markazdagi yozuv */}
       <View style={styles.messageContainer}>
-        <Text style={styles.messageText}>{message}</Text>
+        <View style={styles.messageBox}>
+          <Text style={styles.messageText}>{message}</Text>
+        </View>
       </View>
     </View>
   );
@@ -131,11 +133,16 @@ const styles = StyleSheet.create({
   messageContainer: {
     position: "absolute",
     top: "10%",
-    left: "40%",
-    transform: [{ translateX: -50 }, { translateY: -50 }],
+    left: 0,
+    right: 0,
+    justifyContent: "center",
+    alignItems: "center",
+    flexDirection: "row",
+  },
+  messageBox: {
     backgroundColor: "rgba(255,255,255,0.9)",
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
     borderRadius: 8,
     elevation: 4,
     shadowColor: "#000",
@@ -144,8 +151,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
   },
   messageText: {
-    fontSize: 28,
+    fontSize: 18,
     fontWeight: "bold",
     color: "red",
+    textAlign: "center",
   },
 });
