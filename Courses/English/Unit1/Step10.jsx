@@ -15,7 +15,7 @@ const rows = [
 
 const options = [10, 6, 4, 3, 7];
 
-export default function App({next}) {
+export default function App({ next }) {
     const [selected, setSelected] = useState({});
     const [message, setMessage] = useState("");
     const [isSuccess, setIsSeuccess] = useState(false);
@@ -38,11 +38,17 @@ export default function App({next}) {
 
     const borderColors = ["red", "blue", "green", "orange", "purple"];
 
-const allCorrect = rows.every((row, idx) => selected[idx] === row.answer);
+    const allCorrect = rows.every((row, idx) => selected[idx] === row.answer);
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [dictionary, setDictionary] = useState(false)
     return (
         <>
             <View contentContainerStyle={styles.container}>
-                <ThreeButtons />
+                <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
+                    audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, berilgan raqamlar ketma-ketligini to’g’ri belgila. .mp3" />
                 {/* Yonma-yon 5 ta ustun */}
                 <View style={styles.rowsContainer}>
                     {rows.map((row, rowIndex) => (
@@ -146,5 +152,5 @@ const styles = StyleSheet.create({
         borderColor: '#000'
     },
     line: { width: 47, height: 80, resizeMode: "stretch", transform: [{ scaleX: -1 }, { rotate: "90deg" }], position: 'absolute', bottom: '7%', left: '22%' },
-    nextBtn: {bottom: "-18%"}
+    nextBtn: { bottom: "-18%" }
 });

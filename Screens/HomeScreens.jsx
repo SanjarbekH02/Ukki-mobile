@@ -18,6 +18,7 @@ const courses = [
   { id: 6, title: "Fizika", desc: "Lorem Ipsum is simply dummy text of the printing and typesetting", lessons: 3, image: require("../assets/images/physics.png"), },
 ];
 
+
 export default function HomeScreen() {
   const navigation = useNavigation();
 

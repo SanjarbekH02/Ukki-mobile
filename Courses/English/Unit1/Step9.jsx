@@ -6,7 +6,7 @@ import ConfettiEffect from '../../../components/Utils/Success'
 import ThreeButtons from '../../../components/Utils/ThreeButtons'
 import { audioPlay } from '../../../constants/AudioPlay'
 
-export default function Step9({next}) {
+export default function Step9({ next }) {
     const [isSuccess, setIsSucces] = useState(false);
     const [isError, setIsError] = useState(false);
     const audioUrls = [
@@ -49,11 +49,16 @@ export default function Step9({next}) {
             }, 2000)
         }
     }
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [dictionary, setDictionary] = useState(false)
 
     return (
         <>
             <View style={styles.container}>
-                <ThreeButtons />
+                <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} />
                 <TouchableOpacity style={Styles.listenBtn}>
                     <Text style={Styles.listenNumber}>7</Text>
                     <Text style={Styles.listenText}>Look and match</Text>
@@ -72,7 +77,6 @@ export default function Step9({next}) {
                 <View style={styles.imageContainer}>
                     <Image style={styles.image} source={require('../../../assets/images/listen7.png')} />
 
-                    {/* Audio tugmalari */}
                     <TouchableOpacity
                         style={[styles.numberBtn, styles.numberBtn1]}
                         onPress={() => handlePlay(0)}
@@ -86,7 +90,6 @@ export default function Step9({next}) {
                         onPress={() => handlePlay(2)}
                     />
 
-                    {/* Yosh tugmalari */}
                     <TouchableOpacity
                         style={[styles.numberBtn, styles.ageBtn1]}
                         onPress={() => checkAnswer("ageBtn1")}
@@ -131,9 +134,9 @@ const styles = StyleSheet.create({
     numberBtn1: { top: 20, left: '5%' },
     numberBtn2: { top: 20, left: "40%" },
     numberBtn3: { top: 20, right: '5%' },
-    ageBtn1: { borderWidth: 1, borderColor: '#000', width: 80, height: 80, bottom: 16, left: '11%' },
-    ageBtn2: { borderWidth: 1, borderColor: '#000', width: 80, height: 80, bottom: 16, left: '45%' },
-    ageBtn3: { borderWidth: 1, borderColor: '#000', width: 80, height: 80, bottom: 16, right: '5%' },
+    ageBtn1: { width: 80, height: 80, bottom: 16, left: '11%' },
+    ageBtn2: { width: 80, height: 80, bottom: 16, left: '45%' },
+    ageBtn3: { width: 80, height: 80, bottom: 16, right: '5%' },
 
     infoText: { fontSize: 18, marginVertical: 10, fontWeight: '600', color: '#001affff' },
     resultText: { fontSize: 20, fontWeight: '700', marginVertical: 5 }
