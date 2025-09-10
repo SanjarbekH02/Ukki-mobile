@@ -3,7 +3,7 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const courses = [
-    { id: 1, title: 'Ingliz tili', lessons: 3, image: require('../assets/images/english.png'), route: 'CourseDetail' },
+    { id: 1, title: 'Ingliz tili', desc: "lorem",  lessons: 3, image: require('../assets/images/english.png'), route: 'CourseDetail' },
     { id: 2, title: 'Matematika', lessons: 3, image: require('../assets/images/math.png'), route: 'MathCourse' },
     { id: 3, title: 'Tasviriy San\'at', lessons: 3, image: require('../assets/images/iskus.png'), route: 'ArtCourse' },
     { id: 4, title: 'Geometriya', lessons: 3, image: require('../assets/images/geometry.png'), route: 'GeometryCourse' },
@@ -11,13 +11,14 @@ const courses = [
     { id: 6, title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png'), route: 'PhysicsCourse2' },
 ];
 
+
 export default function HomeScreen() {
     const navigation = useNavigation()
 
     const renderCourse = ({ item }) => (
         <TouchableOpacity
             onPress={() => {
-                navigation.navigate(item.route);
+                navigation.navigate('CourseDetail');
 
             }}
             style={styles.courseItem}

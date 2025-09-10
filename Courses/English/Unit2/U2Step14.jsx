@@ -101,7 +101,7 @@ export default function AudioQuiz({ next }) {
                                 { word: "Read", translation: "O‘qimoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'qimoq.mp3" },
                                 { word: "Bend down", translation: "Egilmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/egilmoq.mp3" },
                                 { word: "Boy", translation: "O‘g‘il bola", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'g'il bola.mp3" },
-                                { word: "Girl", translation: "Qiz bola", audioUrl: "https://ukkibackend.soof.uz/media/audio/qizbola.mp3" },
+                                { word: "Girl", translation: "Qiz bola", audioUrl: "https://ukkibackend.soof.uz/media/audio /qizbola.mp3" },
                                 { word: "Look", translation: "Qaramoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/qaramoq.mp3" },
                             ]}
                         />
