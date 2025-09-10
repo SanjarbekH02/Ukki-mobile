@@ -1,11 +1,7 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import axios from 'axios';
 import { useEffect, useState } from 'react';
 import {
-    ActivityIndicator,
-    Alert,
-    FlatList,
     Image,
     ScrollView,
     StyleSheet,
@@ -16,96 +12,25 @@ import {
 import { courseData } from '../constants/CourseData';
 
 export default function CourseDetailScreen() {
-    const courseId = 1;
-    const userId = 1;
     const [openUnit, setOpenUnit] = useState(null);
-    const [progress, setProgress] = useState(null);
+    const [progress] = useState({ unitId: 1, lastCompletedStep: 0 });
     const navigation = useNavigation();
 
     useEffect(() => {
-        // const loadProgress = async () => {
-        //     try {
-        //         const res = await axios.get(
-        //             `https://your-api.com/api/course-progress/${userId}/${courseId}`
-        //         );
-        //         if (res.data) {
-        //             setProgress(res.data);
-        //             setOpenUnit(res.data.unitId);
-        //         } else {
-        //             setProgress({
-        //                 unitId: 1,
-        //                 lastCompletedStep: 0
-        //             });
-        //         }
-        //     } catch (err) {
-        //         console.error("Progress yuklashda xatolik:", err);
-        //         setProgress({
-        //             unitId: 1,
-        //             lastCompletedStep: 0
-        //         });
-        //     }
-        // };
-        // loadProgress();
-        
-        // For now, set default progress instead of making API call
-        setProgress({
-            unitId: 1,
-            lastCompletedStep: 0
-        });
         setOpenUnit(1);
-    }, [courseId, userId]);
+    }, []);
 
-    // Progress saqlash
-    const saveProgress = async (unitId, stepOrder) => {
-        // try {
-        //     await axios.post(`https://your-api.com/api/course-progress`, {
-        //         userId,
-        //         courseId,
-        //         unitId,
-        //         lastCompletedStep: stepOrder
-        //     });
-        // } catch (err) {
-        //     console.error("Progress saqlashda xatolik:", err);
-        // }
-        
-        // For now, just update local state instead of making API call
-        setProgress({ unitId, lastCompletedStep: stepOrder });
-    };
-
+  
     // Unitni ochish
     const toggleUnit = (unitId) => {
-        // Oldingi unit tugaganmi tekshirish
-        // const unitIndex = courseData.findIndex(u => u.id === unitId);
-        // if (unitIndex > 0) {
-        //     const prevUnit = courseData[unitIndex - 1];
-        //     const lastStepOrder = prevUnit.steps[prevUnit.steps.length - 1].order;
-
-        //     const isPrevUnitCompleted =
-        //         progress?.unitId > prevUnit.id ||
-        //         (progress?.unitId === prevUnit.id &&
-        //             progress?.lastCompletedStep >= lastStepOrder);
-
-        //     if (!isPrevUnitCompleted) {
-        //         Alert.alert("Diqqat", "Oldingi bo'lim tugallanmagan!");
-        //         return;
-        //     }
-        // }
-
         setOpenUnit(openUnit === unitId ? null : unitId);
     };
 
-    if (!progress) {
-        return (
-            <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#007AFF" />
-            </View>
-        );
-    }
-
+    
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles.header}>
+            <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={true}>
+            <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.goBack()}>
                         <Ionicons name="chevron-back" size={24} color="black" />
                     </TouchableOpacity>
@@ -142,11 +67,8 @@ export default function CourseDetailScreen() {
                 <View style={styles.infoBottom}>
                     <Text style={styles.subTitle}>Kurslar</Text>
 
-                    <FlatList
-                        data={courseData}
-                        keyExtractor={(unit) => unit.id.toString()}
-                        renderItem={({ item: unit }) => (
-                            <View style={styles.unitContainer}>
+                    {courseData.map((unit) => (
+                            <View key={unit.id} style={styles.unitContainer}>
                                 <TouchableOpacity style={styles.unitHeader} onPress={() => toggleUnit(unit.id)}>
                                     <Ionicons name="book" size={24} color="#0059FF" />
                                     <Text style={styles.unitTitle}>{unit.name}</Text>
@@ -187,7 +109,6 @@ export default function CourseDetailScreen() {
                                                             step,
                                                             unitSteps: unit.steps,
                                                             progress,
-                                                            setProgress,
                                                         });
                                                     }}
                                                 >
@@ -203,24 +124,24 @@ export default function CourseDetailScreen() {
                                                 </TouchableOpacity>
                                             );
                                         })}
-
                                     </View>
                                 )}
                             </View>
-                        )}
-                    />
-                </View>
+                    ))}
 
-                <TouchableOpacity style={styles.button}>
-                    <Text style={styles.buttonText}>O'qishni boshlash</Text>
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.button}>
+                        <Text style={styles.buttonText}>O&apos;qishni boshlash</Text>
+                    </TouchableOpacity>
+                    <View style={{ height: 20 }} />
+                </View>
             </ScrollView>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#EFF4F8', marginBottom: 20 },
+    container: { flex: 1, backgroundColor: '#EFF4F8' },
+    scrollContent: { flexGrow: 1, paddingBottom: 20 },
     header: {
         flexDirection: 'row',
         justifyContent: 'space-between',
@@ -270,10 +191,4 @@ const styles = StyleSheet.create({
         marginTop: 10, marginHorizontal: 10,
     },
     buttonText: { color: '#fff', fontWeight: '600', fontSize: 16 },
-    loadingContainer: { 
-        flex: 1, 
-        justifyContent: 'center', 
-        alignItems: 'center',
-        backgroundColor: '#EFF4F8'
-    }
 });

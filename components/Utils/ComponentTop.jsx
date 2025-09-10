@@ -1,7 +1,7 @@
 import { useNavigation } from 'expo-router'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
-export default function ({ text = "", transparent }) {
+export default function ComponentTop({ text = "", transparent }) {
     const navigation = useNavigation()
     return (
         < View style={[styles.top, transparent ? styles.transparent : '']}>
@@ -16,6 +16,8 @@ export default function ({ text = "", transparent }) {
         </View>
     )
 }
+
+ComponentTop.displayName = 'ComponentTop';
 
 const styles = StyleSheet.create({
     top: {
