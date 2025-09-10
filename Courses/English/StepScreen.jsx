@@ -25,7 +25,6 @@ import Step4 from "./Unit1/Step4";
 import Step5 from "./Unit1/Step5";
 import Step6 from "./Unit1/Step6";
 import Step7 from "./Unit1/Step7";
-import Step8 from "./Unit1/Step8";
 import Step9 from "./Unit1/Step9";
 import U2Step1 from "./Unit2/U2Step1";
 import U2Step10 from "./Unit2/U2Step10";
@@ -141,58 +140,58 @@ export default function StepScreen({ route, navigation }) {
             {unitId === 1 && step.order === 7 && (
                 <Step7 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 8 && (
+            {/* {unitId === 1 && step.order === 8 && (
                 <Step8 next={goToNextStep} />
-            )}
-            {unitId === 1 && step.order === 9 && (
+            )} */}
+            {unitId === 1 && step.order === 8 && (
                 <Step9 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 10 && (
+            {unitId === 1 && step.order === 9 && (
                 <Step10 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 11 && (
+            {unitId === 1 && step.order === 10 && (
                 <Step11 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 12 && (
+            {unitId === 1 && step.order === 11 && (
                 <Step12 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 13 && (
+            {unitId === 1 && step.order === 12 && (
                 <Step13 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 14 && (
+            {unitId === 1 && step.order === 13 && (
                 <Step14 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 15 && (
+            {unitId === 1 && step.order === 14 && (
                 <QABox next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 16 && (
+            {unitId === 1 && step.order === 15 && (
                 <Step16 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 17 && (
+            {unitId === 1 && step.order === 16 && (
                 <Step17 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 18 && (
+            {unitId === 1 && step.order === 17 && (
                 <Step18 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 19 && (
+            {unitId === 1 && step.order === 18 && (
                 <Step19 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 20 && (
+            {unitId === 1 && step.order === 19 && (
                 <Step20 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 21 && (
+            {unitId === 1 && step.order === 20 && (
                 <Step21 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 22 && (
+            {unitId === 1 && step.order === 21 && (
                 <Step22 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 23 && (
+            {unitId === 1 && step.order === 22 && (
                 <Step23 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 24 && (
+            {unitId === 1 && step.order === 23 && (
                 <Step24 next={goToNextStep} />
             )}
-            {unitId === 1 && step.order === 25 && (
+            {unitId === 1 && step.order === 24 && (
                 <Step25 next={goToNextStep} />
             )}
             {unitId === 2 && step.order === 1 && (

@@ -2,8 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, PanResponder, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Styles from "../../../Styles/Styles";
 import ErrorOverlay from "../../../components/Utils/OnError";
-import ThreeButtons from "../../../components/Utils/ThreeButtons";
 import ConfettiEffect from "../../../components/Utils/Success";
+import WordPractice from "../../../components/Utils/Talaffuz";
+import ThreeButtons from "../../../components/Utils/ThreeButtons";
+import WordGameAssist from "../../../components/Utils/WordGame";
+import FlashCards from "../../../components/YangiSozlar";
 
 const items = [
     { id: 1, img: require("../../../assets/images/olivia.jpg"), correct: "b" },
@@ -92,66 +95,120 @@ export default function App({ next }) {
         setTimeout(measureDropZones, 500);
     }, []);
 
+    const [infoClick, setInfoClick] = useState(true);
+    const [clicked, setClicked] = useState(true)
+    const [dictionary, setDictionary] = useState(false)
+    const [wordgame, setWordgame] = useState(true)
+    const [talaffuz, setTalaffuz] = useState(false)
+
     return (
         <>
-            <View style={styles.container}>
-                <ThreeButtons />
-                {/* Chap tomonda rangli rasmlar */}
-                <View style={styles.leftColumn}>
-                    {items.map((item) => {
-                        if (matched[item.id]) return null; // to‘g‘ri joylashtirilganlarni qaytarmaymiz
-                        const { pan, responder } = createResponder(item);
-                        return (
-                            <Animated.View
-                                key={item.id}
-                                style={[styles.item, { transform: pan.getTranslateTransform() }]}
-                                {...responder.panHandlers}
+            {dictionary ? (
+                <>
+
+                    {wordgame ? (
+                        <FlashCards
+                            setDictionary={setWordgame}
+                            data={[
+                                { word: "I'm", translation: "Men", audioUrl: "https://ukkibackend.soof.uz/media/audio/men.mp3" },
+                                { word: "This", translation: "Bu", audioUrl: "https://ukkibackend.soof.uz/media/audio/bu.mp3" },
+                                { word: "Friend", translation: "Do‘st", audioUrl: "https://ukkibackend.soof.uz/media/audio/do'st.mp3" },
+                                { word: "Answer", translation: "Javob bermoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/javob bermoq.mp3" },
+                                { word: "Name", translation: "Ism", audioUrl: "https://ukkibackend.soof.uz/media/audio/ism.mp3" },
+                            ]}
+                        />
+
+                    ) : talaffuz ? (
+                        <WordPractice
+                            setWordgame={setWordgame}
+                            setDictionary={setDictionary}
+                            setTalaffuz={setTalaffuz}
+                            words={[
+                                { text: "I'm", audioUrl: "https://ukkibackend.soof.uz/media/audio/men.mp3" },
+                                { text: "This", audioUrl: "https://ukkibackend.soof.uz/media/audio/bu.mp3" },
+                                { text: "Friend", audioUrl: "https://ukkibackend.soof.uz/media/audio/do'st.mp3" },
+                                { text: "Answer", audioUrl: "https://ukkibackend.soof.uz/media/audio/javob bermoq.mp3" },
+                                { text: "Name", audioUrl: "https://ukkibackend.soof.uz/media/audio/ism.mp3" },
+                            ]}
+                        />
+                    ) : (
+                        <WordGameAssist
+                            setDictionary={setTalaffuz}
+                            words={["I'm", "This", "Friend", "Answer", "Name",]}
+                            audios={
+                                [
+                                    "https://ukkibackend.soof.uz/media/audio/men.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/bu.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/do'st.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/javob bermoq.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/ism.mp3",
+
+                                ]
+                            }
+                        />
+                    )}
+                </>
+            ) : (
+                <View style={styles.container}>
+                    <ThreeButtons setDictionary={setDictionary}
+                        infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
+                        audioUrl="https://ukkibackend.soof.uz/media/audio/Salom bilag’on bolajon, Rasmlarga qara va ularni moslashtir. .mp3" />
+                    <View style={styles.leftColumn}>
+                        {items.map((item) => {
+                            if (matched[item.id]) return null;
+                            const { pan, responder } = createResponder(item);
+                            return (
+                                <Animated.View
+                                    key={item.id}
+                                    style={[styles.item, { transform: pan.getTranslateTransform() }]}
+                                    {...responder.panHandlers}
+                                >
+                                    <Image source={item.img} style={styles.itemImg} />
+                                    <Text style={styles.label}>{item.id}</Text>
+                                </Animated.View>
+                            );
+                        })}
+                    </View>
+
+                    {/* O‘ng tomonda soyalar */}
+                    <View
+                        style={[
+                            styles.rightColumn,
+                            Object.keys(matched).length === items.length && styles.completed
+                        ]}
+                    >
+                        {targets.map((t) => (
+                            <View
+                                key={t.id}
+                                style={styles.target}
+                                ref={(ref) => (dropZones.current[t.id] = ref)}
                             >
-                                <Image source={item.img} style={styles.itemImg} />
-                                <Text style={styles.label}>{item.id}</Text>
-                            </Animated.View>
-                        );
-                    })}
-                </View>
+                                {/* Agar moslangan bo‘lsa, rasmni ichida ko‘rsatamiz */}
+                                {Object.keys(matched).find(
+                                    (itemId) =>
+                                        items.find((i) => i.id == itemId)?.correct === t.id
+                                ) ? (
+                                    <Image
+                                        source={
+                                            items.find((i) => i.correct === t.id).img
+                                        }
+                                        style={styles.targetImg}
+                                    />
+                                ) : (
+                                    <Image source={t.img} style={styles.targetImg} />
+                                )}
+                                <Text style={styles.label}>{t.id}</Text>
+                            </View>
+                        ))}
+                    </View>
 
-                {/* O‘ng tomonda soyalar */}
-                <View
-                    style={[
-                        styles.rightColumn,
-                        Object.keys(matched).length === items.length && styles.completed
-                    ]}
-                >
-                    {targets.map((t) => (
-                        <View
-                            key={t.id}
-                            style={styles.target}
-                            ref={(ref) => (dropZones.current[t.id] = ref)}
-                        >
-                            {/* Agar moslangan bo‘lsa, rasmni ichida ko‘rsatamiz */}
-                            {Object.keys(matched).find(
-                                (itemId) =>
-                                    items.find((i) => i.id == itemId)?.correct === t.id
-                            ) ? (
-                                <Image
-                                    source={
-                                        items.find((i) => i.correct === t.id).img
-                                    }
-                                    style={styles.targetImg}
-                                />
-                            ) : (
-                                <Image source={t.img} style={styles.targetImg} />
-                            )}
-                            <Text style={styles.label}>{t.id}</Text>
-                        </View>
-                    ))}
+                    {Object.keys(matched).length === items.length && (
+                        <TouchableOpacity onPress={next} style={Styles.NextButton}>
+                            <Text>Next ➡️</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
-
-                {Object.keys(matched).length === items.length && (
-                    <TouchableOpacity onPress={next} style={Styles.NextButton}>
-                        <Text>Next ➡️</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
+            )}
             {isError && <ErrorOverlay />}
             {Object.keys(matched).length === items.length && <ConfettiEffect />}
         </>

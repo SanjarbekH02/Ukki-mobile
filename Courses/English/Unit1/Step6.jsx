@@ -75,11 +75,20 @@ export default function Step6({ next }) {
             }, 2000);
         }
     };
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [dictionary, setDictionary] = useState(false)
+    const [wordgame, setWordgame] = useState(true)
+    const [talaffuz, setTalaffuz] = useState(false)
 
     return (
         <>
+        
             <View style={styles.container}>
-                <ThreeButtons setShowPointer={setIsPlayBtn} />
+                <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} 
+                    setShowPointer={setIsPlayBtn} audioUrl="https://ukkibackend.soof.uz/media/audio/Aziz bolajon, suhbatni tingla va qahramonlarga moslashtir..mp3" />
 
                 <View style={styles.imageContainer}>
                     <Image
