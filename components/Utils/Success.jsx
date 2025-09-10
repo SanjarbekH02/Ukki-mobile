@@ -1,26 +1,29 @@
-// ConfettiEffect.js
-import { Dimensions } from "react-native";
-import ConfettiCannon from "react-native-confetti-cannon";
+// Success component - simple version without confetti
+import { View, Text, StyleSheet } from "react-native";
 
-export default function ConfettiEffect() {
-    const { width } = Dimensions.get("window");
-
+export default function Success() {
     return (
-        <>
-            <ConfettiCannon
-                count={40}
-                origin={{ x: 0, y: 0 }}
-                fadeOut={true}
-                fallSpeed={500}
-                explosionSpeed={350}
-            />
-            <ConfettiCannon
-                count={40}
-                origin={{ x: width, y: 0 }}
-                fadeOut={true}
-                fallSpeed={500}
-                explosionSpeed={500}
-            />
-        </>
+        <View style={styles.container}>
+            <Text style={styles.successText}>✓ Correct!</Text>
+        </View>
     );
 }
+
+const styles = StyleSheet.create({
+    container: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 255, 0, 0.1)',
+        zIndex: 1000,
+    },
+    successText: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        color: 'green',
+    },
+});

@@ -32,12 +32,12 @@ export default function ErrorOverlay({
           Animated.timing(pulseAnim, {
             toValue: 1,
             duration: 400,
-            useNativeDriver: false,
+            useNativeDriver: true,
           }),
           Animated.timing(pulseAnim, {
             toValue: 0,
             duration: 400,
-            useNativeDriver: false,
+            useNativeDriver: true,
           }),
         ]),
         { iterations: 2 } 
@@ -50,6 +50,7 @@ export default function ErrorOverlay({
   const glowOpacity = pulseAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0.2, 0.9],
+    extrapolate: 'clamp',
   });
 
   return (
@@ -59,21 +60,21 @@ export default function ErrorOverlay({
     >
       <Animated.View style={[styles.glowContainer, { opacity: glowOpacity }]}>
         <LinearGradient
-          colors={["rgba(255,0,0,0.8)", "transparent"]}
+          colors={["rgba(255,0,0,0.8)", "rgba(255,0,0,0)"]}
           style={styles.top}
         />
         <LinearGradient
-          colors={["rgba(255,0,0,0.8)", "transparent"]}
+          colors={["rgba(255,0,0,0.8)", "rgba(255,0,0,0)"]}
           style={styles.bottom}
         />
         <LinearGradient
-          colors={["rgba(255,0,0,0.8)", "transparent"]}
+          colors={["rgba(255,0,0,0.8)", "rgba(255,0,0,0)"]}
           style={styles.left}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         />
         <LinearGradient
-          colors={["rgba(255,0,0,0.8)", "transparent"]}
+          colors={["rgba(255,0,0,0.8)", "rgba(255,0,0,0)"]}
           style={styles.right}
           start={{ x: 1, y: 0 }}
           end={{ x: 0, y: 0 }}
