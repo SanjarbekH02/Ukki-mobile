@@ -15,11 +15,11 @@ import FeedbackForm from '../../Screens/FeedbackForm';
 const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {
-    // Navigation bar’ni yashirish
+    // Navigation bar'ni yashirish
     NavigationBar.setVisibilityAsync("hidden");
 
-    // Qorong‘i fon qilish (ixtiyoriy)
-    NavigationBar.setBackgroundColorAsync("black");
+    // Qorong'i fon qilish (ixtiyoriy) - removed due to edge-to-edge warning
+    // NavigationBar.setBackgroundColorAsync("black");
   }, []);
   return (
     <SafeAreaView
