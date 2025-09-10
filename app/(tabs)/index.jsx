@@ -25,12 +25,16 @@ export default function App() {
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
       }}
     >
       {/* <StatusBar backgroundColor="transparent" translucent barStyle="dark-content" /> */}
       <Stack.Navigator>
-        <Stack.Screen name="Main" component={BottomTabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Main"
+          component={BottomTabNavigator}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Feedback"
           component={FeedbackForm}
@@ -42,13 +46,16 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="ArtCource"
+          component={CourseDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="StepScreen"
           component={StepScreen}
           options={{ headerShown: false }}
         />
-
       </Stack.Navigator>
-
     </SafeAreaView>
   );
 }
