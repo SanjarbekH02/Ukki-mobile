@@ -15,22 +15,26 @@ import FeedbackForm from '../../Screens/FeedbackForm';
 const Stack = createNativeStackNavigator();
 export default function App() {
   useEffect(() => {
-    // Navigation bar’ni yashirish
+    // Navigation bar'ni yashirish
     NavigationBar.setVisibilityAsync("hidden");
 
-    // Qorong‘i fon qilish (ixtiyoriy)
-    NavigationBar.setBackgroundColorAsync("black");
+    // Qorong'i fon qilish (ixtiyoriy) - removed due to edge-to-edge warning
+    // NavigationBar.setBackgroundColorAsync("black");
   }, []);
   return (
     <SafeAreaView
       style={{
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: "#fff",
       }}
     >
       {/* <StatusBar backgroundColor="transparent" translucent barStyle="dark-content" /> */}
       <Stack.Navigator>
-        <Stack.Screen name="Main" component={BottomTabNavigator} options={{ headerShown: false }} />
+        <Stack.Screen
+          name="Main"
+          component={BottomTabNavigator}
+          options={{ headerShown: false }}
+        />
         <Stack.Screen
           name="Feedback"
           component={FeedbackForm}
@@ -42,13 +46,16 @@ export default function App() {
           options={{ headerShown: false }}
         />
         <Stack.Screen
+          name="ArtCource"
+          component={CourseDetailScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
           name="StepScreen"
           component={StepScreen}
           options={{ headerShown: false }}
         />
-
       </Stack.Navigator>
-
     </SafeAreaView>
   );
 }
