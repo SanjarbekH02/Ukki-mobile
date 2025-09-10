@@ -45,7 +45,7 @@ const dialogData = {
     ],
 };
 
-export default function RoleDialog({next}) {
+export default function RoleDialog({ next }) {
     const [selectedRole, setSelectedRole] = useState(null);
     const [step, setStep] = useState(0);
     const [feedback, setFeedback] = useState(false);
@@ -79,10 +79,16 @@ export default function RoleDialog({next}) {
         }
     };
 
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [dictionary, setDictionary] = useState(false)
+
     return (
         <>
             <View style={styles.container}>
-                <ThreeButtons />
+                <ThreeButtons setDictionary={setDictionary}
+                    infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} 
+                    audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, berilgan gaplarni o’qi va tarjima qil.mp3" />
                 {!selectedRole ? (
                     <>
                         <Text style={styles.title}>Rolni tanlang 👇</Text>

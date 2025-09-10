@@ -3,22 +3,25 @@ import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from 'react
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const courses = [
-    { title: 'Ingliz tili', lessons: 3, image: require('../assets/images/english.png') },
-    { title: 'Matematika', lessons: 3, image: require('../assets/images/math.png') },
-    { title: 'Himiya', lessons: 3, image: require('../assets/images/chemistry.png') },
-    { title: 'Geometriya', lessons: 3, image: require('../assets/images/geometry.png') },
-    { title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png') },
-    { title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png') },
-    { title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png') },
-    { title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png') },
-    { title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png') },
-    { title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png') },
+    { id: 1, title: 'Ingliz tili', lessons: 3, image: require('../assets/images/english.png'), route: 'CourseDetail' },
+    { id: 2, title: 'Matematika', lessons: 3, image: require('../assets/images/math.png'), route: 'MathCourse' },
+    { id: 3, title: 'Tasviriy San\'at', lessons: 3, image: require('../assets/images/iskus.png'), route: 'ArtCourse' },
+    { id: 4, title: 'Geometriya', lessons: 3, image: require('../assets/images/geometry.png'), route: 'GeometryCourse' },
+    { id: 5, title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png'), route: 'PhysicsCourse' },
+    { id: 6, title: 'Fizika', lessons: 3, image: require('../assets/images/physics.png'), route: 'PhysicsCourse2' },
 ];
 
 export default function HomeScreen() {
     const navigation = useNavigation()
+
     const renderCourse = ({ item }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('CourseDetail')} style={styles.courseItem}>
+        <TouchableOpacity
+            onPress={() => {
+                navigation.navigate(item.route);
+
+            }}
+            style={styles.courseItem}
+        >
             <Text style={styles.courseTitle}>{item.title}</Text>
             <Text style={styles.courseSubtitle}>{item.lessons}ta dars</Text>
             <Image source={item.image} style={styles.courseImage} resizeMode="contain" />
@@ -87,7 +90,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 12,
     },
-    courseImage: { margin: "auto" },
+    courseImage: { margin: "auto", width: 80, height: 80, },
     courseTitle: { fontSize: 16, fontWeight: '600' },
     courseSubtitle: { fontSize: 13, color: '#666' },
 });

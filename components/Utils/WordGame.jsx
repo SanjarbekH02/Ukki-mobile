@@ -425,8 +425,8 @@ const styles = StyleSheet.create({
         marginBottom: 18,
     },
     box: {
-        width: 64,
-        height: 64,
+        width: 54,
+        height: 54,
         marginHorizontal: 6,
         borderRadius: 12,
         borderWidth: 2,

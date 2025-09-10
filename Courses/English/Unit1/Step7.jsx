@@ -3,7 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ErrorOverlay from "../../../components/Utils/OnError";
 import ConfettiEffect from "../../../components/Utils/Success";
+import WordPractice from "../../../components/Utils/Talaffuz";
 import ThreeButtons from "../../../components/Utils/ThreeButtons";
+import WordGameAssist from "../../../components/Utils/WordGame";
+import FlashCards from "../../../components/YangiSozlar";
 import Styles from "../../../Styles/Styles";
 
 const words = ["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"];
@@ -14,11 +17,10 @@ export default function Step7({ next }) {
     const [currentIndex, setCurrentIndex] = useState(null);
     const [completed, setCompleted] = useState([]);
     const [showMic, setShowMic] = useState(false);
-    const [isRecording, setIsRecording] = useState(false); // 🎤 yozib olish holati
+    const [isRecording, setIsRecording] = useState(false);
     const [errorMessage, setErrorMessage] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
 
-    // 🔥 oq to‘lqin animatsiyasi uchun
     const pulseAnim = useRef(new Animated.Value(1)).current;
 
     useEffect(() => {
@@ -136,56 +138,125 @@ export default function Step7({ next }) {
         }
     }
 
+    const [infoClick, setInfoClick] = useState(true);
+    const [clicked, setClicked] = useState(true)
+    const [dictionary, setDictionary] = useState(false)
+    const [wordgame, setWordgame] = useState(true)
+    const [talaffuz, setTalaffuz] = useState(false)
+
     return (
         <>
-            <View style={styles.container}>
-                <ThreeButtons />
+            {dictionary ? (
+                <>
 
-                {words.map((w, i) =>
-                    completed.includes(i) ? null : (
+                    {wordgame ? (
+                        <FlashCards
+                            setDictionary={setWordgame}
+                            data={[
+                                { word: "One", translation: "Bir", audioUrl: "https://ukkibackend.soof.uz/media/audio/1.mp3" },
+                                { word: "Two ", translation: "Ikki", audioUrl: "https://ukkibackend.soof.uz/media/audio/2.mp3" },
+                                { word: "Three", translation: "Uch", audioUrl: "https://ukkibackend.soof.uz/media/audio/3.mp3" },
+                                { word: "Four", translation: "To’rt", audioUrl: "https://ukkibackend.soof.uz/media/audio/4.mp3" },
+                                { word: "Five", translation: "Besh", audioUrl: "https://ukkibackend.soof.uz/media/audio/5.mp3" },
+                                { word: "Six", translation: "Olti", audioUrl: "https://ukkibackend.soof.uz/media/audio/6.mp3" },
+                                { word: "Seven", translation: "Yetti", audioUrl: "https://ukkibackend.soof.uz/media/audio/7.mp3" },
+                                { word: "Eight", translation: "Sakkiz", audioUrl: "https://ukkibackend.soof.uz/media/audio/8.mp3" },
+                                { word: "Nine", translation: "to’qqiz", audioUrl: "https://ukkibackend.soof.uz/media/audio/9.mp3" },
+                                { word: "Ten", translation: "O’n", audioUrl: "https://ukkibackend.soof.uz/media/audio/10.mp3" },
+                            ]}
+                        />
+
+                    ) : talaffuz ? (
+                        <WordPractice
+                            setWordgame={setWordgame}
+                            setDictionary={setDictionary}
+                            setTalaffuz={setTalaffuz}
+                            words={[
+                                { text: "One", audioUrl: "https://ukkibackend.soof.uz/media/audio/1.mp3" },
+                                { text: "Two ", audioUrl: "https://ukkibackend.soof.uz/media/audio/2.mp3" },
+                                { text: "Three", audioUrl: "https://ukkibackend.soof.uz/media/audio/3.mp3" },
+                                { text: "Four", audioUrl: "https://ukkibackend.soof.uz/media/audio/4.mp3" },
+                                { text: "Five", audioUrl: "https://ukkibackend.soof.uz/media/audio/5.mp3" },
+                                { text: "Six", audioUrl: "https://ukkibackend.soof.uz/media/audio/6.mp3" },
+                                { text: "Seven", audioUrl: "https://ukkibackend.soof.uz/media/audio/7.mp3" },
+                                { text: "Eight", audioUrl: "https://ukkibackend.soof.uz/media/audio/8.mp3" },
+                                { text: "Nine", audioUrl: "https://ukkibackend.soof.uz/media/audio/9.mp3" },
+                                { text: "ten", audioUrl: "https://ukkibackend.soof.uz/media/audio/10.mp3" },
+                            ]}
+                        />
+                    ) : (
+                        <WordGameAssist
+                            setDictionary={setTalaffuz}
+                            words={["one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"]}
+                            audios={
+                                [
+                                    "https://ukkibackend.soof.uz/media/audio/1.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/2.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/3.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/4.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/5.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/6.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/7.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/8.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/9.mp3",
+                                    "https://ukkibackend.soof.uz/media/audio/10.mp3"
+
+                                ]
+                            }
+                        />
+                    )}
+                </>
+            ) : (
+                <View style={styles.container}>
+                    <ThreeButtons
+                        setDictionary={setDictionary}
+                        infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} />
+
+                    {words.map((w, i) =>
+                        completed.includes(i) ? null : (
+                            <TouchableOpacity
+                                key={i}
+                                style={[styles.bowlingBtn, { left: `${i * 9}%`, bottom: i % 2 === 0 ? "50%" : "33%" }]}
+                                onPress={() => playSound(i)}
+                            >
+                                <View style={styles.bowlingBox}>
+                                    <Image source={require("../../../assets/images/bowling.png")} style={styles.image} />
+                                    <Text style={i === 9 ? styles.bowlingNumber10 : styles.bowlingNumber}>{i + 1}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        )
+                    )}
+
+                    {/* 🎤 MIC tugma */}
+                    {showMic && !isRecording && (
                         <TouchableOpacity
-                            key={i}
-                            style={[styles.bowlingBtn, { left: `${i * 9}%`, bottom: i % 2 === 0 ? "50%" : "33%" }]}
-                            onPress={() => playSound(i)}
+                            style={styles.micBtn}
+                            onPress={recording ? stopRecording : startRecording}
                         >
-                            <View style={styles.bowlingBox}>
-                                <Image source={require("../../../assets/images/bowling.png")} style={styles.image} />
-                                <Text style={i === 9 ? styles.bowlingNumber10 : styles.bowlingNumber}>{i + 1}</Text>
+                            <Image source={require("../../../assets/images/mic.png")} style={{ width: 120, height: 120 }} />
+                        </TouchableOpacity>
+                    )}
+
+                    {isRecording && (
+                        <TouchableOpacity style={styles.micBtn} onPress={stopRecording}>
+                            <View style={styles.recordingCircle}>
+                                <Animated.View
+                                    style={[
+                                        styles.wave,
+                                        { transform: [{ scale: pulseAnim }] }
+                                    ]}
+                                />
+                                <View style={styles.innerCircle} />
                             </View>
                         </TouchableOpacity>
-                    )
-                )}
+                    )}
 
-                {/* 🎤 MIC tugma */}
-                {showMic && !isRecording && (
-                    <TouchableOpacity
-                        style={styles.micBtn}
-                        onPress={recording ? stopRecording : startRecording}
-                    >
-                        <Image source={require("../../../assets/images/mic.png")} style={{ width: 120, height: 120 }} />
-                    </TouchableOpacity>
-                )}
-
-                {isRecording && (
-                    <TouchableOpacity style={styles.micBtn} onPress={stopRecording}>
-                        <View style={styles.recordingCircle}>
-                            <Animated.View
-                                style={[
-                                    styles.wave,
-                                    { transform: [{ scale: pulseAnim }] }
-                                ]}
-                            />
-                            <View style={styles.innerCircle} />
-                        </View>
-                    </TouchableOpacity>
-                )}
-
-                {completed.length === words.length && (
-                    <TouchableOpacity style={Styles.NextButton} onPress={next}>
-                        <Text>Next</Text>
-                    </TouchableOpacity>
-                )}
-            </View>
+                    {completed.length === words.length && (
+                        <TouchableOpacity style={Styles.NextButton} onPress={next}>
+                            <Text>Next</Text>
+                        </TouchableOpacity>
+                    )}
+                </View>)}
             {successMessage && <ConfettiEffect />}
             {errorMessage && <ErrorOverlay />}
         </>

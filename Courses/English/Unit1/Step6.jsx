@@ -3,10 +3,7 @@ import { useRef, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ErrorOverlay from "../../../components/Utils/OnError";
 import ConfettiEffect from "../../../components/Utils/Success";
-import WordPractice from "../../../components/Utils/Talaffuz";
 import ThreeButtons from "../../../components/Utils/ThreeButtons";
-import WordGameAssist from "../../../components/Utils/WordGame";
-import FlashCards from "../../../components/YangiSozlar";
 
 export default function Step6({ next }) {
     const [isPlayBtn, setIsPlayBtn] = useState(false);
@@ -78,120 +75,75 @@ export default function Step6({ next }) {
             }, 2000);
         }
     };
-    const [infoClick, setInfoClick] = useState(true);
-    const [clicked, setClicked] = useState(true)
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
     const [dictionary, setDictionary] = useState(false)
     const [wordgame, setWordgame] = useState(true)
     const [talaffuz, setTalaffuz] = useState(false)
 
     return (
         <>
-            {dictionary ? (
-                <>
+        
+            <View style={styles.container}>
+                <ThreeButtons
+                    setDictionary={setDictionary}
+                    infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} 
+                    setShowPointer={setIsPlayBtn} audioUrl="https://ukkibackend.soof.uz/media/audio/Aziz bolajon, suhbatni tingla va qahramonlarga moslashtir..mp3" />
 
-                    {wordgame ? (
-                        <FlashCards
-                            setDictionary={setWordgame}
-                            data={[
-                                { word: "I'm", translation: "Men", audioUrl: "https://ukkibackend.soof.uz/media/audio/men.mp3" },
-                                { word: "This", translation: "Bu", audioUrl: "https://ukkibackend.soof.uz/media/audio/bu.mp3" },
-                                { word: "Friend", translation: "Do‘st", audioUrl: "https://ukkibackend.soof.uz/media/audio/do'st.mp3" },
-                                { word: "Answer", translation: "Javob bermoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/javob bermoq.mp3" },
-                                { word: "Name", translation: "Ism", audioUrl: "https://ukkibackend.soof.uz/media/audio/ism.mp3" },
-                            ]}
-                        />
+                <View style={styles.imageContainer}>
+                    <Image
+                        source={require("../../../assets/images/background.jpg")}
+                        style={styles.image}
+                    />
 
-                    ) : talaffuz ? (
-                        <WordPractice
-                            setWordgame={setWordgame}
-                            setDictionary={setDictionary}
-                            setTalaffuz={setTalaffuz}
-                            words={[
-                                { text: "I'm", audioUrl: "https://ukkibackend.soof.uz/media/audio/men.mp3" },
-                                { text: "This", audioUrl: "https://ukkibackend.soof.uz/media/audio/bu.mp3" },
-                                { text: "Friend", audioUrl: "https://ukkibackend.soof.uz/media/audio/do'st.mp3" },
-                                { text: "Answer", audioUrl: "https://ukkibackend.soof.uz/media/audio/javob bermoq.mp3" },
-                                { text: "Name", audioUrl: "https://ukkibackend.soof.uz/media/audio/ism.mp3" },
-                            ]}
-                        />
-                    ) : (
-                        <WordGameAssist
-                            setDictionary={setTalaffuz}
-                            words={["I'm", "This", "Friend", "Answer", "Name",]}
-                            audios={
-                                [
-                                    "https://ukkibackend.soof.uz/media/audio/men.mp3",
-                                    "https://ukkibackend.soof.uz/media/audio/bu.mp3",
-                                    "https://ukkibackend.soof.uz/media/audio/do'st.mp3",
-                                    "https://ukkibackend.soof.uz/media/audio/javob bermoq.mp3",
-                                    "https://ukkibackend.soof.uz/media/audio/ism.mp3",
-
-                                ]
-                            }
-                        />
-                    )}
-                </>
-            ) : (
-                <View style={styles.container}>
-                    <ThreeButtons
-                        setDictionary={setDictionary}
-                        infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} F
-                        setShowPointer={setIsPlayBtn} />
-
-                    <View style={styles.imageContainer}>
+                    {/* Olivia */}
+                    <TouchableOpacity
+                        style={styles.olivia}
+                        onPress={() => handleSelect("tina")}
+                    >
                         <Image
-                            source={require("../../../assets/images/background.jpg")}
-                            style={styles.image}
+                            source={require("../../../assets/images/tinaozi.png")}
+                            style={{ width: 80, resizeMode: "contain" }}
                         />
+                    </TouchableOpacity>
 
-                        {/* Olivia */}
-                        <TouchableOpacity
-                            style={styles.olivia}
-                            onPress={() => handleSelect("tina")}
-                        >
-                            <Image
-                                source={require("../../../assets/images/tinaozi.png")}
-                                style={{ width: 80, resizeMode: "contain" }}
-                            />
+                    <TouchableOpacity
+                        style={styles.tina}
+                        onPress={() => handleSelect("olivia")}
+                    >
+                        <Image
+                            source={require("../../../assets/images/oliviaozi.png")}
+                            style={{ width: 80, resizeMode: "contain" }}
+                        />
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.david}
+                        onPress={() => handleSelect("david")}
+                    >
+                        <Image
+                            source={require("../../../assets/images/davidozi.png")}
+                            style={{ width: 80, resizeMode: "contain" }}
+                        />
+                    </TouchableOpacity>
+
+                    {isPlayBtn && (
+                        <TouchableOpacity style={styles.playBtn} onPress={handlePlay}>
+                            <Text style={{ color: "#fff", fontSize: 18 }}>▶ Play</Text>
                         </TouchableOpacity>
+                    )}
 
-                        <TouchableOpacity
-                            style={styles.tina}
-                            onPress={() => handleSelect("olivia")}
-                        >
-                            <Image
-                                source={require("../../../assets/images/oliviaozi.png")}
-                                style={{ width: 80, resizeMode: "contain" }}
-                            />
+                    {message ? (
+                        <Text style={styles.message}>{message}</Text>
+                    ) : null}
+
+                    {completed && (
+                        <TouchableOpacity style={styles.nextBtn} onPress={next}>
+                            <Text style={{ color: "#fff", fontSize: 18 }}>Next ➡</Text>
                         </TouchableOpacity>
-
-                        <TouchableOpacity
-                            style={styles.david}
-                            onPress={() => handleSelect("david")}
-                        >
-                            <Image
-                                source={require("../../../assets/images/davidozi.png")}
-                                style={{ width: 80, resizeMode: "contain" }}
-                            />
-                        </TouchableOpacity>
-
-                        {isPlayBtn && (
-                            <TouchableOpacity style={styles.playBtn} onPress={handlePlay}>
-                                <Text style={{ color: "#fff", fontSize: 18 }}>▶ Play</Text>
-                            </TouchableOpacity>
-                        )}
-
-                        {message ? (
-                            <Text style={styles.message}>{message}</Text>
-                        ) : null}
-
-                        {completed && (
-                            <TouchableOpacity style={styles.nextBtn} onPress={next}>
-                                <Text style={{ color: "#fff", fontSize: 18 }}>Next ➡</Text>
-                            </TouchableOpacity>
-                        )}
-                    </View>
-                </View>)}
+                    )}
+                </View>
+            </View>
             {isSuccess && <ConfettiEffect />}
             {isError && <ErrorOverlay />}
         </>
