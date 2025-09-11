@@ -877,18 +877,7 @@ export default function U3Step1({ next }) {
   return (
     <>
       {/* Debug button - floating workshop skip */}
-      <TouchableOpacity
-        style={debugStyles.debugButton}
-        onPress={() => {
-          setWorkshopMode(true);
-          setWorkshopStage(1);
-          setIsExampleStage(true);
-          setCheckedAnswers([null, null, null, null]);
-          setWorkshopCompleted(false);
-        }}
-      >
-        <Text style={debugStyles.debugButtonText}>🔧 Workshop</Text>
-      </TouchableOpacity>
+      
 
       {workshopMode ? (
         renderWorkshop()
