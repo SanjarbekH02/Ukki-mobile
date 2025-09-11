@@ -35,7 +35,7 @@ function useOctagonPoints(size = 110, inset = 18) {
     }, [size, inset]);
 }
 
-export default function ShapeColorGame({next}) {
+export default function ShapeColorGame({ next }) {
     const points = useOctagonPoints(120, 22);
     const [sound, setSound] = useState(null);
     const [activeId, setActiveId] = useState(null);
@@ -77,10 +77,14 @@ export default function ShapeColorGame({next}) {
     }
 
     const isAllCorrect = Object.keys(fills).length === SHAPES.length;
-
+    const [infoClick, setInfoClick] = useState(false);
+    const [clicked, setClicked] = useState(false)
+    const [dictionary, setDictionary] = useState(false)
     return (
         <View style={{ flex: 1, padding: 12, justifyContent: "center" }}>
-            <ThreeButtons />
+            <ThreeButtons
+                setDictionary={setDictionary}
+                infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} audioUrl="https://ukkibackend.soof.uz/media/audio/Aziz bolajon, suhbatni tingla va ranglarni moslashtir..mp3" />
 
             <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
                 {SHAPES.map((item) => (

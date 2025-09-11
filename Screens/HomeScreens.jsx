@@ -1,11 +1,11 @@
 import { useNavigation } from "expo-router";
 import {
-  FlatList,
-  Image,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
+    FlatList,
+    Image,
+    StyleSheet,
+    Text,
+    TouchableOpacity,
+    View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 

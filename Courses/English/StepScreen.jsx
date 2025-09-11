@@ -64,7 +64,7 @@ import U3Step9 from "./Unit3/U3Step9";
 
 
 export default function StepScreen({ route, navigation }) {
-    const { unitId, step, unitSteps, progress } = route.params;
+    const { unitId, step, unitSteps, progress, setProgress } = route.params;
     const [isPlaying, setIsPlaying] = useState(false);
     const [infoClick, setInfoClick] = useState(false);
     const [clicked, setClicked] = useState(true)
@@ -73,7 +73,17 @@ export default function StepScreen({ route, navigation }) {
     const currentStepIndex = unitSteps.findIndex(s => s.order === step.order);
     const isLastStep = currentStepIndex === unitSteps.length - 1;
 
-    const goToNextStep = () => {
+     const goToNextStep = () => {
+        setProgress((prev) => {
+            let newProgress = { ...prev };
+            if (step.order > prev.lastCompletedStep) {
+                newProgress = {
+                    unitId,
+                    lastCompletedStep: step.order
+                };
+            }
+            return newProgress;
+        });
         if (isLastStep) {
             Alert.alert("Tabriklaymiz!", "Unit tugadi 🎉");
             navigation.goBack();
@@ -85,15 +95,14 @@ export default function StepScreen({ route, navigation }) {
             step: nextStep,
             unitSteps,
             progress,
+            setProgress,
         });
     };
     return (
         <View style={styles.container}>
-            {!isPlaying && step.order !== 14 && (
                 <View style={Styles.ComponentTop}>
                     <ComponentTop text={step.title} />
                 </View>
-            )}
             {unitId === 1 && step.order === 1 && (<>
                 <Step1 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
                 {/* <TouchableOpacity style={styles.NextButton} onPress={goToNextStep}>

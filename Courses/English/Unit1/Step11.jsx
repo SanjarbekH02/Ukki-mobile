@@ -56,8 +56,7 @@ export default function Step11({ next }) {
         const newInputs = [...inputs];
         newInputs[inputIndex] = text;
         setInputs(newInputs);
-        
-        // Check tugmasini ko'rsatish uchun shart
+
         const correctInputIndex = correctAnswers[currentIndex].index;
         if (inputIndex === correctInputIndex && text.length > 0) {
             setShowCheckButton(true);
@@ -106,7 +105,7 @@ export default function Step11({ next }) {
         const correctInputIndex = correctAnswers[currentIndex].index;
         if (showCheckButton) {
             return (
-                <TouchableOpacity 
+                <TouchableOpacity
                     style={styles.checkBtn}
                     onPress={() => handleCheck(correctInputIndex)}
                 >
@@ -115,6 +114,13 @@ export default function Step11({ next }) {
             );
         }
         return null;
+    };
+
+
+    const areAllAnswersCorrect = () => {
+        return correctAnswers.every(
+            ans => inputs[ans.index] === ans.value
+        );
     };
 
     return (
@@ -169,13 +175,13 @@ export default function Step11({ next }) {
                 <View style={styles.container}>
                     <ThreeButtons
                         setDictionary={setDictionary}
-                        infoClick={infoClick} 
-                        clicked={clicked} 
-                        setClicked={setClicked} 
+                        infoClick={infoClick}
+                        clicked={clicked}
+                        setClicked={setClicked}
                         setInfoClick={setInfoClick}
-                        audioUrl="https://ukkibackend.soof.uz/media/audio/Bilag'on bolajon, kel suhbatni tinglaymiz va kerakli raqamlarni belgilaymiz. .mp3" 
+                        audioUrl="https://ukkibackend.soof.uz/media/audio/Bilag’on bolajon, kel suhbatni tinglaymiz va kerakli raqamlarni belgilaymiz. .mp3"
                     />
-                    
+
                     <TouchableOpacity
                         style={styles.playBtn}
                         onPress={() => handlePlay(currentIndex)}
@@ -238,10 +244,12 @@ export default function Step11({ next }) {
                     {renderCheckButton()}
 
                     {feedback ? <Text style={styles.feedback}>{feedback}</Text> : null}
-                    
-                    <TouchableOpacity onPress={next} style={Styles.NextButton}>
-                        <Text>Next</Text>
-                    </TouchableOpacity>
+
+                    {areAllAnswersCorrect() && (
+                        <TouchableOpacity onPress={next} style={Styles.NextButton}>
+                            <Text>Next</Text>
+                        </TouchableOpacity>
+                    )}
                 </View>
             )}
 
@@ -254,16 +262,16 @@ export default function Step11({ next }) {
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: '100%',
+        height: '90%',
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         paddingBottom: 20,
     },
-    playBtn: { 
-        backgroundColor: '#1d5affff', 
-        padding: 10, 
-        borderRadius: 10 
+    playBtn: {
+        backgroundColor: '#1d5affff',
+        padding: 10,
+        borderRadius: 10
     },
     imageBlock: {
         width: '100%',

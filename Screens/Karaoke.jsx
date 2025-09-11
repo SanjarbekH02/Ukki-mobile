@@ -172,7 +172,6 @@ import { Audio } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useRef, useState } from 'react';
 import { Dimensions, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import ComponentTop from '../components/Utils/ComponentTop';
 
 const { width } = Dimensions.get('window');
 
@@ -273,7 +272,6 @@ export default function KaraokePlayer({
             colors={['#f2f2fe', '#f9eaef', '#fef3ee']}
             style={{ flex: 1 }}
         >
-            <ComponentTop text='Karaoke' />
             <ScrollView
                 contentContainerStyle={{
                     flexGrow: 1,
