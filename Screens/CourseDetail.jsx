@@ -7,34 +7,29 @@ import {
   Alert,
   FlatList,
   Image,
-  ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
-import { courseData, fineArts } from "../constants/CourseData";
+import { courseData } from "../constants/CourseData";
 
 export default function CourseDetailScreen() {
   const route = useRoute();
-  const { course } = route.params; 
+  const { course } = route.params;
   const userId = 1;
   const [openUnit, setOpenUnit] = useState(null);
   const [progress, setProgress] = useState(null);
   const navigation = useNavigation();
 
-  const selectedCourseData =
-    course.title === "Ingliz tili"
-      ? courseData
-      : course.title === "Tasviriy San'at"
-      ? fineArts
-      : [];
+  const selectedCourse = courseData.find((c) => c.id === course.id);
+  const selectedCourseData = selectedCourse ? selectedCourse.units : [];
 
   useEffect(() => {
     // const loadProgress = async () => {
     //     try {
     //         const res = await axios.get(
-    //             `https://your-api.com/api/course-progress/${userId}/${courseId}`
+    //             `https://your-api.com/api/course-progress/${userId}/${course.id}`
     //         );
     //         if (res.data) {
     //             setProgress(res.data);
@@ -66,7 +61,7 @@ export default function CourseDetailScreen() {
     // try {
     //     await axios.post(`https://your-api.com/api/course-progress`, {
     //         userId,
-    //         courseId,
+    //         courseId: course.id,
     //         unitId,
     //         lastCompletedStep: stepOrder
     //     });
@@ -79,9 +74,9 @@ export default function CourseDetailScreen() {
   };
 
   const toggleUnit = (unitId) => {
-    // const unitIndex = courseData.findIndex(u => u.id === unitId);
+    // const unitIndex = selectedCourseData.findIndex(u => u.id === unitId);
     // if (unitIndex > 0) {
-    //     const prevUnit = courseData[unitIndex - 1];
+    //     const prevUnit = selectedCourseData[unitIndex - 1];
     //     const lastStepOrder = prevUnit.steps[prevUnit.steps.length - 1].order;
 
     //     const isPrevUnitCompleted =
@@ -107,139 +102,154 @@ export default function CourseDetailScreen() {
   }
 
   return (
-    <View style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={() => navigation.goBack()}>
-            <Ionicons name="chevron-back" size={24} color="black" />
-          </TouchableOpacity>
-          <Text style={styles.headerText}>Kurs haqida</Text>
-          <TouchableOpacity>
-            <Ionicons name="heart-outline" size={24} color="black" />
-          </TouchableOpacity>
-        </View>
-
-        <Image
-          source={course.image} 
-          style={styles.image}
-          resizeMode="contain"
-        />
-
-        <View style={styles.infoBottom}>
-          <View style={styles.infoRow}>
-            <Text style={styles.date}>26.06.2025, 15:50</Text>
-            <View style={styles.iconRow}>
-              <Ionicons
-                name="person-outline"
-                size={16}
-                color="gray"
-                style={{ marginLeft: 10 }}
-              />
-              <Text style={styles.iconText}>2318 </Text>
-            </View>
+    <FlatList
+      data={[{ key: "header" }]}
+      renderItem={() => (
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={() => navigation.goBack()}>
+              <Ionicons name="chevron-back" size={24} color="black" />
+            </TouchableOpacity>
+            <Text style={styles.headerText}>Kurs haqida</Text>
+            <TouchableOpacity>
+              <Ionicons name="heart-outline" size={24} color="black" />
+            </TouchableOpacity>
           </View>
 
-          <Text style={styles.title}>{course.title}</Text>
-          <Text style={styles.description}>{course.desc}</Text>
-        </View>
+          <Image
+            source={course.image}
+            style={styles.image}
+            resizeMode="contain"
+          />
 
-        <View style={styles.infoBottom}>
-          <Text style={styles.subTitle}>Kurslar</Text>
+          <View style={styles.infoBottom}>
+            <View style={styles.infoRow}>
+              <Text style={styles.date}>11.09.2025, 00:00</Text>
+              <View style={styles.iconRow}>
+                <Ionicons
+                  name="person-outline"
+                  size={16}
+                  color="gray"
+                  style={{ marginLeft: 10 }}
+                />
+                <Text style={styles.iconText}>2318 </Text>
+              </View>
+            </View>
 
-          {selectedCourseData.length > 0 ? (
-            <FlatList
-              data={selectedCourseData}
-              keyExtractor={(unit) => unit.id.toString()}
-              renderItem={({ item: unit }) => (
-                <View style={styles.unitContainer}>
-                  <TouchableOpacity
-                    style={styles.unitHeader}
-                    onPress={() => toggleUnit(unit.id)}
-                  >
-                    <Ionicons name="book" size={24} color="#0059FF" />
-                    <Text style={styles.unitTitle}>{unit.name}</Text>
-                    <Ionicons
-                      name={
-                        openUnit === unit.id ? "chevron-up" : "chevron-down"
-                      }
-                      size={24}
-                      color="black"
-                    />
-                  </TouchableOpacity>
+            <Text style={styles.title}>{course.title}</Text>
+            <Text style={styles.description}>{course.desc}</Text>
+          </View>
 
-                  {openUnit === unit.id && (
-                    <View style={styles.stepsContainer}>
-                      {unit.steps.map((step, index) => {
-                        const isCompleted =
-                          unit.id < progress.unitId ||
-                          (unit.id === progress.unitId &&
-                            step.order <= progress.lastCompletedStep);
+          <View style={styles.infoBottom}>
+            <Text style={styles.subTitle}>Kurslar</Text>
 
-                        const isNextAfterCompleted =
-                          index > 0 &&
-                          (unit.id < progress.unitId ||
+            {selectedCourseData.length > 0 ? (
+              <FlatList
+                data={selectedCourseData}
+                keyExtractor={(unit) => unit.id.toString()}
+                renderItem={({ item: unit }) => (
+                  <View style={styles.unitContainer}>
+                    <TouchableOpacity
+                      style={styles.unitHeader}
+                      onPress={() => toggleUnit(unit.id)}
+                    >
+                      <Ionicons name="book" size={24} color="#0059FF" />
+                      <Text style={styles.unitTitle}>{unit.name}</Text>
+                      <Ionicons
+                        name={
+                          openUnit === unit.id ? "chevron-up" : "chevron-down"
+                        }
+                        size={24}
+                        color="black"
+                      />
+                    </TouchableOpacity>
+
+                    {openUnit === unit.id && (
+                      <View style={styles.stepsContainer}>
+                        {unit.steps.map((step, index) => {
+                          const isCompleted =
+                            unit.id < progress.unitId ||
                             (unit.id === progress.unitId &&
-                              unit.steps[index - 1].order <=
-                                progress.lastCompletedStep));
+                              step.order <= progress.lastCompletedStep);
 
-                        const isFirstStep = index === 0;
+                          const isNextAfterCompleted =
+                            index > 0 &&
+                            (unit.id < progress.unitId ||
+                              (unit.id === progress.unitId &&
+                                unit.steps[index - 1].order <=
+                                  progress.lastCompletedStep));
 
-                        return (
-                          <TouchableOpacity
-                            key={step.order}
-                            style={styles.stepButton}
-                            onPress={() => {
-                              // if (!isCompleted && !isNextAfterCompleted && !isFirstStep) {
-                              //     Alert.alert("Diqqat", "Oldingi qadam tugallanmagan!");
-                              //     return;
-                              // }
-                              navigation.navigate("StepScreen", {
-                                unitId: unit.id,
-                                step,
-                                unitSteps: unit.steps,
-                                progress,
-                                setProgress,
-                              });
-                            }}
-                          >
-                            <Text style={styles.stepText}>
-                              {step.order}. {step.title}
-                            </Text>
+                          const isFirstStep = index === 0;
 
-                            {isCompleted ? (
-                              <Text>✅</Text>
-                            ) : isNextAfterCompleted || isFirstStep ? null : (
-                              <Ionicons
-                                name="lock-closed"
-                                size={16}
-                                color="gray"
-                              />
-                            )}
-                          </TouchableOpacity>
-                        );
-                      })}
-                    </View>
-                  )}
-                </View>
-              )}
-            />
-          ) : (
-            <Text style={styles.noDataText}>
-              Bu kurs uchun ma'lumotlar hozircha mavjud emas.
-            </Text>
-          )}
+                          return (
+                            <TouchableOpacity
+                              key={step.order}
+                              style={styles.stepButton}
+                              onPress={() => {
+                                // if (!isCompleted && !isNextAfterCompleted && !isFirstStep) {
+                                //     Alert.alert("Diqqat", "Oldingi qadam tugallanmagan!");
+                                //     return;
+                                // }
+                                if (course.id === 1) {
+                                  navigation.navigate("StepScreen", {
+                                    unitId: unit.id,
+                                    step,
+                                    unitSteps: unit.steps,
+                                    progress,
+                                    setProgress,
+                                  });
+                                } else if (course.id === 2) {
+                                  navigation.navigate("Drawing", {
+                                    unitId: unit.id,
+                                    step,
+                                    unitSteps: unit.steps,
+                                    progress,
+                                    setProgress,
+                                  });
+                                }
+                              }}
+                            >
+                              <Text style={styles.stepText}>
+                                {step.order}. {step.title}
+                              </Text>
+
+                              {isCompleted ? (
+                                <Text>✅</Text>
+                              ) : isNextAfterCompleted || isFirstStep ? null : (
+                                <Ionicons
+                                  name="lock-closed"
+                                  size={16}
+                                  color="gray"
+                                />
+                              )}
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </View>
+                    )}
+                  </View>
+                )}
+              />
+            ) : (
+              <Text style={styles.noDataText}>
+                Bu kurs uchun ma'lumotlar hozircha mavjud emas.
+              </Text>
+            )}
+          </View>
+
+          <TouchableOpacity style={styles.button}>
+            <Text style={styles.buttonText}>O'qishni boshlash</Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText}>O'qishni boshlash</Text>
-        </TouchableOpacity>
-      </ScrollView>
-    </View>
+      )}
+      showsVerticalScrollIndicator={false}
+      contentContainerStyle={{ flexGrow: 1 }}
+    />
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#EFF4F8", marginBottom: 20 },
+  container: { backgroundColor: "#EFF4F8", marginBottom: 20 },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",

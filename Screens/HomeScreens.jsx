@@ -8,16 +8,7 @@ import {
     View,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
-
-const courses = [
-  { id: 1, title: "Ingliz tili", desc: "Lorem Ipsum is simply dummy text of", lessons: 3, image: require("../assets/images/english.png"),},
-  { id: 2, title: "Matematika", desc: "Lorem Ipsum is simply dummy text", lessons: 3, image: require("../assets/images/math.png"), },
-  { id: 3, title: "Tasviriy San'at", desc: "Lorem Ipsum is simply", lessons: 3, image: require("../assets/images/iskus.png"), },
-  { id: 4, title: "Geometriya", desc: "Lorem Ipsum is simply dummy text of the printing", lessons: 3, image: require("../assets/images/geometry.png"), },
-  { id: 5, title: "Fizika", desc: "Lorem Ipsum is simply dummy", lessons: 3, image: require("../assets/images/physics.png"), },
-  { id: 6, title: "Fizika", desc: "Lorem Ipsum is simply dummy text of the printing and typesetting", lessons: 3, image: require("../assets/images/physics.png"), },
-];
-
+import { courseData } from "../constants/CourseData";
 
 export default function HomeScreen() {
   const navigation = useNavigation();
@@ -63,7 +54,7 @@ export default function HomeScreen() {
 
         <Text style={styles.allCoursesTitle}>Barcha kurslar</Text>
         <FlatList
-          data={courses}
+          data={courseData}
           keyExtractor={(item, index) => index.toString()}
           renderItem={renderCourse}
           numColumns={2}
