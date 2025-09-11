@@ -49,7 +49,8 @@ export default StyleSheet.create({
         alignItems: "center",
         position: "absolute",
         bottom: 20,
-        right: 20
+        right: 20,
+        zIndex: 1000
     },
     buttonText: {
         fontSize: 18,

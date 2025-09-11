@@ -3,7 +3,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect, useRef, useState } from "react";
 import { Animated, Easing, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ErrorOverlay from "./OnError";
-import Success from "./Success";
+import ConfettiEffect from "./Success";
 
   export default function WordPractice({
     words = [

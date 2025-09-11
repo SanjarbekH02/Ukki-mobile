@@ -14,7 +14,7 @@ import ErrorOverlay from "../../../components/Utils/OnError";
 import ConfettiEffect from "../../../components/Utils/Success";
 import ThreeButtons from "../../../components/Utils/ThreeButtons";
 
-export default function Step13({next}) {
+export default function Step13({ next }) {
   const [result, setResult] = useState("");
   const [blocks, setBlocks] = useState({});
   const [placedNames, setPlacedNames] = useState([]);
@@ -145,6 +145,10 @@ export default function Step13({next}) {
     };
   }, []);
 
+  const [infoClick, setInfoClick] = useState(false);
+  const [clicked, setClicked] = useState(false)
+  const [dictionary, setDictionary] = useState(false)
+
   return (
     <>
       <View style={Styles.stepContainer}>
@@ -153,7 +157,10 @@ export default function Step13({next}) {
           <Text style={Styles.listenText}>Sing the song</Text>
         </TouchableOpacity>
 
-        <ThreeButtons audioUrl="https://ukkibackend.soof.uz/media/audio/bf086184-230f-40c1-a06b-7479f695edc9.mp3" />
+        <ThreeButtons
+          setDictionary={setDictionary}
+          infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick}
+          audioUrl="https://ukkibackend.soof.uz/media/audio/bf086184-230f-40c1-a06b-7479f695edc9.mp3" />
 
         <View style={styles.imgBlock}>
           <Image
