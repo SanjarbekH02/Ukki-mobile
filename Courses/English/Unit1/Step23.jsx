@@ -78,7 +78,7 @@ export default function Step23({next}) {
                     audioUrl="https://ukkibackend.soof.uz/media/audio/809023d9-a33d-43a5-aefe-17d6884117e0.mp3" />
 
                 <TouchableOpacity style={styles.listenBtn} onPress={() => playAudio(currentIndex)}>
-                    <Text style={Styles.listenText}>▶ Play</Text>
+                    <Text style={Styles.listenText}>▶ Play </Text>
                 </TouchableOpacity>
 
                 <Image style={styles.backImg} source={require("../../../assets/images/nature.jpg")} />
@@ -124,72 +124,74 @@ export default function Step23({next}) {
 }
 
 const styles = StyleSheet.create({
-    backImg: {
-        width: "100%",
-        height: "100%",
-        resizeMode: "stretch",
-    },
-    colors: {
-        width: "100%",
-        height: 150,
-        backgroundColor: "#3d3c7e9f",
-        position: "absolute",
-        bottom: 60,
-        left: 0,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-around",
-    },
-    colorBlock: {
-        width: 70,
-        height: 70,
-        backgroundColor: "#e9e9e9ff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    colorBtn: {
-        width: 50,
-        height: 50,
-        borderRadius: 50,
-    },
-    message: {
-        position: "absolute",
-        top: 120,
-        alignSelf: "center",
-        fontSize: 22,
-        fontWeight: "bold",
-    },
-    success: {
-        color: "limegreen",
-    },
-    error: {
-        color: "red",
-    },
-    nextBtn: {
-        backgroundColor: "#FFD93D",
-        paddingVertical: 15,
-        paddingHorizontal: 30,
-        borderRadius: 30,
-        marginVertical: 10,
-        shadowColor: "#000",
-        shadowOpacity: 0.2,
-        shadowRadius: 6,
-        shadowOffset: { width: 0, height: 3 },
-        elevation: 4,
-        alignItems: "center",
-        position: 'absolute',
-        bottom: '30%',
-        right: 20
-    },
-    listenBtn: {
-        padding: 20,
-        paddingLeft: 30,
-        paddingRight: 30,
-        backgroundColor: '#f7e013ff',
-        borderRadius: 12,
-        position: "absolute",
-        top: '35%',
-        left: '40%',
-        zIndex: 10
-    }
+  backImg: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "stretch",
+  },
+  colors: {
+    width: "100%",
+    height: 150,
+    backgroundColor: "#3d3c7e9f",
+    position: "absolute",
+    bottom: 60,
+    left: 0,
+    flexWrap: "wrap",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+  },
+  colorBlock: {
+    width: 70,
+    height: 70,
+    backgroundColor: "#e9e9e9ff",
+    alignItems: "center",
+    justifyContent: "center",
+    margin: 1,
+  },
+  colorBtn: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
+  },
+  message: {
+    position: "absolute",
+    top: 120,
+    alignSelf: "center",
+    fontSize: 22,
+    fontWeight: "bold",
+  },
+  success: {
+    color: "limegreen",
+  },
+  error: {
+    color: "red",
+  },
+  nextBtn: {
+    backgroundColor: "#FFD93D",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    marginVertical: 10,
+    shadowColor: "#000",
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
+    alignItems: "center",
+    position: "absolute",
+    bottom: "30%",
+    right: 20,
+  },
+  listenBtn: {
+    padding: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
+    backgroundColor: "#f7e013ff",
+    borderRadius: 12,
+    position: "absolute",
+    top: "35%",
+    left: "40%",
+    zIndex: 10,
+  },
 });

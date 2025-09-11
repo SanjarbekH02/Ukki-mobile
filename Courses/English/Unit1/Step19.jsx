@@ -45,7 +45,7 @@ export default function Step19({ next }) {
     <View style={Styles.stepContainer}>
       <ThreeButtons />  
       {!showName ? (
-        <Text style={styles.title}>Bu jonzotning ismi nima?</Text>
+        <Text style={styles.title}>Bu jonzotning nomi nima?</Text>
       ) : (
         <Animated.Text
           style={[styles.name, { transform: [{ scale: nameAnim }] }]}
