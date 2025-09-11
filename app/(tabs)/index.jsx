@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { SafeAreaView } from 'react-native';
 import BottomTabNavigator from '../../components/BottomTabNavigator';
 import StepScreen from '../../Courses/English/StepScreen';
+import Drawing from '../../Courses/Tasviriy/Drawing';
 import CourseDetailScreen from '../../Screens/CourseDetail';
 import FeedbackForm from '../../Screens/FeedbackForm';
 // import KaraokePlayer from "../../Screens/Karaoke";
@@ -53,6 +54,11 @@ export default function App() {
         <Stack.Screen
           name="StepScreen"
           component={StepScreen}
+          options={{ headerShown: false }}
+        />
+        <Stack.Screen
+          name="Drawing"
+          component={Drawing}
           options={{ headerShown: false }}
         />
       </Stack.Navigator>
