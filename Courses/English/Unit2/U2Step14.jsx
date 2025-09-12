@@ -190,7 +190,7 @@ export default function AudioQuiz({ next }) {
                                     <Text style={styles.btnText}>Check</Text>
                                 </TouchableOpacity>
                             ) : isAllCorrect() ? (
-                                <TouchableOpacity style={styles.nextBtn}>
+                                <TouchableOpacity onPress={next} style={styles.nextBtn}>
                                     <Text style={styles.btnText}>Next</Text>
                                 </TouchableOpacity>
                             ) : (
