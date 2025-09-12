@@ -348,7 +348,10 @@ const styles = StyleSheet.create({
         marginTop: 30,
         flexDirection: 'row',
         justifyContent: 'center',
-        gap: 15
+        gap: 15,
+        position: 'absolute',
+        bottom: 30, left: 0,
+        right: 0,
     },
     button: {
         paddingVertical: 10,
