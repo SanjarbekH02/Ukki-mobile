@@ -1,11 +1,11 @@
 import { StyleSheet } from 'react-native'
 import KaraokePlayer from '../../../Screens/Karaoke'
 
-export default function Step14({next}) {
+export default function Step14({ next }) {
     return (
         <>
             <KaraokePlayer
-            next={next}
+                next={next}
                 audioUri="https://ukkibackend.soof.uz/media/audio/e897f0b6-13e9-40e3-8ef4-566a6e782b4b.mp3"
                 lrcText={`
                     [00:10.31]Red, [00:12.71]yellow, [00:13.51]green, [00:13.77]and [00:14.03]blue, [00:14.82]Pink,[00:15.36]orange, [00:15.62]and [00:15.91]purple.

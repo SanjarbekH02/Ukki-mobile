@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
 import OnError from "../../../components/Utils/OnError";
 import Success from "../../../components/Utils/Success";
+import WordPractice from "../../../components/Utils/Talaffuz";
 import ThreeButtons from "../../../components/Utils/ThreeButtons";
 import WordGameAssist from "../../../components/Utils/WordGame";
 import FlashCards from "../../../components/YangiSozlar";
@@ -13,6 +14,7 @@ export default function U3Step1({ next }) {
   const [clicked, setClicked] = useState(true);
   const [dictionary, setDictionary] = useState(false);
   const [wordgame, setWordgame] = useState(true);
+  const [talaffuz, setTalaffuz] = useState(false)
 
   // Workshop state management
   const [workshopMode, setWorkshopMode] = useState(false);
@@ -836,7 +838,7 @@ export default function U3Step1({ next }) {
                 workshopStyles.tickBox,
                 workshopStyles.tickBoxAbove,
                 checkedAnswers[workshopStage - 1] === 1 &&
-                  workshopStyles.tickBoxSelected,
+                workshopStyles.tickBoxSelected,
               ]}
               onPress={() => handleTickBoxSelect(1)}
             >
@@ -851,7 +853,7 @@ export default function U3Step1({ next }) {
                 workshopStyles.tickBox,
                 workshopStyles.tickBoxBottomRight,
                 checkedAnswers[workshopStage - 1] === 2 &&
-                  workshopStyles.tickBoxSelected,
+                workshopStyles.tickBoxSelected,
               ]}
               onPress={() => handleTickBoxSelect(2)}
             >
@@ -877,198 +879,200 @@ export default function U3Step1({ next }) {
   return (
     <>
       {/* Debug button - floating workshop skip */}
-      <TouchableOpacity
-        style={debugStyles.debugButton}
-        onPress={() => {
-          setWorkshopMode(true);
-          setWorkshopStage(1);
-          setIsExampleStage(true);
-          setCheckedAnswers([null, null, null, null]);
-          setWorkshopCompleted(false);
-        }}
-      >
-        <Text style={debugStyles.debugButtonText}>🔧 Workshop</Text>
-      </TouchableOpacity>
+
 
       {workshopMode ? (
         renderWorkshop()
-      ) : dictionary ? (
-        <>
-          {wordgame ? (
-            <FlashCards
-              setDictionary={setWordgame}
-              data={[
-                {
-                  word: "toys",
-                  translation: "o'yinchoqlar",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
-                },
-                {
-                  word: "bike",
-                  translation: "velosiped",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
-                },
-                {
-                  word: "ball",
-                  translation: "koptok",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
-                },
-                {
-                  word: "kite",
-                  translation: "varrak",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
-                },
-                {
-                  word: "doll",
-                  translation: "qo'g'irchoq",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
-                },
-                {
-                  word: "teddy bears",
-                  translation: "yumshoq ayiqchalar",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/yumshoq ayiqchalar.mp3",
-                },
-                {
-                  word: "computer",
-                  translation: "kompyuter",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
-                },
-                {
-                  word: "games",
-                  translation: "o'yinlar",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3",
-                },
-                {
-                  word: "favorite",
-                  translation: "sevimli",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/sevimli.mp3",
-                },
-                {
-                  word: "art set",
-                  translation: "rasm chizish to'plami",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
-                },
-                {
-                  word: "camera",
-                  translation: "kamera",
-                  audioUrl:
-                    "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3",
-                },
-              ]}
-            />
-          ) : (
-            <WordGameAssist
-              setDictionary={setDictionary}
-              words={[
-                "toys",
-                "bike",
-                "ball",
-                "kite",
-                "doll",
-                "teddy",
-                "computer",
-                "games",
-                "favorite",
-                "camera",
-              ]}
-              audios={[
-                "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
-                "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
-                "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
-                "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
-                "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
-                "https://ukkibackend.soof.uz/media/audio/yumshoq ayiqchalar.mp3",
-                "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
-                "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3",
-                "https://ukkibackend.soof.uz/media/audio/sevimli.mp3",
-                "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3",
-              ]}
-            />
-          )}
-        </>
-      ) : (
-        <View style={Styles.container}>
-          <Image
-            style={[Styles.ImgFull, { height: "75%" }]}
-            source={require("../../../assets/images/unit-3/unit-2-step-1.png")}
-          />
+      ) :
+        dictionary ? (
+          <>
 
-          {/* Clickable circle overlays */}
-          {!gameCompleted && (
-            <View style={overlayStyles.overlayContainer}>
-              {allButtons.map((buttonId) => {
-                const characterButtons = ["tina", "olivia", "david"];
-                const objectButtons = [
+            {wordgame ? (
+              <FlashCards
+                setDictionary={setWordgame}
+                data={[
+                  {
+                    word: "toys",
+                    translation: "o'yinchoqlar",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
+                  },
+                  {
+                    word: "bike",
+                    translation: "velosiped",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
+                  },
+                  {
+                    word: "ball",
+                    translation: "koptok",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
+                  },
+                  {
+                    word: "kite",
+                    translation: "varrak",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
+                  },
+                  {
+                    word: "doll",
+                    translation: "qo'g'irchoq",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
+                  },
+                  {
+                    word: "teddy bears",
+                    translation: "yumshoq ayiqchalar",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/yumshoq ayiqchalar.mp3",
+                  },
+                  {
+                    word: "computer",
+                    translation: "kompyuter",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
+                  },
+                  {
+                    word: "games",
+                    translation: "o'yinlar",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3",
+                  },
+                  {
+                    word: "favorite",
+                    translation: "sevimli",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/sevimli.mp3",
+                  },
+                  {
+                    word: "art set",
+                    translation: "rasm chizish to'plami",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
+                  },
+
+                ]}
+              />
+
+            ) : talaffuz ? (
+              <WordPractice
+                setWordgame={setWordgame}
+                setDictionary={setDictionary}
+                setTalaffuz={setTalaffuz}
+                words={[
+                  { text: "Toys", audioUrl: "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3" },
+                  { text: "Bike", audioUrl: "https://ukkibackend.soof.uz/media/audio/velosiped.mp3" },
+                  { text: "Ball", audioUrl: "https://ukkibackend.soof.uz/media/audio/koptok.mp3" },
+                  { text: "Kite", audioUrl: "https://ukkibackend.soof.uz/media/audio/varrak.mp3" },
+                  { text: "Doll", audioUrl: "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3" },
+                  { text: "Teddy bears", audioUrl: "https://ukkibackend.soof.uz/media/audio/yumshoq ayiqchalar.mp3" },
+                  { text: "Computer", audioUrl: "https://ukkibackend.soof.uz/media/audio/komputer.mp3" },
+                  { text: "Games", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3" },
+                  { text: "favorite", audioUrl: "https://ukkibackend.soof.uz/media/audio/sevimli.mp3" },
+                ]}
+              />
+            ) : (
+              <WordGameAssist
+                setDictionary={setTalaffuz}
+                words={[
+                  "toys",
                   "bike",
                   "ball",
                   "kite",
                   "doll",
-                  "teddy1",
-                  "camera",
-                  "laptop",
-                  "computergames",
-                  "artset",
-                ];
+                  "teddy bear",
+                  "computer",
+                  "games",
+                  "favorite",
+                ]}
+                audios={[
+                  "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/yumshoq ayiqchalar.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/o'yinlar.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/sevimli.mp3",
+                ]}
+              />
+            )}
+          </>
+        ) : (
+          <View style={Styles.container}>
+            <Image
+              style={[Styles.ImgFull, { height: "75%" }]}
+              source={require("../../../assets/images/unit-3/unit-2-step-1.png")}
+            />
 
-                const isCharacter = characterButtons.includes(buttonId);
-                const isObject = objectButtons.includes(buttonId);
-                const isFound = foundObjects.includes(buttonId);
+            {/* Clickable circle overlays */}
+            {!gameCompleted && (
+              <View style={overlayStyles.overlayContainer}>
+                {allButtons.map((buttonId) => {
+                  const characterButtons = ["tina", "olivia", "david"];
+                  const objectButtons = [
+                    "bike",
+                    "ball",
+                    "kite",
+                    "doll",
+                    "teddy1",
+                    "camera",
+                    "laptop",
+                    "computergames",
+                    "artset",
+                  ];
 
-                // Show only characters during character selection
-                const showCharacterSelection =
-                  gameMode === "character_selection" && isCharacter;
+                  const isCharacter = characterButtons.includes(buttonId);
+                  const isObject = objectButtons.includes(buttonId);
+                  const isFound = foundObjects.includes(buttonId);
 
-                // During object finding, show all objects
-                const showObjectSelection =
-                  gameMode === "object_finding" && isObject;
+                  // Show only characters during character selection
+                  const showCharacterSelection =
+                    gameMode === "character_selection" && isCharacter;
 
-                // Don't render if not in appropriate mode
-                if (!showCharacterSelection && !showObjectSelection) {
-                  return null;
-                }
+                  // During object finding, show all objects
+                  const showObjectSelection =
+                    gameMode === "object_finding" && isObject;
 
-                return (
-                  <TouchableOpacity
-                    key={buttonId}
-                    style={[
-                      overlayStyles.buttonOverlay,
-                      buttonPositions[buttonId],
-                      isFound && overlayStyles.foundButton,
-                    ]}
-                    onPress={() => handleCirclePress(buttonId)}
-                  />
-                );
-              })}
-            </View>
-          )}
+                  // Don't render if not in appropriate mode
+                  if (!showCharacterSelection && !showObjectSelection) {
+                    return null;
+                  }
 
-          {/* Unified Status/Subtitle/Play Component */}
-          {renderUnifiedStatus()}
+                  return (
+                    <TouchableOpacity
+                      key={buttonId}
+                      style={[
+                        overlayStyles.buttonOverlay,
+                        buttonPositions[buttonId],
+                        isFound && overlayStyles.foundButton,
+                      ]}
+                      onPress={() => handleCirclePress(buttonId)}
+                    />
+                  );
+                })}
+              </View>
+            )}
 
-          {/* Success and Error feedback */}
-          {showSuccess && <Success />}
-          {showError && <OnError message="Qayta urinib ko'ring / Try again" />}
+            {/* Unified Status/Subtitle/Play Component */}
+            {renderUnifiedStatus()}
 
-          <ThreeButtons
-            setDictionary={setDictionary}
-            infoClick={infoClick}
-            clicked={clicked}
-            setClicked={setClicked}
-            setInfoClick={setInfoClick}
-            audioUrl="https://ukkibackend.soof.uz/media/audio/Aziz bolajon, suhbatni tingla va qahramonlarga moslashtir..mp3"
-          />
-        </View>
-      )}
+            {/* Success and Error feedback */}
+            {showSuccess && <Success />}
+            {showError && <OnError message="Qayta urinib ko'ring / Try again" />}
+
+            <ThreeButtons
+              setDictionary={setDictionary}
+              infoClick={infoClick}
+              clicked={clicked}
+              setClicked={setClicked}
+              setInfoClick={setInfoClick}
+              audioUrl="https://ukkibackend.soof.uz/media/audio/Aziz bolajon, suhbatni tingla va qahramonlarga moslashtir..mp3"
+            />
+          </View>
+        )}
     </>
   );
 }
