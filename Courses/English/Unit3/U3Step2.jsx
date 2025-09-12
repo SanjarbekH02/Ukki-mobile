@@ -5,87 +5,43 @@ import ThreeButtons from "../../../components/Utils/ThreeButtons";
 import Styles from "../../../Styles/Styles";
 
 const TOYS = [
-  {
-    id: "bike",
-    en: "bike",
-    uz: "velosiped",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-1.mp3",
-    pos: { top: "33%", left: "8%", width: 25, height: 25 },
-  },
-  {
-    id: "ball",
-    en: "ball",
-    uz: "koptok",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-2.mp3",
-    pos: { top: "27%", left: "35%", width: 25, height: 25 },
-  },
-  {
-    id: "kite",
-    en: "kite",
-    uz: "varrak",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-3.mp3",
-    pos: { top: "28%", left: "47%", width: 25, height: 25 },
-  },
-  {
-    id: "doll",
-    en: "doll",
-    uz: "qo'g'irchoq",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-4.mp3",
-    pos: { top: "23%", left: "60%", width: 25, height: 25 },
-  },
-  {
-    id: "teddy1",
-    en: "teddy bear",
-    uz: "yumshoq ayiqcha",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-5.mp3",
-    pos: { top: "21%", left: "72%", width: 25, height: 25 },
-  },
-  {
-    id: "camera",
-    en: "camera",
-    uz: "kamera",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-6.mp3",
-    pos: { top: "32%", left: "67%", width: 25, height: 25 },
-  },
-  {
-    id: "robot",
-    en: "robot",
-    uz: "robot",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-7.mp3",
-    pos: { top: "38%", left: "55%", width: 25, height: 25 },
-  },
-  {
-    id: "laptop",
-    en: "computer",
-    uz: "kompyuter",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-8.mp3",
-    pos: { top: "52%", left: "16%", width: 25, height: 25 },
-  },
-  {
-    id: "computergames",
-    en: "computer game",
-    uz: "kompyuter o'yini",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-9.mp3",
-    pos: { top: "48%", left: "40%", width: 25, height: 25 },
-  },
-  {
-    id: "artset",
-    en: "art set",
-    uz: "rasm chizish to'plami",
-    audio: "https://ukkibackend.soof.uz/media/audio/unit2-step2-10.mp3",
-    pos: { top: "55%", left: "69%", width: 25, height: 25 },
-  },
+  { id: "bike", en: "bike", uz: "velosiped", pos: { top: "33%", left: "8%" } },
+  { id: "ball", en: "ball", uz: "koptok", pos: { top: "27%", left: "35%" } },
+  { id: "kite", en: "kite", uz: "varrak", pos: { top: "24%", left: "45%" } },
+  { id: "doll", en: "doll", uz: "qo'g'irchoq", pos: { top: "23%", left: "60%" } },
+  { id: "teddy1", en: "teddy bear", uz: "yumshoq ayiqcha", pos: { top: "21%", left: "72%" } },
+  { id: "camera", en: "camera", uz: "kamera", pos: { top: "32%", left: "65%" } },
+  { id: "robot", en: "robot", uz: "robot", pos: { top: "39%", left: "54%" } },
+  { id: "laptop", en: "computer", uz: "kompyuter", pos: { top: "52%", left: "16%" } },
+  { id: "computergames", en: "computer game", uz: "kompyuter o'yini", pos: { top: "48%", left: "40%" } },
+  { id: "artset", en: "art set", uz: "rasm chizish to'plami", pos: { top: "55%", left: "69%" } },
+];
+
+const AUDIO_SEQUENCE = [
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-1.mp3", correctId: "artset" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-2.mp3", correctId: "camera" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-3.mp3", correctId: "ball" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-4.mp3", correctId: "doll" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-5.mp3", correctId: "laptop" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-6.mp3", correctId: "computergames" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-7.mp3", correctId: "teddy1" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-8.mp3", correctId: "kite" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-9.mp3", correctId: "bike" },
+  { audio: "https://ukkibackend.soof.uz/media/audio/CD1-42-10.mp3", correctId: "robot" },
 ];
 
 export default function U3Step2({ next }) {
   const [infoClick, setInfoClick] = useState(true);
   const [clicked, setClicked] = useState(true);
   const [foundIds, setFoundIds] = useState([]);
-  const [lastTapped, setLastTapped] = useState(null);
-  const [isSequencing, setIsSequencing] = useState(false);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [waitingForAnswer, setWaitingForAnswer] = useState(false);
+  const [feedbackMessage, setFeedbackMessage] = useState("");
+  const [gameStarted, setGameStarted] = useState(false);
+
   const soundRef = useRef(null);
   const timeoutsRef = useRef([]);
-  const shakeAnimation = useRef(new Animated.Value(0)).current;
 
   const stopAllAudio = async () => {
     try {
@@ -104,12 +60,16 @@ export default function U3Step2({ next }) {
     };
   }, []);
 
+  // ✅ Har safar currentQuestionIndex o'zgarsa — yangi audio o'ynaydi
+  useEffect(() => {
+    if (gameStarted && currentQuestionIndex < AUDIO_SEQUENCE.length) {
+      playCurrentAudio();
+    }
+  }, [currentQuestionIndex, gameStarted]);
+
   const playSingle = async (uri) => {
     await stopAllAudio();
-    const { sound } = await Audio.Sound.createAsync(
-      { uri },
-      { shouldPlay: true }
-    );
+    const { sound } = await Audio.Sound.createAsync({ uri }, { shouldPlay: true });
     soundRef.current = sound;
     return new Promise((resolve) => {
       sound.setOnPlaybackStatusUpdate((st) => {
@@ -118,34 +78,66 @@ export default function U3Step2({ next }) {
     });
   };
 
-  const sequenceCounting = async () => {
-    if (isSequencing) return;
-    setIsSequencing(true);
+  const playCurrentAudio = async () => {
+    if (currentQuestionIndex >= AUDIO_SEQUENCE.length) return;
+
+    setIsPlaying(true);
+    setFeedbackMessage("");
+
     try {
-      for (let i = 0; i < TOYS.length; i++) {
-        await playSingle(TOYS[i].audio);
-        await new Promise((res) => {
-          const id = setTimeout(() => res(), 1000);
-          timeoutsRef.current.push(id);
-        });
-      }
+      await playSingle(AUDIO_SEQUENCE[currentQuestionIndex].audio);
+      setWaitingForAnswer(true);
+    } catch (error) {
+      console.error("Audio play error:", error);
     } finally {
-      setIsSequencing(false);
+      setIsPlaying(false);
     }
   };
 
+  const startGame = () => {
+    setGameStarted(true);
+    setCurrentQuestionIndex(0);
+    setFoundIds([]);
+    setWaitingForAnswer(false);
+    setFeedbackMessage("");
+  };
+
   const onTapToy = (id) => {
-    const t = TOYS.find((x) => x.id === id);
-    if (!t) return;
-    if (!foundIds.includes(id)) {
+    if (!waitingForAnswer || isPlaying) return;
+
+    const currentQuestion = AUDIO_SEQUENCE[currentQuestionIndex];
+
+    if (currentQuestion.correctId === id) {
+      // ✅ To'g'ri javob
+      setFeedbackMessage("To'g'ri!");
       setFoundIds((prev) => [...prev, id]);
+      setWaitingForAnswer(false);
+
+      // 🔄 Faqat indexni oshiramiz, audio useEffect orqali o'ynaydi
+      setCurrentQuestionIndex((prev) => prev + 1);
+    } else {
+      // ❌ Noto'g'ri javob
+      setFeedbackMessage("Noto'g'ri!");
+      setWaitingForAnswer(false);
+
+      const timeoutId = setTimeout(() => {
+        setFeedbackMessage("");
+        playCurrentAudio();
+      }, 1500);
+
+      timeoutsRef.current.push(timeoutId);
     }
-    setLastTapped({ en: t.en, uz: t.uz });
+  };
+
+  const getButtonStyle = (toyId) => {
+    if (foundIds.includes(toyId)) {
+      return [styles.toyButton, { backgroundColor: "#4CAF50", borderColor: "#4CAF50" }];
+    }
+    return [styles.toyButton, { backgroundColor: "rgba(255, 255, 255, 0)", borderColor: "#ffffffff" }];
   };
 
   return (
     <>
-      {/* Three buttons positioned at top-right */}
       <View style={styles.topRightContainer}>
         <ThreeButtons
           setDictionary={() => {}}
@@ -158,58 +150,62 @@ export default function U3Step2({ next }) {
       </View>
 
       <Animated.View style={[styles.container]}>
-        {/* Large full-width image at top */}
         <Image
           source={require("../../../assets/images/unit-3/unit-2-step-1.png")}
           style={styles.largeImage}
           resizeMode="contain"
         />
 
-        {/* Buttons positioned exactly like first step */}
-        {TOYS.map((t) => {
-          const found = foundIds.includes(t.id);
-          return (
-            <TouchableOpacity
-              key={t.id}
-              style={[styles.toyButton, t.pos, found && styles.foundButton]}
-              onPress={() => onTapToy(t.id)}
-              disabled={found}
-            />
-          );
-        })}
+        {TOYS.map((t) => (
+          <TouchableOpacity
+            key={t.id}
+            style={[styles.toyButton, t.pos, ...getButtonStyle(t.id)]}
+            onPress={() => onTapToy(t.id)}
+            disabled={!waitingForAnswer}
+          />
+        ))}
 
-        {/* Instructions */}
         <View style={styles.instructionsContainer}>
           <Text style={styles.instructionsText}>
-            Tingla va top: "Number one… ten". Pauza paytida mos rasmga bos.
+            {!gameStarted
+              ? "Audio tinglab, mos keladigan o'yinchoqni toping!"
+              : waitingForAnswer
+              ? "Qaysi o'yinchoq haqida gap ketayapti?"
+              : isPlaying
+              ? "Tinglang..."
+              : "Keyingi audio..."}
           </Text>
           <Text style={styles.progressText}>
-            {foundIds.length} / {TOYS.length}
+            {foundIds.length} / {AUDIO_SEQUENCE.length}
           </Text>
         </View>
 
-        {/* Main play button */}
-        <TouchableOpacity
-          style={styles.playButton}
-          onPress={sequenceCounting}
-          disabled={isSequencing}
-        >
-          <Text style={styles.playButtonText}>
-            {isSequencing ? "▶ O‘qilmoqda..." : "🔊 Play"}
-          </Text>
-        </TouchableOpacity>
-
-        {/* Show word translation when tapped */}
-        {lastTapped && (
-          <View style={styles.translationContainer}>
-            <Text style={styles.translationText}>
-              {lastTapped.en} — {lastTapped.uz}
-            </Text>
+        {feedbackMessage && (
+          <View
+            style={[
+              styles.feedbackContainer,
+              feedbackMessage === "To'g'ri!" ? styles.correctFeedback : styles.incorrectFeedback,
+            ]}
+          >
+            <Text style={styles.feedbackText}>{feedbackMessage}</Text>
           </View>
         )}
 
-        {/* Next button when all found */}
-        {foundIds.length === TOYS.length && (
+        {!gameStarted ? (
+          <TouchableOpacity style={styles.playButton} onPress={startGame}>
+            <Text style={styles.playButtonText}>🔊 O'yinni Boshlash</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity style={[styles.playButton, { opacity: 0.5 }]} disabled={true}>
+            <Text style={styles.playButtonText}>
+              {isPlaying
+                ? "▶ O'qilmoqda..."
+                : `Audio ${currentQuestionIndex + 1}/${AUDIO_SEQUENCE.length}`}
+            </Text>
+          </TouchableOpacity>
+        )}
+
+        {foundIds.length === AUDIO_SEQUENCE.length && (
           <TouchableOpacity style={Styles.NextButton} onPress={next}>
             <Text style={styles.nextButtonText}>Next</Text>
           </TouchableOpacity>
@@ -242,13 +238,9 @@ const styles = {
     borderRadius: 20,
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "inherit",
     borderWidth: 2,
     elevation: 4,
-  },
-  toyButtonText: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
   },
   instructionsContainer: {
     backgroundColor: "rgba(255,255,255,0.95)",
@@ -290,18 +282,24 @@ const styles = {
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+    textAlign: "center",
   },
-  translationContainer: {
-    backgroundColor: "rgba(255,255,255,0.95)",
+  feedbackContainer: {
     padding: 12,
     borderRadius: 8,
     marginBottom: 16,
-    elevation: 2,
+    elevation: 4,
   },
-  translationText: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#333",
+  correctFeedback: {
+    backgroundColor: "#4CAF50",
+  },
+  incorrectFeedback: {
+    backgroundColor: "#F44336",
+  },
+  feedbackText: {
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#fff",
     textAlign: "center",
   },
   nextButtonText: {

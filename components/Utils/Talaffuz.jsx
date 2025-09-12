@@ -134,7 +134,7 @@ import ConfettiEffect from "./Success";
         });
 
         const sttData = await sttResponse.json();
-        // console.log("STT javobi:", sttData);
+        console.log("STT javobi:", sttData);
 
         const userSaid = (sttData.transcript || "").toLowerCase().trim();
         const correctWord = words[currentIndex].text.split("-")[0].toLowerCase().trim();
