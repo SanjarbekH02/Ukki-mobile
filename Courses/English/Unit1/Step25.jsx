@@ -96,7 +96,7 @@ export default function Step25({ next }) {
               setBorderColor("#fff");
             } else {
               setNextBtn(true)
-              setAnswer("🎉 Barcha savollarga javob berding!");
+              setAnswer("🎉 Barcha savollarga javob berdingiz!");
             }
           }, 1500);
         } else {
@@ -104,7 +104,7 @@ export default function Step25({ next }) {
           setTimeout(() => {
             setIsError(false)
           }, 1000)
-          setAnswer("❌ Noto‘g‘ri, qaytadan urinib ko‘r");
+          setAnswer("❌ Noto‘g‘ri, qaytadan urinib ko‘ring");
           setBorderColor("red");
         }
       }
