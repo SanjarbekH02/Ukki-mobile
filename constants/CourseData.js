@@ -98,7 +98,7 @@ export const courseData = [
     id: 2,
     title: "Tasviriy san'at",
     desc: "Lorem Ipsum is simply dummy text of",
-    lessons: 3,
+    lessons: 14,
     image: require("../assets/images/iskus.png"),
     units: [
       {

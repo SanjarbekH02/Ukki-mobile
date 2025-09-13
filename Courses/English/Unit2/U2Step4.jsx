@@ -9,7 +9,7 @@ import FlashCards from "../../../components/YangiSozlar";
 import WordPractice from "../../../components/Utils/Talaffuz";
 import WordGameAssist from "../../../components/Utils/WordGame";
 
-export default function U2Step4() {
+export default function U2Step4({ next }) {
   const [sound, setSound] = useState(null);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [showQuestion, setShowQuestion] = useState(false);
@@ -24,6 +24,7 @@ export default function U2Step4() {
   const [dictionary, setDictionary] = useState(false);
   const [wordgame, setWordgame] = useState(true);
   const [talaffuz, setTalaffuz] = useState(false);
+  const [finished, setFinished] = useState(false);
 
   const audios = [
     {
@@ -109,6 +110,7 @@ export default function U2Step4() {
           playAudio(audios[currentIndex + 1].url);
         } else {
           setResultText("🎉 O‘yin tugadi!");
+          setFinished(true);
         }
         setDisableBtns(false);
       }, 1000);
@@ -256,6 +258,11 @@ export default function U2Step4() {
             <Text style={styles.question}>❓ Bu qaysi rasm?</Text>
           )}
           <Text style={styles.result}>{resultText}</Text>
+          {finished && (
+            <TouchableOpacity style={Styles.NextButton} onPress={next}>
+              <Text style={Styles.listenText}>Next</Text>
+            </TouchableOpacity>
+          )}
         </View>
       )}
       {isSucces && <ConfettiEffect />}
