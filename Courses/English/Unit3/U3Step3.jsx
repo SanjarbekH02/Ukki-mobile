@@ -1,22 +1,50 @@
 import { useState } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import KaraokePlayer from '../../../Screens/Karaoke'
+import ThreeButtons from '../../../components/Utils/ThreeButtons'
 
-export default function U3Step3() {
+export default function U3Step3({ next }) {
   const [showKaraoke, setShowKaraoke] = useState(false)
+   const [infoClick, setInfoClick] = useState(true);
+  const [clicked, setClicked] = useState(true)
+  const [dictionary, setDictionary] = useState(false)
 
+  if (showKaraoke) {
+    return <KaraokePlayer
+      next={next}
+      audioUri='https://ukkibackend.soof.uz/media/audio/CD1-44.mp3'
+      lrcText={` [00:07.85]Toys, [00:08.72]toys, [00:09.62]girls [00:10.12]and [00:10.65]boys, | Oʻyinchoqlar, oʻyinchoqlar, qizlar va bolalar,
+[00:15.10]What’s [00:16.07]your [00:17.15]favorite [00:18.00]toy? | Sening sevimli oʻyinchogʻing nima?
+[00:22.30]My [00:22.65]kite. [00:23.30]My [00:23.50]kite. [00:24.30]My [00:24.50]red [00:24.70]and [00:24.80]yellow [00:25.35]kite. | Mening varragim. Mening varragim. Mening qizil va sariq varragim.
+[00:29.50]My [00:30.00]favorite [00:30.80]toy’s [00:31.40]my [00:31.80]red [00:32.05]and [00:32.15]yellow [00:32.70]kite. | Mening sevimli oʻyinchogʻim mening qizil va sariq varragim.
+[00:37.25]Toys, [00:38.20]toys, [00:39.20]girls [00:39.67]and [00:40.05]boys, | Oʻyinchoqlar, oʻyinchoqlar, qizlar va bolalar,
+[00:44.80]What’s [00:45.60]your [00:46.40]favorite [00:47.50]toy? | Sening sevimli oʻyinchogʻing nima?
+[00:51.90]My [00:52.15]robot. [00:52.80]My [00:53.20]robot. [00:53.80]My [00:53.95]blue [00:54.10]and [00:54.30]orange [00:54.90]robot. | Mening robotim. Mening robotim. Mening koʻk va zargʻaldoq robotim.
+[00:58.85]My [00:59.70]favorite [01:00.20]toy’s [01:00.80]my [01:01.30]blue [01:01.75]and [01:01.90]orange [01:02.30]robot. | Mening sevimli oʻyinchogʻim mening koʻk va zargʻaldoq robotim.
+[01:06.90]Toys, [01:07.50]toys, [01:08.70]girls [01:09.20]and [01:09.65]boys, | Oʻyinchoqlar, oʻyinchoqlar, qizlar va bolalar,
+[01:14.20]What’s [01:15.10]your [01:16.05]favorite [01:17.10]toy? | Sening sevimli oʻyinchogʻing nima?
+[01:21.45]My [01:21.75]teddy. [01:22.35]My [01:22.50]teddy. [01:23.20]My [01:23.50]green [01:23.90]teddy [01:24.50]bear. | Mening teddy'm. Mening teddy'm. Mening yashil yumshoq ayiqcham.
+[01:28.50]My [01:29.05]favorite [01:29.90]toy’s [01:30.45]my [01:30.90]green [01:31.30]teddy [01:31.80]bear. | Mening sevimli oʻyinchogʻim mening yashil yumshoq ayiqcham.
+`} />
+  }
+ 
   return (
     <View style={styles.container}>
-      {!showKaraoke ? (
-        <TouchableOpacity 
-          style={styles.playButton} 
-          onPress={() => setShowKaraoke(true)}
-        >
-          <Text style={styles.playText}>▶ Play</Text>
-        </TouchableOpacity>
-      ) : (
-        <KaraokePlayer />
-      )}
+      <ThreeButtons
+        setDictionary={setDictionary} infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} audioUrl='https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3'
+      />
+      <View style={styles.imagesContainer}>
+        <Image source={require('../../../assets/images/unit-3/unit-2-step-4-1.jpg')} style={styles.image} />
+        <Image source={require('../../../assets/images/unit-3/unit-2-step-4-2.jpg')} style={styles.image} />
+        <Image source={require('../../../assets/images/unit-3/unit-2-step-4-3.jpg')} style={styles.image} />
+      </View>
+
+      <TouchableOpacity
+        style={styles.playButton}
+        onPress={() => setShowKaraoke(true)}
+      >
+        <Text style={styles.playText}>▶ Play</Text>
+      </TouchableOpacity>
     </View>
   )
 }
@@ -24,13 +52,25 @@ export default function U3Step3() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center', 
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imagesContainer: {
+    // flex: 1,
+    flexDirection: 'row',
+  },
+  image: {
+    width: '33%',
+    // flex: 1,
+    resizeMode: 'contain',
   },
   playButton: {
+    position: 'absolute',
+    alignSelf: 'center',
+    top: '45%',
     paddingVertical: 15,
     paddingHorizontal: 40,
-    backgroundColor: '#1db954',
+    backgroundColor: 'rgba(29,185,84,0.9)',
     borderRadius: 30,
   },
   playText: {
