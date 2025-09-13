@@ -1,5 +1,5 @@
-import { useNavigation } from 'expo-router'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { useNavigation } from '@react-navigation/native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ComponentTop({ text = "", transparent }) {
     const navigation = useNavigation()
