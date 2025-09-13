@@ -16,10 +16,10 @@ export default function U2Step21({ next }) {
     const scaleAnim = useRef(new Animated.Value(1)).current;
 
     const items = [
-        { id: 1, audio: "https://ukkibackend.soof.uz/media/audio/1094f105-2868-46ba-8de9-0df2569dd9c7.ogg", img: require('../../../assets/images/cd381.jpg'), text: "WOOD - YOG'OCH" },
-        { id: 2, audio: "https://ukkibackend.soof.uz/media/audio/46ba8a1e-cc5b-478b-8fed-0c47b837f0c9.ogg", img: require('../../../assets/images/cd382.jpg'), text: "PLASTIK - PLASTIK" },
-        { id: 3, audio: "https://ukkibackend.soof.uz/media/audio/57929970-657e-4d9e-9760-af4d41eb88ef.ogg", img: require('../../../assets/images/cd383.jpg'), text: "METAL - METAL" },
-        { id: 4, audio: "https://ukkibackend.soof.uz/media/audio/3a78dcea-9164-471b-afd6-1b8785d30b2e.ogg", img: require('../../../assets/images/cd384.jpg'), text: "GLAS - SHISHA" },
+        { id: 1, audio: "https://ukkibackend.soof.uz/media/audio/1094f105-2868-46ba-8de9-0df2569dd9c7.ogg", img: require('../../../assets/images/cd381.jpg'), text: "WOOD - YOG'OCH " },
+        { id: 2, audio: "https://ukkibackend.soof.uz/media/audio/46ba8a1e-cc5b-478b-8fed-0c47b837f0c9.ogg", img: require('../../../assets/images/cd382.jpg'), text: "PLASTIK - PLASTIK " },
+        { id: 3, audio: "https://ukkibackend.soof.uz/media/audio/57929970-657e-4d9e-9760-af4d41eb88ef.ogg", img: require('../../../assets/images/cd383.jpg'), text: "METAL - METAL " },
+        { id: 4, audio: "https://ukkibackend.soof.uz/media/audio/3a78dcea-9164-471b-afd6-1b8785d30b2e.ogg", img: require('../../../assets/images/cd384.jpg'), text: "GLAS - SHISHA " },
     ]
 
     useEffect(() => {

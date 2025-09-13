@@ -108,7 +108,7 @@ export default function Step17({next}) {
                             setDictionary={setWordgame}
                             data={[
                                 { word: "Please ", translation: "Iltimos", audioUrl: "https://ukkibackend.soof.uz/media/audio/iltimos.mp3" },
-                                { word: "Sit down", translation: "O’tirmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'tirmoq.mp3" },
+                                { word: "Sit", translation: "O’tirmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'tirmoq.mp3" },
                                 { word: "Open", translation: "Ochmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/ochmoq.mp3" },
                                 { word: "Your", translation: "Sening", audioUrl: "https://ukkibackend.soof.uz/media/audio/sening.mp3" },
                                 { word: "Close", translation: "Yopmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/yopmoq.mp3" },
@@ -137,7 +137,7 @@ export default function Step17({next}) {
                     ) : (
                         <WordGameAssist
                             setDictionary={setTalaffuz}
-                            words={["Please", "Sit down", "Open", "Your", "Close", "Pencils", "Pick up", "Put away"]}
+                            words={["Please", "Sit", "Open", "Your", "Close", "Pencils", "Pick up", "Put away"]}
                             audios={
                                 [
                                     "https://ukkibackend.soof.uz/media/audio/iltimos.mp3",

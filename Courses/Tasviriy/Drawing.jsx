@@ -8,14 +8,17 @@ import {
   TouchableOpacity,
   Modal,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Video } from "expo-av";
 import { Ionicons } from "@expo/vector-icons";
 import { images } from "./unit";
 
-const { width, height } = Dimensions.get("window");
-const imageSize = width / 2.4;
+const { width } = Dimensions.get("window");
+const numColumns = 2;
+const margin = 10;
+const imageSize = (width - (numColumns + 1) * margin) / numColumns; 
 
 const Drawing = () => {
   const route = useRoute();
@@ -40,14 +43,6 @@ const Drawing = () => {
     handleOrientationChange();
     return () => subscription?.remove();
   }, []);
-
-  if (!selectedImageData) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.noDataText}>Malumotlar topilmadi</Text>
-      </View>
-    );
-  }
 
   const handleComplete = () => {
     if (progress.unitId === unitId && step.order > progress.lastCompletedStep) {
@@ -80,7 +75,7 @@ const Drawing = () => {
         <Image
           source={{ uri: item }}
           style={styles.smallImage}
-          resizeMode="cover"
+          resizeMode="contain"
         />
       </View>
     </TouchableOpacity>
@@ -108,26 +103,38 @@ const Drawing = () => {
         />
       </TouchableOpacity>
 
-      <Text style={styles.subTitle}>Rasm chizish tartibi:</Text>
-      <FlatList
-        data={selectedImageData.images}
-        keyExtractor={(item, index) => index.toString()}
-        numColumns={2}
-        contentContainerStyle={styles.imageList}
-        renderItem={renderImageItem}
-      />
+      {selectedImageData.images && selectedImageData.images.length > 0 ? (
+        <>
+          <Text style={styles.subTitle}>Rasm chizish tartibi:</Text>
+          <FlatList
+            data={selectedImageData.images}
+            keyExtractor={(item, index) => index.toString()}
+            numColumns={numColumns}
+            contentContainerStyle={styles.imageList}
+            renderItem={renderImageItem}
+            showsVerticalScrollIndicator={true}
+          />
+        </>
+      ) : (
+        <View></View>
+      )}
 
-      <TouchableOpacity
-        style={styles.videoButton}
-        onPress={() => setShowVideo(true)}
-      >
-        <Ionicons name="play-circle" size={24} color="#fff" />
-        <Text style={styles.videoButtonText}>Videoni ko‘rish</Text>
-      </TouchableOpacity>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity
+          style={styles.videoButton}
+          onPress={() => setShowVideo(true)}
+        >
+          <Ionicons name="play-circle" size={24} color="#fff" />
+          <Text style={styles.videoButtonText}>Videoni ko‘rish</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.completeButton} onPress={handleComplete}>
-        <Text style={styles.completeButtonText}>Tugallandi</Text>
-      </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.completeButton}
+          onPress={handleComplete}
+        >
+          <Text style={styles.completeButtonText}>Tugallandi</Text>
+        </TouchableOpacity>
+      </View>
 
       <Modal visible={showVideo} transparent={true} animationType="slide">
         <View style={styles.modalContainer}>
@@ -211,31 +218,41 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   imageList: {
-    paddingHorizontal: 10,
-    alignItems: "center",
+    paddingHorizontal: margin,
+    paddingBottom: 120,
+    alignItems: "center", 
   },
   imageWrapper: {
-    margin: 5,
-    alignItems: "center",
-    justifyContent: "center",
+    margin: margin / 2,
     width: imageSize,
     height: imageSize,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
   },
   smallImage: {
     width: "100%",
     height: "100%",
     borderRadius: 8,
-    backgroundColor: "#eee",
+    backgroundColor: "#fff",
+  },
+  buttonContainer: {
+    position: "absolute",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    padding: 20,
+    backgroundColor: "#fff",
+    zIndex: 1000,
   },
   videoButton: {
     flexDirection: "row",
-    backgroundColor: "#333",
+    backgroundColor: "#FF5733",
     padding: 10,
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    margin: 20,
-    marginBottom: 2,
+    marginBottom: 10,
   },
   videoButtonText: {
     color: "#fff",
@@ -248,7 +265,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     justifyContent: "center",
     alignItems: "center",
-    margin: 20,
   },
   completeButtonText: {
     color: "#fff",
@@ -266,7 +282,6 @@ const styles = StyleSheet.create({
     height: 300,
   },
   videoLandscape: {
-    width: height * 0.9,
     height: width * 0.6,
   },
   enlargedImage: {
@@ -274,7 +289,6 @@ const styles = StyleSheet.create({
     height: "70%",
   },
   enlargedImageLandscape: {
-    width: height * 0.9,
     height: width * 0.7,
   },
   enlargedVideoButton: {
@@ -286,12 +300,6 @@ const styles = StyleSheet.create({
     position: "absolute",
     top: 40,
     right: 20,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f8f9fa",
   },
   noDataText: {
     fontSize: 14,
