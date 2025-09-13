@@ -28,7 +28,7 @@ export default function U2Step22({next}) {
         onChangeState={event => console.log(event)}
       />
       <TouchableOpacity onPress={next} style={Styles.NextButton}>
-        <Text>Next</Text>
+        <Text>Next </Text>
       </TouchableOpacity>
     </View>
   );

@@ -1,36 +1,113 @@
-import { useState } from 'react';
-import { Image, Text, View } from 'react-native';
-import ThreeButtons from '../../../components/Utils/ThreeButtons';
-import FlashCards from '../../../components/YangiSozlar';
-import KaraokePlayer from '../../../Screens/Karaoke';
-import Styles from '../../../Styles/Styles';
+import { useState } from "react";
+import { Image, Text, View } from "react-native";
+import ThreeButtons from "../../../components/Utils/ThreeButtons";
+import FlashCards from "../../../components/YangiSozlar";
+import KaraokePlayer from "../../../Screens/Karaoke";
+import Styles from "../../../Styles/Styles";
+import WordPractice from "../../../components/Utils/Talaffuz";
+import WordGameAssist from "../../../components/Utils/WordGame";
 
 export default function U2Step10({ setIsPlaying, isPlaying, next }) {
-    const [infoClick, setInfoClick] = useState(true);
-    const [clicked, setClicked] = useState(true)
-    const [dictionary, setDictionary] = useState(false)
-    return (
+  const [infoClick, setInfoClick] = useState(true);
+  const [clicked, setClicked] = useState(true);
+  const [dictionary, setDictionary] = useState(false);
+  const [wordgame, setWordgame] = useState(true);
+  const [talaffuz, setTalaffuz] = useState(false);
+
+  return (
+    <>
+      {dictionary ? (
         <>
-            {dictionary ? (
-                <FlashCards
-                    setDictionary={setDictionary}
-                    data={[
-                        { word: "Books", translation: "kitoblar ", audioUrl: "https://ukkibackend.soof.uz/media/audio/kitob.mp3" },
-                        { word: "Count", translation: "Sanamoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/sanamoq.mp3" },
-                        { word: "With me", translation: "Men bilan", audioUrl: "https://ukkibackend.soof.uz/media/audio/men bilan.mp3" },
-                        { word: "How many ", translation: "Nechta", audioUrl: "https://ukkibackend.soof.uz/media/audio/nechta.mp3" },
-                        { word: "See", translation: "Ko’rmoq", audioUrl: "https://ukkibackend.soof.uz/media/audio/ko'rmoq.mp3" },
-                        { word: "Erasers ", translation: "o’chirg’ichlar", audioUrl: "https://ukkibackend.soof.uz/media/audio/o'chirgichlarrr.mp3" },
-                        { word: "Pencils", translation: "qalamlar", audioUrl: "https://ukkibackend.soof.uz/media/audio/qalamlar.mp3" },
-                       
-
-                    ]}
-                />
-            ) : (
-                isPlaying ? <KaraokePlayer
-
-                    audioUri="https://ukkibackend.soof.uz/media/audio/66db7258-9489-4bdb-a011-1def5f946869.mp3"
-                    lrcText={`[00:07.92]Books, [00:08.72]books. [00:09.77]Count [00:10.05]with [00:10.31]me.
+          {wordgame ? (
+            <FlashCards
+              setDictionary={setWordgame}
+              data={[
+                {
+                  word: "count",
+                  translation: "sanamoq",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/sanamoq.mp3",
+                },
+                {
+                  word: "with me",
+                  translation: "men bilan",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/men bilan.mp3",
+                },
+                {
+                  word: "how many",
+                  translation: "nechta",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/nechta.mp3",
+                },
+                {
+                  word: "see",
+                  translation: "ko'rmoq",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/ko'rmoq.mp3",
+                },
+                {
+                  word: "pensils",
+                  translation: "qalamlar",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/qalamlar.mp3",
+                },
+              ]}
+            />
+          ) : talaffuz ? (
+            <WordPractice
+              setWordgame={setWordgame}
+              setDictionary={setDictionary}
+              setTalaffuz={setTalaffuz}
+              words={[
+                {
+                  text: "count",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/sanamoq.mp3",
+                },
+                {
+                  text: "with me",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/men bilan.mp3",
+                },
+                {
+                  text: "how many",
+                  audioUrl: "https://ukkibackend.soof.uz/media/audio/nechta.mp3",
+                },
+                {
+                  text: "see",
+                  audioUrl: "https://ukkibackend.soof.uz/media/audio/ko'rmoq.mp3",
+                },
+                {
+                  text: "pensils",
+                  audioUrl: "https://ukkibackend.soof.uz/media/audio/qalamlar.mp3",
+                },
+              ]}
+            />
+          ) : (
+            <WordGameAssist
+              setDictionary={setTalaffuz}
+              words={[
+                "count",
+                "with me",
+                "how many",
+                "see",
+                "pensils",
+              ]}
+              audios={[
+                "https://ukkibackend.soof.uz/media/audio/sanamoq.mp3",
+                "https://ukkibackend.soof.uz/media/audio/men bilan.mp3",
+                "https://ukkibackend.soof.uz/media/audio/nechta.mp3",
+                "https://ukkibackend.soof.uz/media/audio/ko'rmoq.mp3",
+                "https://ukkibackend.soof.uz/media/audio/qalamlar.mp3", 
+              ]}
+            />
+          )}
+        </>
+      ) : isPlaying ? (
+        <KaraokePlayer
+          audioUri="https://ukkibackend.soof.uz/media/audio/66db7258-9489-4bdb-a011-1def5f946869.mp3"
+          lrcText={`[00:07.92]Books, [00:08.72]books. [00:09.77]Count [00:10.05]with [00:10.31]me.
 [00:11.64]Books, [00:12.43]books. [00:13.50]Count [00:14.03]with [00:14.30]me.
 [00:15.36]How [00:15.89]many [00:16.42]books [00:17.49]can [00:17.75]you [00:18.29]see?
 [00:20.40]One, [00:21.20]two, [00:22.26]three, [00:23.06]four.
@@ -45,16 +122,28 @@ export default function U2Step10({ setIsPlaying, isPlaying, next }) {
 [01:10.14]How [01:10.41]many [01:10.93]pencils [01:12.00]can [01:12.53]you [01:13.06]see?
 [01:14.92]One, [01:15.72]two, [01:16.77]three, [01:17.84]four, [01:18.64]five, [01:19.71]six.
 [01:23.68]Six! [01:24.48]Six, [01:25.55]six, [01:26.34]six [01:27.40]pencils.`}
-
-                    next={next} /> : (
-                    <View style={Styles.container}>
-                        <Text style={Styles.title}>Sing the song.</Text>
-                        <Image style={Styles.ImgFull} source={require('../../../assets/images/sirk.jpg')} />
-                        {/* <Image style={Styles.ImgFull} source={require('../../../assets/images/image.png')} /> */}
-                        <ThreeButtons setDictionary={setDictionary} infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} audioUrl='https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3' setIsPlaying={setIsPlaying} playBtn={true} />
-                    </View>
-                )
-            )}
-        </>
-    )
+          next={next}
+        />
+      ) : (
+        <View style={Styles.container}>
+          <Text style={Styles.title}>Sing the song.</Text>
+          <Image
+            style={Styles.ImgFull}
+            source={require("../../../assets/images/sirk.jpg")}
+          />
+          {/* <Image style={Styles.ImgFull} source={require('../../../assets/images/image.png')} /> */}
+          <ThreeButtons
+            setDictionary={setDictionary}
+            infoClick={infoClick}
+            clicked={clicked}
+            setClicked={setClicked}
+            setInfoClick={setInfoClick}
+            audioUrl="https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3"
+            setIsPlaying={setIsPlaying}
+            playBtn={true}
+          />
+        </View>
+      )}
+    </>
+  );
 }
