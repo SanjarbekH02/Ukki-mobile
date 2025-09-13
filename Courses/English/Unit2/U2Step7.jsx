@@ -92,12 +92,12 @@ export default function MatchGame({next}) {
       </View>
 
       <TouchableOpacity style={styles.resetBtn} onPress={handleReset}>
-        <Text style={{ color: "white", fontSize: 18 }}>🔄 Reset</Text>
+        <Text style={{ color: "white", fontSize: 18 }}>🔄 Reset </Text>
       </TouchableOpacity>
 
       {allCorrect && (
         <TouchableOpacity style={Styles.NextButton} onPress={next}>
-          <Text style={{ color: "white", fontSize: 18 }}>➡️ Next</Text>
+          <Text style={{ color: "white", fontSize: 18 }}>➡️ Next </Text>
         </TouchableOpacity>
       )}
     </View>
