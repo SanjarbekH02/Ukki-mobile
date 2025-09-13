@@ -1,17 +1,18 @@
 import { useState } from "react";
 import { FlatList, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import ThreeButtons from "../../../components/Utils/ThreeButtons";
 
 const images = [
-  { id: "1", uri: require("./assets/img1.png"), isToy: true },
-  { id: "2", uri: require("./assets/img2.png"), isToy: false },
-  { id: "3", uri: require("./assets/img3.png"), isToy: true },
-  { id: "4", uri: require("./assets/img4.png"), isToy: false },
-  { id: "5", uri: require("./assets/img5.png"), isToy: true },
-  { id: "6", uri: require("./assets/img6.png"), isToy: false },
-  { id: "7", uri: require("./assets/img7.png"), isToy: true },
+  { id: "1", uri: require("../../../assets/images/unit-3/cd461.jpg"), isToy: false },
+  { id: "2", uri: require("../../../assets/images/unit-3/cd462.jpg"), isToy: true },
+  { id: "3", uri: require("../../../assets/images/unit-3/cd463.jpg"), isToy: true },
+  { id: "4", uri: require("../../../assets/images/unit-3/cd464.jpg"), isToy: false },
+  { id: "5", uri: require("../../../assets/images/unit-3/cd465.jpg"), isToy: true },
+  { id: "6", uri: require("../../../assets/images/unit-3/cd466.jpg"), isToy: true },
+  { id: "7", uri: require("../../../assets/images/unit-3/cd467.jpg"), isToy: false },
 ];
 
-export default function GameScreen() {
+export default function GameScreen({ next }) {
   const [selected, setSelected] = useState({});
   const [checked, setChecked] = useState(false);
 
@@ -22,22 +23,49 @@ export default function GameScreen() {
     }));
   };
 
+  // Faqat to'g'ri rasm tanlanganligini tekshirish
+  const isAllCorrect = () => {
+    const correctIds = images.filter((img) => img.isToy).map((img) => img.id);
+    const selectedIds = Object.keys(selected).filter((id) => selected[id]);
+
+    return (
+      selectedIds.length === correctIds.length &&
+      correctIds.every((id) => selectedIds.includes(id))
+    );
+  };
+
   const renderItem = ({ item }) => {
-    let borderColor = "#ccc"; // default kulrang
-    if (selected[item.id]) borderColor = "blue"; // vaqtincha tanlaganda ko‘k
+    let borderColor = "#ccc";
+    if (selected[item.id]) borderColor = "blue";
     if (checked && selected[item.id]) {
-      borderColor = item.isToy ? "green" : "red"; // checkdan keyin yashil/qizil
+      borderColor = item.isToy ? "green" : "red";
     }
 
     return (
-      <TouchableOpacity onPress={() => toggleSelect(item.id)} style={[styles.imageWrapper, { borderColor }]}>
+      <TouchableOpacity
+        onPress={() => toggleSelect(item.id)}
+        style={[styles.imageWrapper, { borderColor }]}
+      >
         <Image source={item.uri} style={styles.image} />
       </TouchableOpacity>
     );
   };
 
+  const [infoClick, setInfoClick] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [dictionary, setDictionary] = useState(false);
+
   return (
     <View style={styles.container}>
+      <ThreeButtons
+        setDictionary={setDictionary}
+        infoClick={infoClick}
+        clicked={clicked}
+        setClicked={setClicked}
+        setInfoClick={setInfoClick}
+        audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, kel o’yinchoqlarni belgilaymiz.mp3"
+      />
+
       <FlatList
         data={images}
         renderItem={renderItem}
@@ -45,9 +73,26 @@ export default function GameScreen() {
         numColumns={2}
         contentContainerStyle={styles.grid}
       />
-      <TouchableOpacity style={styles.checkBtn} onPress={() => setChecked(true)}>
-        <Text style={styles.checkText}>Check</Text>
-      </TouchableOpacity>
+
+      {!checked ? (
+        <TouchableOpacity style={styles.checkBtn} onPress={() => setChecked(true)}>
+          <Text style={styles.checkText}>Check</Text>
+        </TouchableOpacity>
+      ) : isAllCorrect() ? (
+        <TouchableOpacity onPress={next} style={[styles.checkBtn, { backgroundColor: "green" }]}>
+          <Text style={styles.checkText}>Next</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          style={[styles.checkBtn, { backgroundColor: "red" }]}
+          onPress={() => {
+            setSelected({}); // tanlanganlarni tozalash
+            setChecked(false); // check holatini reset qilish
+          }}
+        >
+          <Text style={styles.checkText}>Try Again</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -63,15 +108,15 @@ const styles = StyleSheet.create({
   imageWrapper: {
     width: "45%",
     aspectRatio: 1,
-    margin: "2.5%",
+    margin: "2%",
     borderWidth: 4,
     borderRadius: 100,
     justifyContent: "center",
     alignItems: "center",
   },
   image: {
-    width: "80%",
-    height: "80%",
+    width: "60%",
+    height: "60%",
     resizeMode: "contain",
   },
   checkBtn: {
