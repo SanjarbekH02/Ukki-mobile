@@ -53,6 +53,7 @@ import U3Step1 from "./Unit3/U3Step1";
 import U3Step10 from "./Unit3/U3Step10";
 import U3Step11 from "./Unit3/U3Step11";
 import U3Step12 from "./Unit3/U3Step12";
+import U3Step14 from "./Unit3/U3Step14";
 import U3Step2 from "./Unit3/U3Step2";
 import U3Step3 from "./Unit3/U3Step3";
 import U3Step4 from "./Unit3/U3Step4";
@@ -297,6 +298,9 @@ export default function StepScreen({ route, navigation }) {
             )}
              {unitId === 2 && step.order === 23 && (
                 <U2Step23 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 14 && (
+                <U3Step14 next={goToNextStep} />
             )}
 
         </View>

@@ -1,520 +1,296 @@
-import { Audio } from "expo-av";
-import { useRef, useState } from "react";
+import { Audio } from 'expo-av';
+import { useEffect, useState } from 'react';
 import {
-  Alert,
-  Animated,
   Dimensions,
   Image,
-  PanResponder,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
-} from "react-native";
+  View
+} from 'react-native';
+import ErrorOverlay from '../../../components/Utils/OnError';
+import ConfettiEffect from '../../../components/Utils/Success';
+import ThreeButtons from '../../../components/Utils/ThreeButtons';
 
-const { width } = Dimensions.get("window");
+const { width } = Dimensions.get('window');
+
+const shuffleArray = (array) => {
+  return [...array].sort(() => Math.random() - 0.5);
+};
 
 const AudioImageGame = () => {
-  // Rasmlar LOCAL (require), audio esa URL (Asset.fromModule orqali)
-  const images = [
-    {
-      id: 1,
-      source: require("../../../assets/images/unit-3/cd501.jpg"),
-      audio: { uri: "https://ukkibackend.soof.uz/media/audio/CD1-50-1.mp3" },
-    },
-    {
-      id: 2,
-      source: require("../../../assets/images/unit-3/cd501.jpg"),
-      audio: { uri: "https://ukkibackend.soof.uz/media/audio/CD1-50-2.mp3" },
-    },
-    {
-      id: 3,
-      source: require("../../../assets/images/unit-3/cd501.jpg"),
-      audio: { uri: "https://ukkibackend.soof.uz/media/audio/CD1-50-3.mp3" },
-    },
-    {
-      id: 4,
-      source: require("../../../assets/images/unit-3/cd501.jpg"),
-      audio: { uri: "https://ukkibackend.soof.uz/media/audio/CD1-50-4.mp3" },
-    },
-    {
-      id: 5,
-      source: require("../../../assets/images/unit-3/cd501.jpg"),
-      audio: { uri: "https://ukkibackend.soof.uz/media/audio/CD1-50-5.mp3" },
-    },
-    {
-      id: 6,
-      source: require("../../../assets/images/unit-3/cd501.jpg"),
-      audio: { uri: "https://ukkibackend.soof.uz/media/audio/CD1-50-6.mp3" },
-    },
+  const [currentAudioIndex, setCurrentAudioIndex] = useState(0);
+  const [gameData, setGameData] = useState([]);
+  const [usedAnswers, setUsedAnswers] = useState([]);
+  const [sound, setSound] = useState();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [gameFinished, setGameFinished] = useState(false);
+  const [score, setScore] = useState(0);
+  const [feedback, setFeedback] = useState(null);
+  const [IsSuccess, setIsSuccess] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [infoClick, setInfoClick] = useState(false)
+  const [clicked, setClicked] = useState(false)
+  const [dictionary, setDictionary] = useState(false)
+
+  const localImages = [
+    require('../../../assets/images/unit-3/cd50.jpg'),
+    require('../../../assets/images/unit-3/cd501.jpg'),
+    require('../../../assets/images/unit-3/cd502.jpg'),
+    require('../../../assets/images/unit-3/cd503.jpg'),
+    require('../../../assets/images/unit-3/cd504.jpg'),
+    require('../../../assets/images/unit-3/cd505.jpg'),
   ];
 
-  const correctAnswers = {
-    1: 1,
-    2: 2,
-    3: 3,
-    4: 4,
-    5: 5,
-    6: 6,
+  const audioFiles = [
+    'https://ukkibackend.soof.uz/media/audio/CD1-50-1.mp3',
+    'https://ukkibackend.soof.uz/media/audio/CD1-50-2.mp3',
+    'https://ukkibackend.soof.uz/media/audio/CD1-50-3.mp3',
+    'https://ukkibackend.soof.uz/media/audio/CD1-50-4.mp3',
+    'https://ukkibackend.soof.uz/media/audio/CD1-50-5.mp3',
+    'https://ukkibackend.soof.uz/media/audio/CD1-50-6.mp3',
+  ];
+
+  useEffect(() => {
+    initializeGame();
+    return () => {
+      if (sound) {
+        sound.unloadAsync();
+      }
+    };
+  }, []);
+
+  const initializeGame = () => {
+    // ✅ To‘g‘ri mapping (0-based index)
+    const correctMappings = [3, 1, 5, 4, 0, 2];
+    // 1->4, 2->2, 3->6, 4->5, 5->1, 6->3
+
+    const gameSetup = audioFiles.map((audio, index) => ({
+      audioUrl: audio,
+      correctImageIndex: correctMappings[index],
+      audioIndex: index
+    }));
+
+    setGameData(gameSetup);
+    setCurrentAudioIndex(0);
+    setUsedAnswers([]);
+    setGameFinished(false);
+    setScore(0);
+    setFeedback(null);
   };
 
-  const shuffledNumbers = [3, 1, 5, 2, 6, 4];
-
-  const [userAnswers, setUserAnswers] = useState({});
-  const [showResults, setShowResults] = useState(false);
-  const [currentAudio, setCurrentAudio] = useState(null);
-  const [draggedNumber, setDraggedNumber] = useState(null);
-  const [dropZones, setDropZones] = useState({});
-  const [currentPlayingAudio, setCurrentPlayingAudio] = useState(1);
-
-  // Audio o'ynash
-  const playAudio = async (audioFile, audioId) => {
+  const playAudio = async (index = currentAudioIndex) => {
     try {
-      if (currentAudio) {
-        await currentAudio.unloadAsync();
+      if (sound) {
+        await sound.unloadAsync();
       }
 
-      const { sound } = await Audio.Sound.createAsync(audioFile);
-      setCurrentAudio(sound);
-      setCurrentPlayingAudio(audioId);
-      await sound.playAsync();
+      const { sound: newSound } = await Audio.Sound.createAsync(
+        { uri: gameData[index]?.audioUrl },
+        { shouldPlay: true }
+      );
 
-      sound.setOnPlaybackStatusUpdate((status) => {
+      setSound(newSound);
+      setIsPlaying(true);
+
+      newSound.setOnPlaybackStatusUpdate((status) => {
         if (status.didJustFinish) {
-          setCurrentAudio(null);
-          setCurrentPlayingAudio(null);
+          setIsPlaying(false);
         }
       });
     } catch (error) {
-      console.error("Audio o'ynashda xatolik:", error);
-      Alert.alert("Xatolik", "Audio faylini o'ynab bo'lmadi");
+      console.error('Audio yuklanmadi:', error);
     }
   };
 
-  // Keyingi audioni avtomatik o'ynash
-  const playNextAudio = () => {
-    const answeredCount = Object.keys(userAnswers).length;
-    if (answeredCount < images.length) {
-      const nextAudioIndex = answeredCount + 1;
-      const nextImage = images.find(img => img.id === nextAudioIndex);
-      if (nextImage) {
-        setTimeout(() => {
-          playAudio(nextImage.audio, nextImage.id);
-        }, 500);
-      }
+  const stopAudio = async () => {
+    if (sound) {
+      await sound.stopAsync();
+      setIsPlaying(false);
     }
   };
 
-  // Birinchi audioni boshlash
-  const startFirstAudio = () => {
-    if (Object.keys(userAnswers).length === 0) {
-      playAudio(images[0].audio, images[0].id);
+  const handleImageSelect = (selectedImageIndex) => {
+    if (usedAnswers.includes(selectedImageIndex + 1)) {
+      return;
+    }
+
+    const currentGame = gameData[currentAudioIndex];
+    const isCorrect = selectedImageIndex === currentGame.correctImageIndex;
+
+    if (isCorrect) {
+      setScore(prev => prev + 1);
+      setIsSuccess(true);
+      setTimeout(() => setIsSuccess(false), 2000);
+    } else {
+      setIsError(true);
+      setTimeout(() => setIsError(false), 1000);
+    }
+
+    setUsedAnswers(prev => [...prev, selectedImageIndex + 1]);
+
+    if (currentAudioIndex < gameData.length - 1) {
+      const nextIndex = currentAudioIndex + 1;
+      setCurrentAudioIndex(nextIndex);
+
+      setTimeout(() => {
+        playAudio(nextIndex);
+      }, 700);
+    } else {
+      setGameFinished(true);
     }
   };
 
-  const setDropZone = (imageId, layout) => {
-    setDropZones((prev) => {
-      const existing = prev[imageId];
-      if (!existing || 
-          existing.x !== layout.x || 
-          existing.y !== layout.y || 
-          existing.width !== layout.width || 
-          existing.height !== layout.height) {
-        return {
-          ...prev,
-          [imageId]: {
-            x: layout.x,
-            y: layout.y,
-            width: layout.width,
-            height: layout.height
-          }
-        };
-      }
-      return prev;
-    });
-  };
-
-  const checkAnswers = () => {
-    setShowResults(true);
-  };
-
-  const resetGame = () => {
-    setUserAnswers({});
-    setShowResults(false);
-    setCurrentPlayingAudio(1);
-    if (currentAudio) {
-      currentAudio.unloadAsync();
-      setCurrentAudio(null);
-    }
-  };
-
-  // Joylashtirilgan raqamni topish
-  const getPlacedNumber = (imageId) => {
-    return Object.keys(userAnswers).find(
-      (key) => userAnswers[key] === imageId.toString()
-    );
-  };
-
-  const ImageCard = ({ image }) => (
-    <View style={styles.imageContainer}>
-      <View
-        style={styles.imageWrapper}
-        onLayout={(event) => {
-          const { x, y, width, height } = event.nativeEvent.layout;
-          const imageIdStr = image.id.toString();
-          const existing = dropZones[imageIdStr];
-          if (!existing || 
-              Math.abs(existing.x - x) > 1 || 
-              Math.abs(existing.y - y) > 1 || 
-              Math.abs(existing.width - width) > 1 || 
-              Math.abs(existing.height - height) > 1) {
-            setDropZone(imageIdStr, { x, y, width, height });
-          }
-        }}
-      >
-        {/* Play tugmasi tepada */}
-        <TouchableOpacity
-          style={[
-            styles.audioButton,
-            { backgroundColor: currentPlayingAudio === image.id ? "#4CAF50" : "rgba(0,0,0,0.7)" }
-          ]}
-          onPress={() => playAudio(image.audio, image.id)}
-        >
-          <Text style={styles.audioButtonText}>
-            {currentPlayingAudio === image.id ? "⏸" : "▶"}
-          </Text>
-        </TouchableOpacity>
-
-        {/* Rasm */}
-        <Image source={image.source} style={styles.image} />
-
-        {/* Rasm tagidagi raqam joyi */}
-        <View style={styles.dropZone}>
-          {showResults ? (
-            <View
-              style={[
-                styles.resultBox,
-                {
-                  backgroundColor: correctAnswers[parseInt(getPlacedNumber(image.id)) || 0] === image.id
-                    ? "#4CAF50"
-                    : "#F44336",
-                },
-              ]}
-            >
-              <Text style={styles.resultText}>
-                {correctAnswers[parseInt(getPlacedNumber(image.id)) || 0] === image.id ? "✓" : "✗"}
-              </Text>
-            </View>
-          ) : (
-            getPlacedNumber(image.id) && (
-              <View style={styles.placedNumber}>
-                <Text style={styles.placedNumberText}>
-                  {getPlacedNumber(image.id)}
-                </Text>
-              </View>
-            )
-          )}
-        </View>
-      </View>
-    </View>
-  );
-
-  const DraggableNumber = ({ number }) => {
-    const pan = useRef(new Animated.ValueXY()).current;
-    
-    const panResponder = useRef(
-      PanResponder.create({
-        onStartShouldSetPanResponder: () => !Object.values(userAnswers).includes(number.toString()),
-        onMoveShouldSetPanResponder: () => !Object.values(userAnswers).includes(number.toString()),
-
-        onPanResponderGrant: () => {
-          setDraggedNumber(number);
-          pan.setOffset({
-            x: pan.x._value,
-            y: pan.y._value,
-          });
-        },
-
-        onPanResponderMove: Animated.event(
-          [null, { dx: pan.x, dy: pan.y }],
-          { useNativeDriver: false }
-        ),
-
-        onPanResponderRelease: (evt) => {
-          pan.flattenOffset();
-
-          const dropX = evt.nativeEvent.pageX;
-          const dropY = evt.nativeEvent.pageY;
-
-          let droppedOnImage = null;
-          Object.keys(dropZones).forEach((imageId) => {
-            const zone = dropZones[imageId];
-            if (zone && 
-                dropX >= zone.x &&
-                dropX <= zone.x + zone.width &&
-                dropY >= zone.y &&
-                dropY <= zone.y + zone.height
-            ) {
-              droppedOnImage = imageId;
-            }
-          });
-
-          if (droppedOnImage) {
-            const newAnswers = { ...userAnswers };
-            Object.keys(newAnswers).forEach(key => {
-              if (newAnswers[key] === droppedOnImage) {
-                delete newAnswers[key];
-              }
-            });
-            
-            newAnswers[number] = droppedOnImage;
-            setUserAnswers(newAnswers);
-            
-            playNextAudio();
-          }
-
-          Animated.spring(pan, {
-            toValue: { x: 0, y: 0 },
-            useNativeDriver: false,
-          }).start();
-
-          setDraggedNumber(null);
-        },
-      })
-    ).current;
-
-    const isUsed = Object.values(userAnswers).includes(number.toString());
-
+  const renderImages = () => {
     return (
-      <Animated.View
-        {...panResponder.panHandlers}
-        style={[
-          pan.getLayout(),
-          styles.numberBox,
-          {
-            opacity: isUsed ? 0.3 : 1,
-            backgroundColor: draggedNumber === number ? "#2196F3" : "#FFC107",
-          },
-        ]}
-      >
-        <Text style={styles.numberText}>{number}</Text>
-      </Animated.View>
-    );
-  };
-
-  const allAnswersProvided = Object.keys(userAnswers).length === 6;
-
-  return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Audio va Rasm Moslashtirish O'yini</Text>
-
-      {/* Boshlash tugmasi */}
-      {Object.keys(userAnswers).length === 0 && (
-        <TouchableOpacity style={styles.startButton} onPress={startFirstAudio}>
-          <Text style={styles.startButtonText}>O'yinni Boshlash</Text>
-        </TouchableOpacity>
-      )}
-
-      <View style={styles.imagesGrid}>
-        {images.map((image) => (
-          <ImageCard key={image.id} image={image} />
+      <View style={styles.imagesContainer}>
+        {[0, 1].map(row => (
+          <View key={row} style={styles.imageRow}>
+            {[0, 1, 2].map(col => {
+              const index = row * 3 + col;
+              return (
+                <View key={index} style={styles.imageWrapper}>
+                  <Text style={styles.imageNumber}>{index + 1}</Text>
+                  <Image
+                    source={localImages[index]}
+                    style={styles.image}
+                    resizeMode="cover"
+                  />
+                </View>
+              );
+            })}
+          </View>
         ))}
       </View>
+    );
+  };
 
-      <View style={styles.numbersContainer}>
-        <Text style={styles.instructionText}>
-          Raqamlarni rasmlar tagidagi joylarga sudrab oling:
-        </Text>
-        <View style={styles.numbersGrid}>
-          {shuffledNumbers.map((number) => (
-            <DraggableNumber key={number} number={number} />
-          ))}
+  const renderAnswerButtons = () => {
+    let availableNumbers = [1, 2, 3, 4, 5, 6].filter(num => !usedAnswers.includes(num));
+
+    // 🔀 Har safar aralashtirib chiqaramiz
+    availableNumbers = shuffleArray(availableNumbers);
+
+    return (
+      <View style={styles.answerButtonsContainer}>
+        {availableNumbers.map(num => (
+          <TouchableOpacity
+            key={num}
+            style={styles.answerButton}
+            onPress={() => handleImageSelect(num - 1)}
+          >
+            <Text style={styles.answerButtonText}>{num}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    );
+  };
+
+  const renderGameFinished = () => {
+    return (
+      <View style={styles.finishedContainer}>
+        <Text style={styles.finishedTitle}>O'yin tugadi!</Text>
+        <Text style={styles.scoreText}>Natija: {score}/6</Text>
+        <View style={styles.finishedButtons}>
+          <TouchableOpacity
+            style={styles.restartButton}
+            onPress={() => {
+              initializeGame();
+            }}
+          >
+            <Text style={styles.buttonText}>Qaytadan o'ynash</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.exitButton}
+            onPress={() => {
+              // chiqish joyi
+            }}
+          >
+            <Text style={styles.buttonText}>Tugatish</Text>
+          </TouchableOpacity>
         </View>
       </View>
+    );
+  };
 
-      {allAnswersProvided && !showResults && (
-        <TouchableOpacity style={styles.checkButton} onPress={checkAnswers}>
-          <Text style={styles.checkButtonText}>Tekshirish</Text>
-        </TouchableOpacity>
-      )}
+  if (gameFinished) {
+    return (
+      <View style={styles.container}>
+        {renderGameFinished()}
+      </View>
+    );
+  }
 
-      {showResults && (
-        <TouchableOpacity style={styles.resetButton} onPress={resetGame}>
-          <Text style={styles.resetButtonText}>Qayta Boshlash</Text>
-        </TouchableOpacity>
-      )}
-    </ScrollView>
+  return (
+    <>
+      <ScrollView style={styles.container}>
+        <ThreeButtons
+          audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, audioni tingla va rasmlar ketma-ketligini belgila.mp3"
+          setDictionary={setDictionary}
+          infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} />
+        <View style={styles.header}>
+          <Text style={styles.title}>Qaysi rasm to'g'ri?</Text>
+          <Text style={styles.progress}>{currentAudioIndex + 1}/6</Text>
+        </View>
+        {renderImages()}
+        <View style={styles.audioContainer}>
+          <TouchableOpacity
+            style={[styles.playButton, isPlaying && styles.playingButton]}
+            onPress={isPlaying ? stopAudio : () => playAudio(currentAudioIndex)}
+          >
+            <Text style={styles.playButtonText}>
+              {isPlaying ? 'To\'xtatish' : 'Audio tinglash'}
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        {renderAnswerButtons()}
+      </ScrollView>
+      {IsSuccess && <ConfettiEffect />}
+      {isError && <ErrorOverlay />}
+    </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flexGrow: 1,
-    backgroundColor: "#f0f0f0",
-    padding: 20,
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginBottom: 20,
-    color: "#333",
-  },
-  startButton: {
-    backgroundColor: "#4CAF50",
-    padding: 15,
+  container: { flex: 1, backgroundColor: '#f5f5f5', paddingTop: 50 },
+  header: { flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20, paddingVertical: 15 },
+  title: { fontSize: 24, fontWeight: 'bold', color: '#333' },
+  progress: { fontSize: 18, color: '#666' },
+  imagesContainer: { paddingHorizontal: 10, marginVertical: 20 },
+  imageRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
+  imageWrapper: { position: 'relative', width: (width - 40) / 3, height: (width - 40) / 3 },
+  imageNumber: { position: 'absolute', top: 5, left: 5, backgroundColor: 'rgba(0,0,0,0.7)', color: 'white', fontSize: 16, fontWeight: 'bold', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 12, zIndex: 1 },
+  image: { width: '100%', height: '100%', borderRadius: 10, borderWidth: 2, borderColor: '#ddd' },
+  audioContainer: { alignItems: 'center', marginVertical: 20 },
+  playButton: { backgroundColor: '#4CAF50', paddingHorizontal: 30, paddingVertical: 15, borderRadius: 25, elevation: 3 },
+  playingButton: { backgroundColor: '#f44336' },
+  playButtonText: { color: 'white', fontSize: 18, fontWeight: 'bold' },
+  answerButtonsContainer: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', paddingHorizontal: 20, paddingBottom: 30 },
+  answerButton: { backgroundColor: '#2196F3', width: 60, height: 60, borderRadius: 30, justifyContent: 'center', alignItems: 'center', margin: 10, elevation: 3 },
+  answerButtonText: { color: 'white', fontSize: 20, fontWeight: 'bold' },
+  finishedContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 40 },
+  finishedTitle: { fontSize: 32, fontWeight: 'bold', color: '#333', marginBottom: 20, textAlign: 'center' },
+  scoreText: { fontSize: 24, color: '#4CAF50', marginBottom: 40, fontWeight: 'bold' },
+  finishedButtons: { width: '100%' },
+  restartButton: { backgroundColor: '#4CAF50', paddingVertical: 15, borderRadius: 10, marginBottom: 15, elevation: 3 },
+  exitButton: { backgroundColor: '#f44336', paddingVertical: 15, borderRadius: 10, elevation: 3 },
+  buttonText: { color: 'white', fontSize: 18, fontWeight: 'bold', textAlign: 'center' },
+
+  // ✅ Feedback style
+  feedbackContainer: {
+    marginHorizontal: 20,
+    marginVertical: 10,
+    paddingVertical: 12,
+    paddingHorizontal: 20,
     borderRadius: 10,
-    alignItems: "center",
-    marginBottom: 20,
+    alignItems: 'center',
+    elevation: 3,
   },
-  startButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  imagesGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-between",
-    marginBottom: 30,
-  },
-  imageContainer: {
-    width: "48%",
-    marginBottom: 20,
-  },
-  imageWrapper: {
-    position: "relative",
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  image: {
-    width: "100%",
-    height: 120,
-    borderRadius: 8,
-    resizeMode: "cover",
-  },
-  audioButton: {
-    position: "absolute",
-    top: 15,
-    right: 15,
-    borderRadius: 20,
-    width: 35,
-    height: 35,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 10,
-  },
-  audioButtonText: {
-    color: "white",
-    fontSize: 14,
-    fontWeight: "bold",
-  },
-  dropZone: {
-    marginTop: 10,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#f8f8f8",
-    borderRadius: 25,
-    borderWidth: 2,
-    borderColor: "#ddd",
-    borderStyle: "dashed",
-  },
-  placedNumber: {
-    backgroundColor: "#4CAF50",
-    borderRadius: 25,
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  placedNumberText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  resultBox: {
-    borderRadius: 25,
-    width: 40,
-    height: 40,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  resultText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  numbersContainer: {
-    marginBottom: 30,
-  },
-  instructionText: {
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 15,
-    color: "#666",
-  },
-  numbersGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "space-around",
-  },
-  numberBox: {
-    backgroundColor: "#FFC107",
-    borderRadius: 25,
-    width: 50,
-    height: 50,
-    justifyContent: "center",
-    alignItems: "center",
-    margin: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-  },
-  numberText: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "white",
-  },
-  checkButton: {
-    backgroundColor: "#2196F3",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  checkButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  resetButton: {
-    backgroundColor: "#FF9800",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  resetButtonText: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
+  correctFeedback: { backgroundColor: '#4CAF50' },
+  wrongFeedback: { backgroundColor: '#f44336' },
+  feedbackText: { color: 'white', fontSize: 18, fontWeight: 'bold' },
 });
 
 export default AudioImageGame;
