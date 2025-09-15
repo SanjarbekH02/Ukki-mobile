@@ -56,6 +56,9 @@ import U3Step12 from "./Unit3/U3Step12";
 import U3Step13 from "./Unit3/U3Step13";
 import U3Step14 from "./Unit3/U3Step14";
 import U3Step15 from "./Unit3/U3Step15";
+import U3Step17 from "./Unit3/U3Step17";
+import U3Step18 from "./Unit3/U3Step18";
+import U3Step19 from "./Unit3/U3Step19";
 import U3Step2 from "./Unit3/U3Step2";
 import U3Step3 from "./Unit3/U3Step3";
 import U3Step4 from "./Unit3/U3Step4";
@@ -64,6 +67,7 @@ import U3Step6 from "./Unit3/U3Step6";
 import U3Step7 from "./Unit3/U3Step7";
 import U3Step8 from "./Unit3/U3Step8";
 import U3Step9 from "./Unit3/U3Step9";
+import U3Step20 from "./Unit3/U3Step20";
 
 
 export default function StepScreen({ route, navigation }) {
@@ -309,6 +313,18 @@ export default function StepScreen({ route, navigation }) {
             )}
             {unitId === 3 && step.order === 15 && (
                 <U3Step15 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 17 && (
+                <U3Step17 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 18 && (
+                <U3Step18 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 19 && (
+                <U3Step19 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 20 && (
+                <U3Step20 next={goToNextStep} />
             )}
 
         </View>
