@@ -140,7 +140,7 @@ export default function U3Step10({ setIsPlaying, isPlaying, next }) {
                     <Text style={Styles.title}>Sing the song.</Text>
                     <Image
                         style={Styles.ImgFull}
-                        source={require("../../../assets/images/sirk.jpg")}
+                        source={require("../../../assets/images/cd49.jpg")}
                     />
                     {/* <Image style={Styles.ImgFull} source={require('../../../assets/images/image.png')} /> */}
                     <ThreeButtons
