@@ -53,7 +53,9 @@ import U3Step1 from "./Unit3/U3Step1";
 import U3Step10 from "./Unit3/U3Step10";
 import U3Step11 from "./Unit3/U3Step11";
 import U3Step12 from "./Unit3/U3Step12";
+import U3Step13 from "./Unit3/U3Step13";
 import U3Step14 from "./Unit3/U3Step14";
+import U3Step15 from "./Unit3/U3Step15";
 import U3Step2 from "./Unit3/U3Step2";
 import U3Step3 from "./Unit3/U3Step3";
 import U3Step4 from "./Unit3/U3Step4";
@@ -74,7 +76,7 @@ export default function StepScreen({ route, navigation }) {
     const currentStepIndex = unitSteps.findIndex(s => s.order === step.order);
     const isLastStep = currentStepIndex === unitSteps.length - 1;
 
-     const goToNextStep = () => {
+    const goToNextStep = () => {
         setProgress((prev) => {
             let newProgress = { ...prev };
             if (step.order > prev.lastCompletedStep) {
@@ -101,9 +103,9 @@ export default function StepScreen({ route, navigation }) {
     };
     return (
         <View style={styles.container}>
-                <View style={Styles.ComponentTop}>
-                    <ComponentTop text={step.title} />
-                </View>
+            <View style={Styles.ComponentTop}>
+                <ComponentTop text={step.title} />
+            </View>
             {unitId === 1 && step.order === 1 && (<>
                 <Step1 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
                 {/* <TouchableOpacity style={styles.NextButton} onPress={goToNextStep}>
@@ -236,7 +238,7 @@ export default function StepScreen({ route, navigation }) {
                 <AudioQuiz next={goToNextStep} />
             )}
 
-            
+
             {unitId === 3 && step.order === 1 && (
                 <U3Step1 isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
             )}
@@ -287,7 +289,7 @@ export default function StepScreen({ route, navigation }) {
             {unitId === 2 && step.order === 19 && (
                 <U2Step19 next={goToNextStep} />
             )}
-             {unitId === 2 && step.order === 20 && (
+            {unitId === 2 && step.order === 20 && (
                 <U2Step20 next={goToNextStep} />
             )}
             {unitId === 2 && step.order === 21 && (
@@ -296,11 +298,17 @@ export default function StepScreen({ route, navigation }) {
             {unitId === 2 && step.order === 22 && (
                 <U2Step22 next={goToNextStep} />
             )}
-             {unitId === 2 && step.order === 23 && (
+            {unitId === 2 && step.order === 23 && (
                 <U2Step23 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 13 && (
+                <U3Step13  isPlaying={isPlaying} setIsPlaying={setIsPlaying} next={goToNextStep} />
             )}
             {unitId === 3 && step.order === 14 && (
                 <U3Step14 next={goToNextStep} />
+            )}
+            {unitId === 3 && step.order === 15 && (
+                <U3Step15 next={goToNextStep} />
             )}
 
         </View>

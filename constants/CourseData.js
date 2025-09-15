@@ -92,6 +92,8 @@ export const courseData = [
           { id: 12, title: "Listen, Point and say", order: 12 },
           { id: 13, title: "Karaoke", order: 13 },
           { id: 14, title: "Play the game", order: 14 },
+          { id: 15, title: "Listen", order: 15 },
+          { id: 16, title: "Listen and check", order: 16 },
         ],
       },
     ],
