@@ -116,7 +116,6 @@ const styles = StyleSheet.create({
   },
   bottom: {
     // flex:2
-    borderTopLeftRadius: "12px",
     backgroundColor: "white",
     borderTopLeftRadius: 12,
     borderTopRightRadius: 12,
