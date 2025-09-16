@@ -31,8 +31,8 @@ const AUDIO_SEQUENCE = [
 ];
 
 export default function U3Step2({ next }) {
-  const [infoClick, setInfoClick] = useState(true);
-  const [clicked, setClicked] = useState(true);
+  const [infoClick, setInfoClick] = useState(false);
+  const [clicked, setClicked] = useState(false);
   const [foundIds, setFoundIds] = useState([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -145,7 +145,7 @@ export default function U3Step2({ next }) {
           clicked={clicked}
           setClicked={setClicked}
           setInfoClick={setInfoClick}
-          audioUrl="https://ukkibackend.soof.uz/media/audio/unit2-step2-intro.mp3"
+          audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila_1.mp3"
         />
       </View>
 
@@ -184,7 +184,9 @@ export default function U3Step2({ next }) {
           <View
             style={[
               styles.feedbackContainer,
-              feedbackMessage === "To'g'ri!" ? styles.correctFeedback : styles.incorrectFeedback,
+              feedbackMessage === "To'g'ri!"
+                ? styles.correctFeedback
+                : styles.incorrectFeedback,
             ]}
           >
             <Text style={styles.feedbackText}>{feedbackMessage}</Text>
@@ -193,10 +195,13 @@ export default function U3Step2({ next }) {
 
         {!gameStarted ? (
           <TouchableOpacity style={styles.playButton} onPress={startGame}>
-            <Text style={styles.playButtonText}>🔊 O'yinni Boshlash</Text>
+            <Text style={styles.playButtonText}>🔊 O‘yinni Boshlash</Text>
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity style={[styles.playButton, { opacity: 0.5 }]} disabled={true}>
+          <TouchableOpacity
+            style={[styles.playButton, { opacity: 0.5 }]}
+            disabled={true}
+          >
             <Text style={styles.playButtonText}>
               {isPlaying
                 ? "▶ O'qilmoqda..."

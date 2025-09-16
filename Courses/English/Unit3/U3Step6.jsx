@@ -149,7 +149,7 @@ export default function U2Step8({ next }) {
 
   const [infoClick, setInfoClick] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [dictionary, setDictionary] = useState(false);
+  const [, setDictionary] = useState(false);
 
   return (
     <>

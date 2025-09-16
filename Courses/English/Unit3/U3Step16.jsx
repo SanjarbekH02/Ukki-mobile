@@ -19,7 +19,7 @@ export default function U3Step16({ next }) {
   const [selected, setSelected] = useState({});
   const [infoClick, setInfoClick] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [dictionary, setDictionary] = useState(false);
+  const [, setDictionary] = useState(false);
   const [showPointer, setShowPointer] = useState(true);
   const [completed, setCompleted] = useState(false);
   const [audioPlayed, setAudioPlayed] = useState({});
@@ -33,28 +33,28 @@ export default function U3Step16({ next }) {
       id: 1,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-1.mp3",
       imgA: require("../../../assets/images/unit-3/cd520.png"),
-      imgB: require("../../../assets/images/unit-3/cd521.png"),
+      imgB: require("../../../assets/images/unit-3/cd523.png"),
       correct: "a",
     },
     {
       id: 2,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-2.mp3",
       imgA: require("../../../assets/images/unit-3/cd522.png"),
-      imgB: require("../../../assets/images/unit-3/cd523.png"),
+      imgB: require("../../../assets/images/unit-3/cd521.png"),
       correct: "b",
     },
     {
       id: 3,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-3.mp3",
-      imgA: require("../../../assets/images/unit-3/cd524.png"),
-      imgB: require("../../../assets/images/unit-3/cd525.png"),
+      imgA: require("../../../assets/images/unit-3/cd522.png"),
+      imgB: require("../../../assets/images/unit-3/cd523.png"),
       correct: "b",
     },
     {
       id: 4,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-4.mp3",
-      imgA: require("../../../assets/images/unit-3/cd521.png"),
-      imgB: require("../../../assets/images/unit-3/cd525.png"),
+      imgA: require("../../../assets/images/unit-3/cd525.png"),
+      imgB: require("../../../assets/images/unit-3/cd524.png"),
       correct: "a",
     },
   ];
@@ -80,7 +80,7 @@ export default function U3Step16({ next }) {
     } else {
       scaleAnim.setValue(1);
     }
-  }, [showPointer]);
+  }, [showPointer, scaleAnim]);
 
   useEffect(() => {
     if (completed) {
@@ -91,7 +91,7 @@ export default function U3Step16({ next }) {
         easing: Easing.out(Easing.ease),
       }).start();
     }
-  }, [completed]);
+  },);
 
   async function playAudio(stepIndex) {
     try {
@@ -117,7 +117,7 @@ export default function U3Step16({ next }) {
       });
 
       await newSound.playAsync();
-    } catch (error) {
+    } catch (_) {
       setIsPlaying(false);
     }
   }
@@ -161,23 +161,27 @@ export default function U3Step16({ next }) {
     }
   };
 
-  if (completed) {
-    const correctCount = steps.filter(
-      (step) => selected[step.id] === step.correct
-    ).length;
+  const replayAudio = () => {
+    if (!isPlaying && audioPlayed[currentStepData.id]) {
+      playAudio(currentStep);
+    }
+  };
 
-    return (
-      <View style={styles.container}>
-        <ThreeButtons
-          setShowPointer={setShowPointer}
-          audioUrl="https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3"
-          setDictionary={setDictionary}
-          infoClick={infoClick}
-          clicked={clicked}
-          setClicked={setClicked}
-          setInfoClick={setInfoClick}
-        />
+  const currentStepData = steps[currentStep];
 
+  return (
+    <View style={styles.container}>
+      <ThreeButtons
+        setShowPointer={setShowPointer}
+        audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3"
+        setDictionary={setDictionary}
+        infoClick={infoClick}
+        clicked={clicked}
+        setClicked={setClicked}
+        setInfoClick={setInfoClick}
+      />
+
+      {completed ? (
         <Animated.View
           style={[
             styles.bottomSheet,
@@ -187,102 +191,111 @@ export default function U3Step16({ next }) {
           ]}
         >
           <Text style={styles.scoreText}>
-            Siz 4 ta savoldan {correctCount} ta to'g'ri javob berdingiz
+            Siz 4 ta savoldan{" "}
+            {steps.filter((step) => selected[step.id] === step.correct).length}{" "}
+            ta to‘g‘ri javob berdingiz
           </Text>
           <View style={styles.buttonContainer}>
             <TouchableOpacity style={styles.restartButton} onPress={restart}>
-              <Text style={styles.buttonText}>Restart </Text>
+              <Text style={styles.buttonText}>Restart</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-              <Text style={styles.buttonText}>Next </Text>
+              <Text style={styles.buttonText}>Next</Text>
             </TouchableOpacity>
           </View>
         </Animated.View>
-      </View>
-    );
-  }
-
-  const currentStepData = steps[currentStep];
-
-  return (
-    <View style={styles.container}>
-      <ThreeButtons
-        setShowPointer={setShowPointer}
-        audioUrl="https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3"
-        setDictionary={setDictionary}
-        infoClick={infoClick}
-        clicked={clicked}
-        setClicked={setClicked}
-        setInfoClick={setInfoClick}
-      />
-
-      <View style={styles.imagesContainer}>
-        <View key={currentStepData.id} style={styles.imgBlock}>
-          <TouchableOpacity
-            onPress={() => handleSelection(currentStepData.id, "a")}
-            style={styles.imgBtn}
-            disabled={isPlaying || !audioPlayed[currentStepData.id]}
-          >
-            <View style={styles.letterBoxA}>
-              <Text style={styles.letterText}>a</Text>
-            </View>
-            <Image style={styles.image} source={currentStepData.imgA} />
-            <View style={styles.feedbackBox}>
-              {selected[currentStepData.id] === "a" && (
-                <Text
-                  style={[
-                    styles.checkmark,
-                    {
-                      color:
-                        currentStepData.correct === "a" ? "#28a745" : "#dc3545",
-                    },
-                  ]}
-                >
-                  {currentStepData.correct === "a" ? "\u2713" : "\u2717"}
-                </Text>
-              )}
-            </View>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={() => handleSelection(currentStepData.id, "b")}
-            style={styles.imgBtn}
-            disabled={isPlaying || !audioPlayed[currentStepData.id]}
-          >
-            <View style={styles.letterBoxB}>
-              <Text style={styles.letterText}>b</Text>
-            </View>
-            <Image style={styles.image} source={currentStepData.imgB} />
-            <View style={styles.feedbackBox}>
-              {selected[currentStepData.id] === "b" && (
-                <Text
-                  style={[
-                    styles.checkmark,
-                    {
-                      color:
-                        currentStepData.correct === "b" ? "#28a745" : "#dc3545",
-                    },
-                  ]}
-                >
-                  {currentStepData.correct === "b" ? "\u2713" : "\u2717"}
-                </Text>
-              )}
-            </View>
-          </TouchableOpacity>
-        </View>
-
-        {!isPlaying &&
-          (selected[currentStepData.id] === null ||
-            selected[currentStepData.id] === undefined) &&
-          audioPlayed[currentStepData.id] !== true && (
-            <TouchableOpacity
-              onPress={() => playAudio(currentStep)}
-              style={styles.playButton}
-            >
-              <Text style={styles.playText}>Play </Text>
-            </TouchableOpacity>
+      ) : (
+        <View style={styles.imagesContainer}>
+          {(isPlaying ||
+            (audioPlayed[currentStepData.id] &&
+              (selected[currentStepData.id] === null ||
+                selected[currentStepData.id] === undefined))) && (
+            <Text style={styles.promptText}>
+              Suhbat qaysi rasm haqida ketmoqda?
+            </Text>
           )}
-      </View>
+          <View key={currentStepData.id} style={styles.imgBlock}>
+            <TouchableOpacity
+              onPress={() => handleSelection(currentStepData.id, "a")}
+              style={styles.imgBtn}
+              disabled={isPlaying || !audioPlayed[currentStepData.id]}
+            >
+              <View style={styles.letterBoxA}>
+                <Text style={styles.letterText}>a</Text>
+              </View>
+              <Image style={styles.image} source={currentStepData.imgA} />
+              <View style={styles.feedbackBox}>
+                {selected[currentStepData.id] === "a" && (
+                  <Text
+                    style={[
+                      styles.checkmark,
+                      {
+                        color:
+                          currentStepData.correct === "a"
+                            ? "#28a745"
+                            : "#dc3545",
+                      },
+                    ]}
+                  >
+                    {currentStepData.correct === "a" ? "\u2713" : "\u2717"}
+                  </Text>
+                )}
+              </View>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => handleSelection(currentStepData.id, "b")}
+              style={styles.imgBtn}
+              disabled={isPlaying || !audioPlayed[currentStepData.id]}
+            >
+              <View style={styles.letterBoxB}>
+                <Text style={styles.letterText}>b</Text>
+              </View>
+              <Image style={styles.image} source={currentStepData.imgB} />
+              <View style={styles.feedbackBox}>
+                {selected[currentStepData.id] === "b" && (
+                  <Text
+                    style={[
+                      styles.checkmark,
+                      {
+                        color:
+                          currentStepData.correct === "b"
+                            ? "#28a745"
+                            : "#dc3545",
+                      },
+                    ]}
+                  >
+                    {currentStepData.correct === "b" ? "\u2713" : "\u2717"}
+                  </Text>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
+
+          {/* Play/Replay Button Logic */}
+          {!isPlaying &&
+            (selected[currentStepData.id] === null ||
+              selected[currentStepData.id] === undefined) && (
+              <View style={styles.buttonRow}>
+                {!audioPlayed[currentStepData.id] ? (
+                  <TouchableOpacity
+                    onPress={() => playAudio(currentStep)}
+                    style={styles.playButton}
+                  >
+                    <Text style={styles.playText}>PLAY</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    onPress={replayAudio}
+                    style={styles.replayButton}
+                  >
+                    <Text style={styles.playText}>REPLAY</Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            )}
+        </View>
+      )}
 
       <View style={styles.progress}>
         <View style={styles.dotContainer}>
@@ -343,8 +356,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   letterBoxA: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 20,
     backgroundColor: "#ff6f00",
     alignItems: "center",
@@ -355,8 +368,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   letterBoxB: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 20,
     backgroundColor: "#007bff",
     alignItems: "center",
@@ -372,8 +385,8 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   feedbackBox: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     backgroundColor: "#fff",
     borderRadius: 8,
     alignItems: "center",
@@ -389,8 +402,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   playButton: {
-    position: "absolute",
-    bottom: 20,
     backgroundColor: "#007bff",
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -400,7 +411,24 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
-    zIndex: 20,
+  },
+  replayButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+  },
+  buttonRow: {
+    position: "absolute",
+    bottom: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   playText: {
     color: "#fff",
@@ -473,7 +501,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: "#4CAF50", 
+    backgroundColor: "#4CAF50",
     borderRadius: 10,
     alignItems: "center",
     elevation: 5,
@@ -482,5 +510,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "white",
+  },
+  promptText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 20,
+    textAlign: "center",
   },
 });

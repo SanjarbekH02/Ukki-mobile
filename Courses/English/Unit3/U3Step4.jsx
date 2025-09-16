@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ErrorOverlay from "../../../components/Utils/OnError";
 import ConfettiEffect from "../../../components/Utils/Success";
@@ -22,13 +22,13 @@ const U3Step4 = ({next}) => {
   const [selectedLeft, setSelectedLeft] = useState(null);
   const [matched, setMatched] = useState([]);
   const [message, setMessage] = useState("");
-  const soundRef = useRef(null);
+  // const soundRef = useRef(null);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false)
   const [showNext, setShowNext] = useState(false);
 
   // Barcha juftliklar to'g'ri bog'langanini tekshirish
-  const isAllMatched = matched.length === imagesLeft.length * 2;
+  // const isAllMatched = matched.length === imagesLeft.length * 2;
 
   const handleLeftPress = (item, idx) => {
     setSelectedLeft(idx);
@@ -65,17 +65,15 @@ const U3Step4 = ({next}) => {
     }
   };
 
-  const handleNext = () => {
-    // Bu yerda keyingi sahifaga o'tish logikasini yozing
-    console.log("Keyingi sahifaga o'tish");
-    // Masalan: navigation.navigate('NextScreen');
-  };
+  // const handleNext = () => {
+  //   // Bu yerda keyingi sahifaga o'tish logikasini yozing
+  //   console.log("Keyingi sahifaga o'tish");
+  //   // Masalan: navigation.navigate('NextScreen');
+  // };
 
   const [infoClick, setInfoClick] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [dictionary, setDictionary] = useState(false);
-  const [wordgame, setWordgame] = useState(true)
-  const [talaffuz, setTalaffuz] = useState(false)
+  const [, setDictionary] = useState(false);
 
   return (
     <>

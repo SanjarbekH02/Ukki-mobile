@@ -1,19 +1,25 @@
-import { useState } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import KaraokePlayer from '../../../Screens/Karaoke'
-import ThreeButtons from '../../../components/Utils/ThreeButtons'
+import { useState } from "react";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import KaraokePlayer from "../../../Screens/Karaoke";
+import ThreeButtons from "../../../components/Utils/ThreeButtons";
+import WordGameAssist from "../../../components/Utils/WordGame";
+import WordPractice from "../../../components/Utils/Talaffuz";
+import FlashCards from "../../../components/YangiSozlar";
 
 export default function U3Step3({ next }) {
-  const [showKaraoke, setShowKaraoke] = useState(false)
-   const [infoClick, setInfoClick] = useState(true);
-  const [clicked, setClicked] = useState(true)
-  const [dictionary, setDictionary] = useState(false)
+  const [showKaraoke, setShowKaraoke] = useState(false);
+  const [infoClick, setInfoClick] = useState(true);
+  const [clicked, setClicked] = useState(true);
+  const [dictionary, setDictionary] = useState(false);
+  const [wordgame, setWordgame] = useState(true);
+  const [talaffuz, setTalaffuz] = useState(false);
 
   if (showKaraoke) {
-    return <KaraokePlayer
-      next={next}
-      audioUri='https://ukkibackend.soof.uz/media/audio/CD1-44.mp3'
-      lrcText={` [00:07.85]Toys, [00:08.72]toys, [00:09.62]girls [00:10.12]and [00:10.65]boys, | Oʻyinchoqlar, oʻyinchoqlar, qizlar va bolalar,
+    return (
+      <KaraokePlayer
+        next={next}
+        audioUri="https://ukkibackend.soof.uz/media/audio/CD1-44.mp3"
+        lrcText={` [00:07.85]Toys, [00:08.72]toys, [00:09.62]girls [00:10.12]and [00:10.65]boys, | Oʻyinchoqlar, oʻyinchoqlar, qizlar va bolalar,
 [00:15.10]What’s [00:16.07]your [00:17.15]favorite [00:18.00]toy? | Sening sevimli oʻyinchogʻing nima?
 [00:22.30]My [00:22.65]kite. [00:23.30]My [00:23.50]kite. [00:24.30]My [00:24.50]red [00:24.70]and [00:24.80]yellow [00:25.35]kite. | Mening varragim. Mening varragim. Mening qizil va sariq varragim.
 [00:29.50]My [00:30.00]favorite [00:30.80]toy’s [00:31.40]my [00:31.80]red [00:32.05]and [00:32.15]yellow [00:32.70]kite. | Mening sevimli oʻyinchogʻim mening qizil va sariq varragim.
@@ -25,57 +31,153 @@ export default function U3Step3({ next }) {
 [01:14.20]What’s [01:15.10]your [01:16.05]favorite [01:17.10]toy? | Sening sevimli oʻyinchogʻing nima?
 [01:21.45]My [01:21.75]teddy. [01:22.35]My [01:22.50]teddy. [01:23.20]My [01:23.50]green [01:23.90]teddy [01:24.50]bear. | Mening teddy'm. Mening teddy'm. Mening yashil yumshoq ayiqcham.
 [01:28.50]My [01:29.05]favorite [01:29.90]toy’s [01:30.45]my [01:30.90]green [01:31.30]teddy [01:31.80]bear. | Mening sevimli oʻyinchogʻim mening yashil yumshoq ayiqcham.
-`} />
-  }
- 
-  return (
-    <View style={styles.container}>
-      <ThreeButtons
-        setDictionary={setDictionary} infoClick={infoClick} clicked={clicked} setClicked={setClicked} setInfoClick={setInfoClick} audioUrl='https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3'
+`}
       />
-      <View style={styles.imagesContainer}>
-        <Image source={require('../../../assets/images/unit-3/unit-2-step-4-1.jpg')} style={styles.image} />
-        <Image source={require('../../../assets/images/unit-3/unit-2-step-4-2.jpg')} style={styles.image} />
-        <Image source={require('../../../assets/images/unit-3/unit-2-step-4-3.jpg')} style={styles.image} />
-      </View>
+    );
+  }
 
-      <TouchableOpacity
-        style={styles.playButton}
-        onPress={() => setShowKaraoke(true)}
-      >
-        <Text style={styles.playText}>▶ Play</Text>
-      </TouchableOpacity>
-    </View>
-  )
+  return (
+    <>
+      {dictionary ? (
+        <>
+          {wordgame ? (
+            <FlashCards
+              setDictionary={setWordgame}
+              data={[
+                {
+                  word: "toys",
+                  translation: "o'yinchoqlar",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
+                },
+                {
+                  word: "girls",
+                  translation: "qizlar",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/qizlar.mp3",
+                },
+                {
+                  word: "boys",
+                  translation: "bolalar",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/bolalar.mp3",
+                },
+                {
+                  word: "My",
+                  translation: "mening",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/mening.mp3",
+                },
+              ]}
+            />
+          ) : talaffuz ? (
+            <WordPractice
+              setWordgame={setWordgame}
+              setDictionary={setDictionary}
+              setTalaffuz={setTalaffuz}
+              words={[
+                {
+                  text: "toys",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
+                },
+                {
+                  text: "girls",
+                  audioUrl:
+                    "https://ukkibackend.soof.uz/media/audio/qizlar.mp3",
+                },
+                {
+                  text: "boys",
+                  audioUrl: "https://ukkibackend.soof.uz/media/audio/bolalar.mp3",
+                },
+                {
+                  text: "My",
+                  audioUrl: "https://ukkibackend.soof.uz/media/audio/mening.mp3",
+                },
+              ]}
+            />
+          ) : (
+            <WordGameAssist
+              setDictionary={setTalaffuz}
+              words={[
+                "toys",
+                "girls",
+                "boys",
+                "My",
+              ]}
+              audios={[
+                "https://ukkibackend.soof.uz/media/audio/oyinchoqlar.mp3",
+                "https://ukkibackend.soof.uz/media/audio/qizlar.mp3",
+                "https://ukkibackend.soof.uz/media/audio/bolalar.mp3",
+                "https://ukkibackend.soof.uz/media/audio/mening.mp3",
+              ]}
+            />
+          )}
+        </>
+      ) : (
+        <View style={styles.container}>
+          <ThreeButtons
+            setDictionary={setDictionary}
+            infoClick={infoClick}
+            clicked={clicked}
+            setClicked={setClicked}
+            setInfoClick={setInfoClick}
+            audioUrl="https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3"
+          />
+          <View style={styles.imagesContainer}>
+            <Image
+              source={require("../../../assets/images/unit-3/unit-2-step-4-1.jpg")}
+              style={styles.image}
+            />
+            <Image
+              source={require("../../../assets/images/unit-3/unit-2-step-4-2.jpg")}
+              style={styles.image}
+            />
+            <Image
+              source={require("../../../assets/images/unit-3/unit-2-step-4-3.jpg")}
+              style={styles.image}
+            />
+          </View>
+
+          <TouchableOpacity
+            style={styles.playButton}
+            onPress={() => setShowKaraoke(true)}
+          >
+            <Text style={styles.playText}>▶ Play</Text>
+          </TouchableOpacity>
+        </View>
+      )}
+    </>
+  );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
   imagesContainer: {
     // flex: 1,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   image: {
-    width: '33%',
+    width: "33%",
     // flex: 1,
-    resizeMode: 'contain',
+    resizeMode: "contain",
   },
   playButton: {
-    position: 'absolute',
-    alignSelf: 'center',
-    top: '45%',
+    position: "absolute",
+    alignSelf: "center",
+    top: "45%",
     paddingVertical: 15,
     paddingHorizontal: 40,
-    backgroundColor: 'rgba(29,185,84,0.9)',
+    backgroundColor: "rgba(29,185,84,0.9)",
     borderRadius: 30,
   },
   playText: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
-})
+});

@@ -53,7 +53,7 @@ export default function GameScreen({ next }) {
 
   const [infoClick, setInfoClick] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [dictionary, setDictionary] = useState(false);
+  const [, setDictionary] = useState(false);
 
   return (
     <View style={styles.container}>
@@ -109,6 +109,7 @@ const styles = StyleSheet.create({
     width: "45%",
     aspectRatio: 1,
     margin: "2%",
+    backgroundColor: "#fff",
     borderWidth: 4,
     borderRadius: 100,
     justifyContent: "center",
