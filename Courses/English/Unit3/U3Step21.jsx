@@ -42,7 +42,7 @@ const U3Step21 = ({ next }) => {
       id: "top2",
       source: require("../../../assets/images/unit-3/varrak.png"),
       audioUrl: "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
-      position: { top: "11%", left: "37%", zIndex: 10 },
+      position: { top: "11.5%", left: "36.5%", zIndex: 10 },
       size: { width: "18%", height: "16%" },
       transform: [{ rotate: "-30deg" }],
     },
@@ -50,7 +50,7 @@ const U3Step21 = ({ next }) => {
       id: "top3",
       source: require("../../../assets/images/unit-3/stul21.png"),
       audioUrl: "https://ukkibackend.soof.uz/media/audio/stul.mp3",
-      position: { top: "56%", left: "34%", zIndex: 10 },
+      position: { top: "56%", left: "33.5%", zIndex: 10 },
       size: { width: "28%", height: "37%" },
     },
     {
@@ -59,20 +59,20 @@ const U3Step21 = ({ next }) => {
       audioUrl:
         "https://ukkibackend.soof.uz/media/audio/yumshoq ayiqchalar.mp3",
       position: { top: "19%", right: "2%", zIndex: 10 },
-      size: { width: "13%", height: "18%" },
+      size: { width: "13%", height: "16%" },
     },
     {
       id: "bottom1",
       source: require("../../../assets/images/unit-3/qalamdon.png"),
       audioUrl: "https://ukkibackend.soof.uz/media/audio/qalamdon.mp3",
-      position: { top: "63%", right: "5%", zIndex: 10 },
+      position: { top: "62.8%", right: "5%", zIndex: 10 },
       size: { width: "13%", height: "14%" },
     },
     {
       id: "bottom2",
       source: require("../../../assets/images/unit-3/koptok.png"),
       audioUrl: "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
-      position: { top: "63%", left: "2.8%", zIndex: 10 },
+      position: { top: "63.4%", left: "2.8%", zIndex: 10 },
       size: { width: "20%", height: "22%" },
     },
     {
@@ -102,7 +102,7 @@ const U3Step21 = ({ next }) => {
       }
 
       setIsPlaying(true);
-      setCurrentSelected(imageId);
+      setCurrentSelected(imageId);  
       const { sound: newSound } = await Audio.Sound.createAsync({
         uri: audioUrl,
       });
@@ -120,7 +120,6 @@ const U3Step21 = ({ next }) => {
     } catch (error) {
       console.log("Audio o'ynatishda xatolik:", error);
       setIsPlaying(false);
-      setCurrentSelected(null);
     }
   }
 
@@ -138,12 +137,12 @@ const U3Step21 = ({ next }) => {
           source: selectedImage.source,
           position: selectedImage.position,
           size: selectedImage.size,
-          transform: selectedImage.transform, 
+          transform: selectedImage.transform,
         },
       ]);
       setIsSuccess(true);
       setTimeout(() => setIsSuccess(false), 2000);
-      setCurrentSelected(null);
+      setCurrentSelected(null); 
       setNextBtn(placedImages.length + 1 === allImages.length);
     } else {
       setErrorMessage("Xato javob berdingiz");
@@ -178,7 +177,7 @@ const U3Step21 = ({ next }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.instructionText}>
-        Eshitgan so‘zingni rangsiz rasmlar orasidan toping.
+        Eshitgan so‘zingizni rangsiz rasmlar orasidan toping.
       </Text>
       <ThreeButtons
         setDictionary={setDictionary}
@@ -192,7 +191,7 @@ const U3Step21 = ({ next }) => {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[styles.options, { marginBottom: -80 }]}
+        contentContainerStyle={[styles.options, { marginBottom: -50 }]}
       >
         {topImages.map((image) => (
           <TouchableOpacity
@@ -280,7 +279,7 @@ const U3Step21 = ({ next }) => {
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
-        contentContainerStyle={[styles.options, { marginTop: -70 }]}
+        contentContainerStyle={[styles.options, { marginTop: -50 }]}
       >
         {bottomImages.map((image) => (
           <TouchableOpacity
@@ -306,7 +305,7 @@ const U3Step21 = ({ next }) => {
 
       {nextBtn && (
         <TouchableOpacity onPress={next} style={styles.nextButton}>
-          <Text style={styles.nextButtonText}>Next </Text>
+          <Text style={styles.nextButtonText}>Next</Text>
         </TouchableOpacity>
       )}
     </View>

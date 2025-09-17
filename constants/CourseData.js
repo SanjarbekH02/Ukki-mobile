@@ -90,7 +90,7 @@ export const courseData = [
           { id: 6, title: "Listen and stick", order: 6 },
           { id: 7, title: "Look and circle the toys", order: 7 },
           { id: 8, title: "Listen, look, and say", order: 8 },
-          { id: 9, title: "Listen and check ✓ or put an X", order: 9 },
+          { id: 9, title: "Listen and check", order: 9 },
           { id: 10, title: "Look and say", order: 10 },
           { id: 11, title: "Now listen and check", order: 11 },
           { id: 12, title: "Listen and number the pictures", order: 12 },

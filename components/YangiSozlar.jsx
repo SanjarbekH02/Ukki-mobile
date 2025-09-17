@@ -13,6 +13,16 @@ import ThreeButtons from "./Utils/ThreeButtons";
 
 const { width } = Dimensions.get("window");
 
+const colors = [
+  "#fa0000",
+  "#f7ef02",
+  "#008000",
+  "#0000FF",
+  "#FFC0CB",
+  "#FFA500",
+  "#800080",
+];
+
 const FlashCards = ({ data, onFinish, setDictionary }) => {
   const [index, setIndex] = useState(0);
   const [finished, setFinished] = useState(false);
@@ -22,7 +32,6 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
   const [infoClick, setInfoClick] = useState(false);
   const [clicked, setClicked] = useState(false);
   const [pointer, setPointer] = useState(false);
-  // const [dictionary, setDictionary] = useState(false)
   const pointerScale = useRef(new Animated.Value(1)).current;
   const pointerOpacity = useRef(new Animated.Value(1)).current;
 
@@ -36,7 +45,9 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
         useNativeDriver: true,
       }).start();
     }
-  }, [index, finished]);
+  }, [index, finished, translateX]);
+
+  // Pointer animatsiyasi
   useEffect(() => {
     if (pointer) {
       Animated.loop(
@@ -56,39 +67,49 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
         ])
       ).start();
     }
-  }, [pointer]);
+  }, [pointer, pointerScale]);
 
   // Audio o‘ynash
   const playAudio = async (url) => {
     try {
       if (soundRef.current) {
         await soundRef.current.unloadAsync();
+        soundRef.current = null;
       }
-      const { sound } = await Audio.Sound.createAsync(
-        { uri: url },
-        { shouldPlay: true }
-      );
-      soundRef.current = sound;
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.didJustFinish) {
-          nextCard();
-        }
-      });
+      if (url) {
+        const { sound } = await Audio.Sound.createAsync(
+          { uri: url },
+          { shouldPlay: true }
+        );
+        soundRef.current = sound;
+        sound.setOnPlaybackStatusUpdate((status) => {
+          if (status.didJustFinish) {
+            nextCard();
+          }
+        });
+      } else {
+        console.log("Audio URL topilmadi!");
+      }
     } catch (err) {
       console.log("Audio error:", err);
     }
   };
 
+  // Kartani aylantirish
   const flipCard = () => {
-    setPointer(false);
-    Animated.timing(rotateY, {
-      toValue: 180,
-      duration: 500,
-      useNativeDriver: true,
-    }).start();
-    playAudio(currentItem.audioUrl);
+    if (!pointer && !finished) {
+      console.log("flipCard chaqirildi, index:", index);
+      setPointer(false);
+      Animated.timing(rotateY, {
+        toValue: 180,
+        duration: 500,
+        useNativeDriver: true,
+      }).start();
+      playAudio(currentItem.audioUrl);
+    }
   };
 
+  // Keyingi kartaga o‘tish
   const nextCard = () => {
     Animated.timing(translateX, {
       toValue: -width,
@@ -96,7 +117,6 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
       useNativeDriver: true,
     }).start(() => {
       rotateY.setValue(0);
-
       if (index + 1 >= data.length) {
         setFinished(true);
       } else {
@@ -159,37 +179,49 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
       />
 
       {/* FRONT SIDE */}
-      <Animated.View
-        style={[
-          styles.card,
-          {
-            backgroundColor: colors[index % colors.length],
-            transform: [{ translateX }, { rotateY: frontInterpolate }],
-          },
-        ]}
+      <TouchableOpacity
+        style={styles.touchableCard}
+        onPress={flipCard}
+        activeOpacity={0.7}
       >
-        <TouchableOpacity style={styles.inner} onPress={flipCard}>
-          <Text style={styles.frontText}>Tap to Flip</Text>
-        </TouchableOpacity>
-      </Animated.View>
+        <Animated.View
+          style={[
+            styles.card,
+            {
+              backgroundColor: colors[index % colors.length],
+              transform: [{ translateX }, { rotateY: frontInterpolate }],
+            },
+          ]}
+        >
+          <View style={styles.inner}>
+            <Text style={styles.frontText}>Tap to Flip</Text>
+          </View>
+        </Animated.View>
+      </TouchableOpacity>
 
       {/* BACK SIDE */}
-      <Animated.View
-        style={[
-          styles.card,
-          styles.cardBack,
-          {
-            backgroundColor: colors[index % colors.length],
-            transform: [{ translateX }, { rotateY: backInterpolate }],
-          },
-        ]}
+      <TouchableOpacity
+        style={styles.touchableCard}
+        onPress={flipCard}
+        activeOpacity={0.7}
       >
-        <TouchableOpacity style={styles.inner} onPress={flipCard}>
-          <Text style={styles.text}>
-            {currentItem.word} - {currentItem.translation}
-          </Text>
-        </TouchableOpacity>
-      </Animated.View>
+        <Animated.View
+          style={[
+            styles.card,
+            styles.cardBack,
+            {
+              backgroundColor: colors[index % colors.length],
+              transform: [{ translateX }, { rotateY: backInterpolate }],
+            },
+          ]}
+        >
+          <View style={styles.inner}>
+            <Text style={styles.text}>
+              {currentItem.word} - {currentItem.translation}
+            </Text>
+          </View>
+        </Animated.View>
+      </TouchableOpacity>
       {pointer && (
         <Animated.Image
           style={[
@@ -203,21 +235,17 @@ const FlashCards = ({ data, onFinish, setDictionary }) => {
   );
 };
 
-const colors = [
-  "#fa0000",
-  "#f7ef02",
-  "#008000",
-  "#0000FF",
-  "#FFC0CB",
-  "#FFA500",
-  "#800080",
-];
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  touchableCard: {
+    position: "absolute",
+    width: 280,
+    height: 180,
+    borderRadius: 20,
   },
   card: {
     width: 280,
@@ -252,7 +280,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     color: "#333",
-    textAlign: 'center'
+    textAlign: "center",
   },
   button: {
     paddingVertical: 12,

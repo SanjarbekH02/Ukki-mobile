@@ -30,7 +30,7 @@ export default function Step17({ next }) {
     "https://ukkibackend.soof.uz/media/audio/kitob.mp3",
     "https://ukkibackend.soof.uz/media/audio/CD1-41-7.mp3",
     "https://ukkibackend.soof.uz/media/audio/CD1-41-5.mp3",
-    "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
+    "https://ukkibackend.soof.uz/media/audio/CD1-41-10.mp3",
   ];
 
   const images = [

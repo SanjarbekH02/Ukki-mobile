@@ -23,9 +23,10 @@ export default function U3Step16({ next }) {
   const [showPointer, setShowPointer] = useState(true);
   const [completed, setCompleted] = useState(false);
   const [audioPlayed, setAudioPlayed] = useState({});
+  const [initialAudioPlayed, setInitialAudioPlayed] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const translateYAnim = useRef(
-    new Animated.Value(Dimensions.get("window").height)
+    new Animated.Value(Dimensions.get("window").height * 0.35)
   ).current;
 
   const steps = [
@@ -91,7 +92,35 @@ export default function U3Step16({ next }) {
         easing: Easing.out(Easing.ease),
       }).start();
     }
-  },);
+  });
+
+  async function playInitialAudio() {
+    try {
+      if (sound) {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+      }
+
+      setIsPlaying(true);
+      const { sound: newSound } = await Audio.Sound.createAsync({
+        uri: "https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3",
+      });
+      setSound(newSound);
+
+      newSound.setOnPlaybackStatusUpdate(async (status) => {
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+          setInitialAudioPlayed(true);
+          playAudio(0);
+        }
+      });
+
+      await newSound.playAsync();
+    } catch (_) {
+      setIsPlaying(false);
+      setInitialAudioPlayed(true);
+    }
+  }
 
   async function playAudio(stepIndex) {
     try {
@@ -152,7 +181,8 @@ export default function U3Step16({ next }) {
     setCompleted(false);
     setShowPointer(true);
     setAudioPlayed({});
-    translateYAnim.setValue(Dimensions.get("window").height);
+    setInitialAudioPlayed(false);
+    translateYAnim.setValue(Dimensions.get("window").height * 0.35);
   };
 
   const handleNext = () => {
@@ -177,138 +207,130 @@ export default function U3Step16({ next }) {
         setDictionary={setDictionary}
         infoClick={infoClick}
         clicked={clicked}
-        setClicked={setClicked}
+        setClicked={() => {
+          setClicked(true);
+          if (!initialAudioPlayed) {
+            playInitialAudio();
+          }
+        }}
         setInfoClick={setInfoClick}
       />
 
-      {completed ? (
-        <Animated.View
-          style={[
-            styles.bottomSheet,
-            {
-              transform: [{ translateY: translateYAnim }],
-            },
-          ]}
-        >
-          <Text style={styles.scoreText}>
-            Siz 4 ta savoldan{" "}
-            {steps.filter((step) => selected[step.id] === step.correct).length}{" "}
-            ta to‘g‘ri javob berdingiz
-          </Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.restartButton} onPress={restart}>
-              <Text style={styles.buttonText}>Restart</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-              <Text style={styles.buttonText}>Next</Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      ) : (
-        <View style={styles.imagesContainer}>
-          {(isPlaying ||
-            (audioPlayed[currentStepData.id] &&
-              (selected[currentStepData.id] === null ||
-                selected[currentStepData.id] === undefined))) && (
-            <Text style={styles.promptText}>
-              Suhbat qaysi rasm haqida ketmoqda?
+      {completed && (
+        <View style={styles.overlay}>
+          <Animated.View
+            style={[
+              styles.bottomSheet,
+              {
+                transform: [{ translateY: translateYAnim }],
+              },
+            ]}
+          >
+            <Text style={styles.scoreText}>
+              Siz 4 ta savoldan{" "}
+              {
+                steps.filter((step) => selected[step.id] === step.correct)
+                  .length
+              }{" "}
+              ta to‘g‘ri javob berdingiz
             </Text>
-          )}
-          <View key={currentStepData.id} style={styles.imgBlock}>
-            <TouchableOpacity
-              onPress={() => handleSelection(currentStepData.id, "a")}
-              style={styles.imgBtn}
-              disabled={isPlaying || !audioPlayed[currentStepData.id]}
-            >
-              <View style={styles.letterBoxA}>
-                <Text style={styles.letterText}>a</Text>
-              </View>
-              <Image style={styles.image} source={currentStepData.imgA} />
-              <View style={styles.feedbackBox}>
-                {selected[currentStepData.id] === "a" && (
-                  <Text
-                    style={[
-                      styles.checkmark,
-                      {
-                        color:
-                          currentStepData.correct === "a"
-                            ? "#28a745"
-                            : "#dc3545",
-                      },
-                    ]}
-                  >
-                    {currentStepData.correct === "a" ? "\u2713" : "\u2717"}
-                  </Text>
-                )}
-              </View>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              onPress={() => handleSelection(currentStepData.id, "b")}
-              style={styles.imgBtn}
-              disabled={isPlaying || !audioPlayed[currentStepData.id]}
-            >
-              <View style={styles.letterBoxB}>
-                <Text style={styles.letterText}>b</Text>
-              </View>
-              <Image style={styles.image} source={currentStepData.imgB} />
-              <View style={styles.feedbackBox}>
-                {selected[currentStepData.id] === "b" && (
-                  <Text
-                    style={[
-                      styles.checkmark,
-                      {
-                        color:
-                          currentStepData.correct === "b"
-                            ? "#28a745"
-                            : "#dc3545",
-                      },
-                    ]}
-                  >
-                    {currentStepData.correct === "b" ? "\u2713" : "\u2717"}
-                  </Text>
-                )}
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Play/Replay Button Logic */}
-          {!isPlaying &&
-            (selected[currentStepData.id] === null ||
-              selected[currentStepData.id] === undefined) && (
-              <View style={styles.buttonRow}>
-                {!audioPlayed[currentStepData.id] ? (
-                  <TouchableOpacity
-                    onPress={() => playAudio(currentStep)}
-                    style={styles.playButton}
-                  >
-                    <Text style={styles.playText}>PLAY</Text>
-                  </TouchableOpacity>
-                ) : (
-                  <TouchableOpacity
-                    onPress={replayAudio}
-                    style={styles.replayButton}
-                  >
-                    <Text style={styles.playText}>REPLAY</Text>
-                  </TouchableOpacity>
-                )}
-              </View>
-            )}
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.restartButton} onPress={restart}>
+                <Text style={styles.buttonText}>Restart</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
         </View>
       )}
 
-      <View style={styles.progress}>
-        <View style={styles.dotContainer}>
-          {steps.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                index <= currentStep ? styles.filledDot : styles.emptyDot,
-              ]}
-            />
-          ))}
+      <View style={[styles.imagesContainer, completed && styles.dimmed]}>
+        {(isPlaying ||
+          (audioPlayed[currentStepData.id] &&
+            (selected[currentStepData.id] === null ||
+              selected[currentStepData.id] === undefined))) && (
+          <Text style={styles.promptText}>
+            Suhbat qaysi rasm haqida ketmoqda?
+          </Text>
+        )}
+        <View key={currentStepData.id} style={styles.imgBlock}>
+          <TouchableOpacity
+            onPress={() => handleSelection(currentStepData.id, "a")}
+            style={styles.imgBtn}
+            disabled={isPlaying || !audioPlayed[currentStepData.id]}
+          >
+            <View style={styles.letterBoxA}>
+              <Text style={styles.letterText}>a</Text>
+            </View>
+            <Image style={styles.image} source={currentStepData.imgA} />
+            <View style={styles.feedbackBox}>
+              {selected[currentStepData.id] === "a" && (
+                <Text
+                  style={[
+                    styles.checkmark,
+                    {
+                      color:
+                        currentStepData.correct === "a" ? "#28a745" : "#dc3545",
+                    },
+                  ]}
+                >
+                  {currentStepData.correct === "a" ? "\u2713" : "\u2717"}
+                </Text>
+              )}
+            </View>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => handleSelection(currentStepData.id, "b")}
+            style={styles.imgBtn}
+            disabled={isPlaying || !audioPlayed[currentStepData.id]}
+          >
+            <View style={styles.letterBoxB}>
+              <Text style={styles.letterText}>b</Text>
+            </View>
+            <Image style={styles.image} source={currentStepData.imgB} />
+            <View style={styles.feedbackBox}>
+              {selected[currentStepData.id] === "b" && (
+                <Text
+                  style={[
+                    styles.checkmark,
+                    {
+                      color:
+                        currentStepData.correct === "b" ? "#28a745" : "#dc3545",
+                    },
+                  ]}
+                >
+                  {currentStepData.correct === "b" ? "\u2713" : "\u2717"}
+                </Text>
+              )}
+            </View>
+          </TouchableOpacity>
         </View>
+
+        {!isPlaying &&
+          initialAudioPlayed &&
+          (selected[currentStepData.id] === null ||
+            selected[currentStepData.id] === undefined) && (
+            <View style={styles.buttonRow}>
+              {!audioPlayed[currentStepData.id] ? (
+                <TouchableOpacity
+                  onPress={() => playAudio(currentStep)}
+                  style={styles.playButton}
+                >
+                  <Text style={styles.playText}>PLAY</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={replayAudio}
+                  style={styles.replayButton}
+                >
+                  <Text style={styles.playText}>REPLAY</Text>
+                </TouchableOpacity>
+              )}
+            </View>
+          )}
       </View>
     </View>
   );
@@ -328,6 +350,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+  },
+  dimmed: {
+    opacity: 0.3,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 1,
   },
   imgBlock: {
     flexDirection: "row",
@@ -435,29 +469,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: "600",
   },
-  progress: {
-    marginTop: 20,
-    alignItems: "center",
-  },
-  dotContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginHorizontal: 6,
-    borderWidth: 1,
-    borderColor: "#007bff",
-  },
-  filledDot: {
-    backgroundColor: "#007bff",
-  },
-  emptyDot: {
-    backgroundColor: "transparent",
-  },
   bottomSheet: {
     position: "absolute",
     bottom: 0,
@@ -473,7 +484,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    height: Dimensions.get("window").height * 0.35,
+    height: Dimensions.get("window").height * 0.28,
+    zIndex: 2,
   },
   scoreText: {
     fontSize: 22,
