@@ -19,13 +19,14 @@ export default function U3Step16({ next }) {
   const [selected, setSelected] = useState({});
   const [infoClick, setInfoClick] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [dictionary, setDictionary] = useState(false);
+  const [, setDictionary] = useState(false);
   const [showPointer, setShowPointer] = useState(true);
   const [completed, setCompleted] = useState(false);
   const [audioPlayed, setAudioPlayed] = useState({});
+  const [initialAudioPlayed, setInitialAudioPlayed] = useState(false);
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const translateYAnim = useRef(
-    new Animated.Value(Dimensions.get("window").height)
+    new Animated.Value(Dimensions.get("window").height * 0.35)
   ).current;
 
   const steps = [
@@ -33,28 +34,28 @@ export default function U3Step16({ next }) {
       id: 1,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-1.mp3",
       imgA: require("../../../assets/images/unit-3/cd520.png"),
-      imgB: require("../../../assets/images/unit-3/cd521.png"),
+      imgB: require("../../../assets/images/unit-3/cd523.png"),
       correct: "a",
     },
     {
       id: 2,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-2.mp3",
       imgA: require("../../../assets/images/unit-3/cd522.png"),
-      imgB: require("../../../assets/images/unit-3/cd523.png"),
+      imgB: require("../../../assets/images/unit-3/cd521.png"),
       correct: "b",
     },
     {
       id: 3,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-3.mp3",
-      imgA: require("../../../assets/images/unit-3/cd524.png"),
-      imgB: require("../../../assets/images/unit-3/cd525.png"),
+      imgA: require("../../../assets/images/unit-3/cd522.png"),
+      imgB: require("../../../assets/images/unit-3/cd523.png"),
       correct: "b",
     },
     {
       id: 4,
       audio: "https://ukkibackend.soof.uz/media/audio/CD1-53-4.mp3",
-      imgA: require("../../../assets/images/unit-3/cd521.png"),
-      imgB: require("../../../assets/images/unit-3/cd525.png"),
+      imgA: require("../../../assets/images/unit-3/cd525.png"),
+      imgB: require("../../../assets/images/unit-3/cd524.png"),
       correct: "a",
     },
   ];
@@ -80,7 +81,7 @@ export default function U3Step16({ next }) {
     } else {
       scaleAnim.setValue(1);
     }
-  }, [showPointer]);
+  }, [showPointer, scaleAnim]);
 
   useEffect(() => {
     if (completed) {
@@ -91,7 +92,35 @@ export default function U3Step16({ next }) {
         easing: Easing.out(Easing.ease),
       }).start();
     }
-  }, [completed]);
+  });
+
+  async function playInitialAudio() {
+    try {
+      if (sound) {
+        await sound.stopAsync();
+        await sound.unloadAsync();
+      }
+
+      setIsPlaying(true);
+      const { sound: newSound } = await Audio.Sound.createAsync({
+        uri: "https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3",
+      });
+      setSound(newSound);
+
+      newSound.setOnPlaybackStatusUpdate(async (status) => {
+        if (status.didJustFinish) {
+          setIsPlaying(false);
+          setInitialAudioPlayed(true);
+          playAudio(0);
+        }
+      });
+
+      await newSound.playAsync();
+    } catch (_) {
+      setIsPlaying(false);
+      setInitialAudioPlayed(true);
+    }
+  }
 
   async function playAudio(stepIndex) {
     try {
@@ -117,7 +146,7 @@ export default function U3Step16({ next }) {
       });
 
       await newSound.playAsync();
-    } catch (error) {
+    } catch (_) {
       setIsPlaying(false);
     }
   }
@@ -152,7 +181,8 @@ export default function U3Step16({ next }) {
     setCompleted(false);
     setShowPointer(true);
     setAudioPlayed({});
-    translateYAnim.setValue(Dimensions.get("window").height);
+    setInitialAudioPlayed(false);
+    translateYAnim.setValue(Dimensions.get("window").height * 0.35);
   };
 
   const handleNext = () => {
@@ -161,46 +191,11 @@ export default function U3Step16({ next }) {
     }
   };
 
-  if (completed) {
-    const correctCount = steps.filter(
-      (step) => selected[step.id] === step.correct
-    ).length;
-
-    return (
-      <View style={styles.container}>
-        <ThreeButtons
-          setShowPointer={setShowPointer}
-          audioUrl="https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3"
-          setDictionary={setDictionary}
-          infoClick={infoClick}
-          clicked={clicked}
-          setClicked={setClicked}
-          setInfoClick={setInfoClick}
-        />
-
-        <Animated.View
-          style={[
-            styles.bottomSheet,
-            {
-              transform: [{ translateY: translateYAnim }],
-            },
-          ]}
-        >
-          <Text style={styles.scoreText}>
-            Siz 4 ta savoldan {correctCount} ta to'g'ri javob berdingiz
-          </Text>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.restartButton} onPress={restart}>
-              <Text style={styles.buttonText}>Restart </Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
-              <Text style={styles.buttonText}>Next </Text>
-            </TouchableOpacity>
-          </View>
-        </Animated.View>
-      </View>
-    );
-  }
+  const replayAudio = () => {
+    if (!isPlaying && audioPlayed[currentStepData.id]) {
+      playAudio(currentStep);
+    }
+  };
 
   const currentStepData = steps[currentStep];
 
@@ -208,15 +203,58 @@ export default function U3Step16({ next }) {
     <View style={styles.container}>
       <ThreeButtons
         setShowPointer={setShowPointer}
-        audioUrl="https://ukkibackend.soof.uz/media/audio/d69bc1ad-d5da-450a-93a8-ebea3b7971ab.mp3"
+        audioUrl="https://ukkibackend.soof.uz/media/audio/Dono bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3"
         setDictionary={setDictionary}
         infoClick={infoClick}
         clicked={clicked}
-        setClicked={setClicked}
+        setClicked={() => {
+          setClicked(true);
+          if (!initialAudioPlayed) {
+            playInitialAudio();
+          }
+        }}
         setInfoClick={setInfoClick}
       />
 
-      <View style={styles.imagesContainer}>
+      {completed && (
+        <View style={styles.overlay}>
+          <Animated.View
+            style={[
+              styles.bottomSheet,
+              {
+                transform: [{ translateY: translateYAnim }],
+              },
+            ]}
+          >
+            <Text style={styles.scoreText}>
+              Siz 4 ta savoldan{" "}
+              {
+                steps.filter((step) => selected[step.id] === step.correct)
+                  .length
+              }{" "}
+              ta to‘g‘ri javob berdingiz
+            </Text>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity style={styles.restartButton} onPress={restart}>
+                <Text style={styles.buttonText}>Restart</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.nextButton} onPress={handleNext}>
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          </Animated.View>
+        </View>
+      )}
+
+      <View style={[styles.imagesContainer, completed && styles.dimmed]}>
+        {(isPlaying ||
+          (audioPlayed[currentStepData.id] &&
+            (selected[currentStepData.id] === null ||
+              selected[currentStepData.id] === undefined))) && (
+          <Text style={styles.promptText}>
+            Suhbat qaysi rasm haqida ketmoqda?
+          </Text>
+        )}
         <View key={currentStepData.id} style={styles.imgBlock}>
           <TouchableOpacity
             onPress={() => handleSelection(currentStepData.id, "a")}
@@ -272,30 +310,27 @@ export default function U3Step16({ next }) {
         </View>
 
         {!isPlaying &&
+          initialAudioPlayed &&
           (selected[currentStepData.id] === null ||
-            selected[currentStepData.id] === undefined) &&
-          audioPlayed[currentStepData.id] !== true && (
-            <TouchableOpacity
-              onPress={() => playAudio(currentStep)}
-              style={styles.playButton}
-            >
-              <Text style={styles.playText}>Play </Text>
-            </TouchableOpacity>
+            selected[currentStepData.id] === undefined) && (
+            <View style={styles.buttonRow}>
+              {!audioPlayed[currentStepData.id] ? (
+                <TouchableOpacity
+                  onPress={() => playAudio(currentStep)}
+                  style={styles.playButton}
+                >
+                  <Text style={styles.playText}>PLAY</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity
+                  onPress={replayAudio}
+                  style={styles.replayButton}
+                >
+                  <Text style={styles.playText}>REPLAY</Text>
+                </TouchableOpacity>
+              )}
+            </View>
           )}
-      </View>
-
-      <View style={styles.progress}>
-        <View style={styles.dotContainer}>
-          {steps.map((_, index) => (
-            <View
-              key={index}
-              style={[
-                styles.dot,
-                index <= currentStep ? styles.filledDot : styles.emptyDot,
-              ]}
-            />
-          ))}
-        </View>
       </View>
     </View>
   );
@@ -315,6 +350,18 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     flex: 1,
+  },
+  dimmed: {
+    opacity: 0.3,
+  },
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    zIndex: 1,
   },
   imgBlock: {
     flexDirection: "row",
@@ -343,8 +390,8 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
   },
   letterBoxA: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 20,
     backgroundColor: "#ff6f00",
     alignItems: "center",
@@ -355,8 +402,8 @@ const styles = StyleSheet.create({
     zIndex: 10,
   },
   letterBoxB: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     borderRadius: 20,
     backgroundColor: "#007bff",
     alignItems: "center",
@@ -372,8 +419,8 @@ const styles = StyleSheet.create({
     color: "#fff",
   },
   feedbackBox: {
-    width: 40,
-    height: 40,
+    width: 30,
+    height: 30,
     backgroundColor: "#fff",
     borderRadius: 8,
     alignItems: "center",
@@ -389,8 +436,6 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   playButton: {
-    position: "absolute",
-    bottom: 20,
     backgroundColor: "#007bff",
     paddingVertical: 12,
     paddingHorizontal: 24,
@@ -400,35 +445,29 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.2,
     shadowRadius: 6,
-    zIndex: 20,
+  },
+  replayButton: {
+    backgroundColor: "#4CAF50",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 12,
+    elevation: 4,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.2,
+    shadowRadius: 6,
+  },
+  buttonRow: {
+    position: "absolute",
+    bottom: 20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
   },
   playText: {
     color: "#fff",
     fontSize: 18,
     fontWeight: "600",
-  },
-  progress: {
-    marginTop: 20,
-    alignItems: "center",
-  },
-  dotContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  dot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginHorizontal: 6,
-    borderWidth: 1,
-    borderColor: "#007bff",
-  },
-  filledDot: {
-    backgroundColor: "#007bff",
-  },
-  emptyDot: {
-    backgroundColor: "transparent",
   },
   bottomSheet: {
     position: "absolute",
@@ -445,7 +484,8 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: -2 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
-    height: Dimensions.get("window").height * 0.35,
+    height: Dimensions.get("window").height * 0.28,
+    zIndex: 2,
   },
   scoreText: {
     fontSize: 22,
@@ -473,7 +513,7 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 15,
     paddingHorizontal: 30,
-    backgroundColor: "#4CAF50", 
+    backgroundColor: "#4CAF50",
     borderRadius: 10,
     alignItems: "center",
     elevation: 5,
@@ -482,5 +522,12 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: "bold",
     color: "white",
+  },
+  promptText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    color: "#333",
+    marginBottom: 20,
+    textAlign: "center",
   },
 });

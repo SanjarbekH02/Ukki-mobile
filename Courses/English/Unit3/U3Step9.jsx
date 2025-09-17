@@ -15,7 +15,7 @@ import ThreeButtons from '../../../components/Utils/ThreeButtons';
 import WordGameAssist from '../../../components/Utils/WordGame';
 import FlashCards from '../../../components/YangiSozlar';
 
-const { width, height } = Dimensions.get('window');
+const { width, } = Dimensions.get('window');
 
 const AudioImageQuiz = ({ next }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -57,7 +57,7 @@ const AudioImageQuiz = ({ next }) => {
             id: 4,
             image: require('../../../assets/images/unit-3/cd484.jpg'),
             audioUrl: 'https://ukkibackend.soof.uz/media/audio/CD1-48-4.mp3',
-            correctAnswer: false,
+            correctAnswer: true,
             description: 'Rasm chizish to\'plami'
         }
     ];
@@ -128,157 +128,168 @@ const AudioImageQuiz = ({ next }) => {
     }, [sound]);
 
     return (
-        <>
-            {dictionary ? (
-                <>
+      <>
+        {dictionary ? (
+          <>
+            {wordgame ? (
+              <FlashCards
+                setDictionary={setWordgame}
+                data={[
+                  {
+                    word: "bike",
+                    translation: "velosiped",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
+                  },
+                  {
+                    word: "ball",
+                    translation: "koptok",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
+                  },
+                  {
+                    word: "kite",
+                    translation: "varrak",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
+                  },
+                  {
+                    word: "doll",
+                    translation: "qo'g'irchoq",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
+                  },
 
-                    {wordgame ? (
-                        <FlashCards
-                            setDictionary={setWordgame}
-                            data={[
+                  {
+                    word: "computer",
+                    translation: "kompyuter",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
+                  },
 
-                                {
-                                    word: "bike",
-                                    translation: "velosiped",
-                                    audioUrl:
-                                        "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
-                                },
-                                {
-                                    word: "ball",
-                                    translation: "koptok",
-                                    audioUrl:
-                                        "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
-                                },
-                                {
-                                    word: "kite",
-                                    translation: "varrak",
-                                    audioUrl:
-                                        "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
-                                },
-                                {
-                                    word: "doll",
-                                    translation: "qo'g'irchoq",
-                                    audioUrl:
-                                        "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
-                                },
-
-                                {
-                                    word: "computer",
-                                    translation: "kompyuter",
-                                    audioUrl:
-                                        "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
-                                },
-
-
-                                {
-                                    word: "art set",
-                                    translation: "rasm chizish to'plami",
-                                    audioUrl:
-                                        "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
-                                },
-
-                            ]}
-                        />
-
-                    ) : talaffuz ? (
-                        <WordPractice
-                            setWordgame={setWordgame}
-                            setDictionary={setDictionary}
-                            setTalaffuz={setTalaffuz}
-                            words={[
-                                { text: "Bike", audioUrl: "https://ukkibackend.soof.uz/media/audio/velosiped.mp3" },
-                                { text: "Ball", audioUrl: "https://ukkibackend.soof.uz/media/audio/koptok.mp3" },
-                                { text: "Kite", audioUrl: "https://ukkibackend.soof.uz/media/audio/varrak.mp3" },
-                                { text: "Doll", audioUrl: "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3" },
-                                { text: "Computer", audioUrl: "https://ukkibackend.soof.uz/media/audio/komputer.mp3" },
-                                { text: "Art set", audioUrl: "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3" },]}
-                        />
-                    ) : (
-                        <WordGameAssist
-                            setDictionary={setTalaffuz}
-                            words={[
-                                "bike",
-                                "ball",
-                                "kite",
-                                "doll",
-                                "computer",
-                                "art set",
-                            ]}
-                            audios={[
-                                "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
-                                "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
-                                "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
-                                "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
-                                "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
-                                "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",]}
-                        />
-                    )}
-                </>
+                  {
+                    word: "art set",
+                    translation: "rasm chizish to'plami",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
+                  },
+                ]}
+              />
+            ) : talaffuz ? (
+              <WordPractice
+                setWordgame={setWordgame}
+                setDictionary={setDictionary}
+                setTalaffuz={setTalaffuz}
+                words={[
+                  {
+                    text: "Bike",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
+                  },
+                  {
+                    text: "Ball",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
+                  },
+                  {
+                    text: "Kite",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
+                  },
+                  {
+                    text: "Doll",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
+                  },
+                  {
+                    text: "Computer",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
+                  },
+                  {
+                    text: "Art set",
+                    audioUrl:
+                      "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
+                  },
+                ]}
+              />
             ) : (
-                <View style={styles.container}>
-                    <ThreeButtons
-                        setDictionary={setDictionary}
-                        infoClick={infoClick}
-                        clicked={clicked}
-                        setClicked={setClicked}
-                        setInfoClick={setInfoClick}
-                        audioUrl='https://ukkibackend.soof.uz/media/audio/aziz bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3'/>
-                    <Text style={styles.questionText}>
-                        Aytilgan rasm to'g'rimi?
-                    </Text>
+              <WordGameAssist
+                setDictionary={setTalaffuz}
+                words={["bike", "ball", "kite", "doll", "computer", "art set"]}
+                audios={[
+                  "https://ukkibackend.soof.uz/media/audio/velosiped.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/koptok.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/varrak.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/qo'girchoq.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/komputer.mp3",
+                  "https://ukkibackend.soof.uz/media/audio/rasmchizish toplami.mp3",
+                ]}
+              />
+            )}
+          </>
+        ) : (
+          <View style={styles.container}>
+            <ThreeButtons
+              setDictionary={setDictionary}
+              infoClick={infoClick}
+              clicked={clicked}
+              setClicked={setClicked}
+              setInfoClick={setInfoClick}
+              audioUrl="https://ukkibackend.soof.uz/media/audio/aziz bolajon, suhbatlarni tingla va to’gri javobni belgila. .mp3"
+            />
+            <Text style={styles.questionText}>Aytilgan rasm to‘g‘rimi?</Text>
 
-                    <View style={styles.imageContainer}>
-                        <Image
-                            source={currentItem.image}
-                            style={styles.image}
-                            resizeMode="stretch"
-                        />
+            <View style={styles.imageContainer}>
+              <Image
+                source={currentItem.image}
+                style={styles.image}
+                resizeMode="stretch"
+              />
 
-                        <TouchableOpacity
-                            style={styles.playButton}
-                            onPress={isPlaying ? stopAudio : playAudio}
-                        >
-                            <Text style={styles.playButtonText}>
-                                {isPlaying ? '⏸Pause' : '▶Play'}
-                            </Text>
-                        </TouchableOpacity>
-                    </View>
+              <TouchableOpacity
+                style={styles.playButton}
+                onPress={isPlaying ? stopAudio : playAudio}
+              >
+                <Text style={styles.playButtonText}>
+                  {isPlaying ? "⏸Pause" : "▶Play"}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity
-                            style={[styles.button, styles.correctButton]}
-                            onPress={() => checkAnswer(true)}
-                        >
-                            <Text style={styles.buttonText}>✓</Text>
-                        </TouchableOpacity>
+            <View style={styles.buttonContainer}>
+              <TouchableOpacity
+                style={[styles.button, styles.correctButton]}
+                onPress={() => checkAnswer(true)}
+              >
+                <Text style={styles.buttonText}>✓</Text>
+              </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={[styles.button, styles.incorrectButton]}
-                            onPress={() => checkAnswer(false)}
-                        >
-                            <Text style={styles.buttonText}>✗</Text>
-                        </TouchableOpacity>
-                    </View>
+              <TouchableOpacity
+                style={[styles.button, styles.incorrectButton]}
+                onPress={() => checkAnswer(false)}
+              >
+                <Text style={styles.buttonText}>✗</Text>
+              </TouchableOpacity>
+            </View>
 
-                    {showResult && (
-                        <View style={styles.resultContainer}>
-                            <Text style={styles.resultText}>{resultText}</Text>
-                        </View>
-                    )}
+            {showResult && (
+              <View style={styles.resultContainer}>
+                <Text style={styles.resultText}>{resultText}</Text>
+              </View>
+            )}
 
-                    <Text style={styles.progressText}>
-                        {currentIndex + 1} / {quizData.length}
-                    </Text>
-                    {nextShow && (
-                        <TouchableOpacity
-                            style={Styles.NextButton}
-                            onPress={next}
-                        >
-                            <Text style={styles.buttonText}>Next</Text>
-                        </TouchableOpacity>
-                    )}
-                </View>)}
-        </>
+            <Text style={styles.progressText}>
+              {currentIndex + 1} / {quizData.length}
+            </Text>
+            {nextShow && (
+              <TouchableOpacity style={Styles.NextButton} onPress={next}>
+                <Text style={styles.buttonText}>Next</Text>
+              </TouchableOpacity>
+            )}
+          </View>
+        )}
+      </>
     );
 };
 

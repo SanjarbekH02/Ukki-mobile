@@ -7,14 +7,14 @@ import ThreeButtons from "../../../components/Utils/ThreeButtons";
 
 export default function U3Step19({ next }) {
   const [recording, setRecording] = useState(null);
-  const [result, setResult] = useState("");
+  const [, setResult] = useState("");
   const [answer, setAnswer] = useState("");
   const [borderColor, setBorderColor] = useState("#fff");
-  const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [nextBtn, setNextBtn] = useState(false);
+  const [, setIsSuccess] = useState(false);
+  const [, setIsError] = useState(false);
+  const [, setNextBtn] = useState(false);
   const [clicked, setClicked] = useState(false);
-  const [dictionary, setDictionary] = useState(false);
+  const [, setDictionary] = useState(false);
   const [infoClick, setInfoClick] = useState(false);
   const [showMic, setShowMic] = useState(false); // 🔥 Mic faqat audio tugaganda chiqadi
   const [sound, setSound] = useState(null);
@@ -151,7 +151,7 @@ export default function U3Step19({ next }) {
         clicked={clicked}
         setClicked={setClicked}
         setInfoClick={setInfoClick}
-        audioUrl={audioUrl}
+        audioUrl="https://ukkibackend.soof.uz/media/audio/Hurmatli bolajon, berilgan harflarni birlashtir, va hosil bo’lgan gapni o’qib ber..mp3"
       />
 
       <Image
@@ -164,9 +164,17 @@ export default function U3Step19({ next }) {
           fontSize: 20,
           fontWeight: "bold",
           color: "#fff",
-          backgroundColor: answer.includes("🎉 Zo‘r! Keyingiga o‘tishingiz mumkin.") || answer.includes("❌ Noto‘g‘ri, qaytadan urinib ko‘r") ? "#333" : "transparent",
-          borderColor: answer.includes("❌ Noto‘g‘ri, qaytadan urinib ko‘r") ? "#f0f0f0" : "transparent",
-          borderWidth: answer.includes("❌ Noto‘g‘ri, qaytadan urinib ko‘r") ? 2 : 0,
+          backgroundColor:
+            answer.includes("🎉 Zo‘r! Keyingiga o‘tishingiz mumkin.") ||
+            answer.includes("❌ Noto‘g‘ri, qaytadan urinib ko‘r")
+              ? "#333"
+              : "transparent",
+          borderColor: answer.includes("❌ Noto‘g‘ri, qaytadan urinib ko‘r")
+            ? "#f0f0f0"
+            : "transparent",
+          borderWidth: answer.includes("❌ Noto‘g‘ri, qaytadan urinib ko‘r")
+            ? 2
+            : 0,
           padding: 10,
           borderRadius: 5,
         }}
@@ -182,7 +190,6 @@ export default function U3Step19({ next }) {
 
       {showMic && (
         <>
-          
           <TouchableOpacity
             style={[styles.micButton, { borderColor }]}
             onPress={recording ? stopRecording : startRecording}
@@ -196,9 +203,9 @@ export default function U3Step19({ next }) {
         </>
       )}
 
-        <TouchableOpacity onPress={next} style={Styles.NextButton}>
-          <Text style={{ color: "#fff" }}>Next</Text>
-        </TouchableOpacity>
+      <TouchableOpacity onPress={next} style={Styles.NextButton}>
+        <Text style={{ color: "#fff" }}>Next </Text>
+      </TouchableOpacity>
     </View>
   );
 }
