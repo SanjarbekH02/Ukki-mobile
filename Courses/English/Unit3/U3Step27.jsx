@@ -202,10 +202,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     bigImage: {
-        width: '80%',
-        height: '50%',
-        resizeMode: 'contain',
-        borderRadius: 50
+        width: 180,
+        height: 180,
+        resizeMode: 'stretch',
+        borderRadius: '50%'
     },
     modalText: {
         marginTop: 20,

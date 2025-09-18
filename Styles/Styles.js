@@ -5,7 +5,9 @@ export default StyleSheet.create({
         width: "100%",
         flex: 1,
         // alignItems: "stretch",
-        position: "relative"
+        position: "relative",
+        alignItems: "center",
+        justifyContent: "center",
     },
 
     text: {
