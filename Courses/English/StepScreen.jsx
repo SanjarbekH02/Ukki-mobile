@@ -68,12 +68,14 @@ import U3Step18 from "./Unit3/U3Step18";
 import U3Step19 from "./Unit3/U3Step19";
 import U3Step2 from "./Unit3/U3Step2";
 import U3Step20 from "./Unit3/U3Step20";
+import U3Step21 from "./Unit3/U3Step21";
 import U3Step22 from "./Unit3/U3Step22";
 import U3Step23 from "./Unit3/U3Step23";
 import U3Step24 from "./Unit3/U3Step24";
 import U3Step25 from "./Unit3/U3Step25";
 import U3Step26 from "./Unit3/U3Step26";
 import U3Step27 from "./Unit3/U3Step27";
+import U3Step28 from "./Unit3/U3Step28";
 import U3Step3 from "./Unit3/U3Step3";
 import U3Step4 from "./Unit3/U3Step4";
 import U3Step5 from "./Unit3/U3Step5";
@@ -81,7 +83,8 @@ import U3Step6 from "./Unit3/U3Step6";
 import U3Step7 from "./Unit3/U3Step7";
 import U3Step8 from "./Unit3/U3Step8";
 import U3Step9 from "./Unit3/U3Step9";
-import U3Step21 from "./Unit3/U3Step21";
+import U3Step29 from "./Unit3/U3Step29";
+import U3Step30 from "./Unit3/U3Step30";
 
 export default function StepScreen({ route, navigation }) {
   const { unitId, step, unitSteps, progress, setProgress } = route.params;
@@ -238,6 +241,9 @@ export default function StepScreen({ route, navigation }) {
       {unitId === 3 && step.order === 25 && <U3Step25 next={goToNextStep} />}
       {unitId === 3 && step.order === 26 && <U3Step26 next={goToNextStep} />}
       {unitId === 3 && step.order === 27 && <U3Step27 next={goToNextStep} />}
+      {unitId === 3 && step.order === 28 && <U3Step28 next={goToNextStep} />}
+      {unitId === 3 && step.order === 29 && <U3Step29 next={goToNextStep} />}
+      {unitId === 3 && step.order === 30 && <U3Step30 next={goToNextStep} />}
     </View>
   );
 }
